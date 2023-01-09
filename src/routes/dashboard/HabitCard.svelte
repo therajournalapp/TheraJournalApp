@@ -18,7 +18,7 @@
 	<div class="flex justify-between">
 		<div class="flex">
 			<a href="/dashboard#" class="text-xl font-medium hover:underline">{name}</a>
-			<div class="h-[25px] w-[25px] overflow-visible bg-red-600 opacity-50" />
+			<!-- <div class="h-[25px] w-[25px] overflow-visible bg-red-600 opacity-50" /> -->
 		</div>
 		<ShareToggle />
 	</div>

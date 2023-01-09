@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/stores';
-	import logo from '$lib/images/logo-no-background.svg';
+	// import logo from '$lib/images/logo-no-background.svg';
+	import logo from '$lib/images/logov2.svg';
 	import logo_small from '$lib/images/logo-no-text.svg';
 	import 'iconify-icon';
 	import NavPopover from './NavPopover.svelte';
