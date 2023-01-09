@@ -46,7 +46,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	.circle {
 		@apply h-5 w-5 rounded-full;
 	}

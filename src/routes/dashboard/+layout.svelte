@@ -95,7 +95,7 @@
 
 <slot />
 
-<style>
+<style lang="postcss">
 	.card-scroll {
 		@apply flex w-screen shrink-0 gap-5 overflow-auto p-2;
 	}
