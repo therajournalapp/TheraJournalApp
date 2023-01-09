@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 256 256"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="users.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     id="namedview14"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="3.2148438"
+     inkscape:cx="101.8712"
+     inkscape:cy="128.15553"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-7"
+     inkscape:window-y="-7"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg12" />
+  <rect
+     width="256"
+     height="256"
+     fill="none"
+     id="rect2" />
+  <circle
+     cx="88"
+     cy="108"
+     r="52"
+     fill="none"
+     stroke="#000"
+     stroke-miterlimit="10"
+     stroke-width="16"
+     id="circle4"
+     style="stroke:#739244;stroke-opacity:1" />
+  <path
+     d="M155.4,57.9A54.5,54.5,0,0,1,169.5,56a52,52,0,0,1,0,104"
+     fill="none"
+     stroke="#000"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-width="16"
+     id="path6"
+     style="stroke:#739244;stroke-opacity:1" />
+  <path
+     d="M16,197.4a88,88,0,0,1,144,0"
+     fill="none"
+     stroke="#000"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-width="16"
+     id="path8"
+     style="stroke:#739244;stroke-opacity:1" />
+  <path
+     d="M169.5,160a87.9,87.9,0,0,1,72,37.4"
+     fill="none"
+     stroke="#000"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-width="16"
+     id="path10"
+     style="stroke:#739244;stroke-opacity:1" />
+</svg>

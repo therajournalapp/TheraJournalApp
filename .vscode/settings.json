@@ -1,0 +1,37 @@
+{
+    /* Editor */
+    "editor.formatOnSave": true,
+    // format on save, useful for svelte prettier + tailwind class sorting
+    "workbench.editor.labelFormat": "short",
+    // easier to tell apart files w/ shared filenames
+    "explorer.sortOrder": "filesFirst",
+    // see +layout before pages
+    "explorer.compactFolders": false,
+    // don't nest directories - see whole route
+    "material-icon-theme.folders.color": "#43a047",
+    // make all routes folders green
+    "workbench.tree.indent": 14,
+    // easier to tell nested routes apart 
+    "workbench.iconTheme": "material-icon-theme",
+    // icon theme with helpful icons
+    
+    /* Prisma */
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma"
+    },
+    // Format Prisma on Save
+
+    /* Tailwind */
+    "files.associations": {
+        "*.css": "tailwindcss",
+        "*.pcss": "tailwindcss",
+        "*.postcss": "tailwindcss"
+    },
+    // have vs code open css files in tailwind css mode
+    "editor.quickSuggestions": {
+        "strings": true
+    }, 
+    // tailwind autocompletions in strings
+    "css.lint.unknownAtRules": "ignore", 
+    // use tailwind specific @apply rule without warning
+}

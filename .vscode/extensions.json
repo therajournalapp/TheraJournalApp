@@ -1,0 +1,22 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",
+        "pkief.material-icon-theme",
+        "sanaajani.taskrunnercode",
+        "usernamehw.errorlens",
+        "formulahendry.auto-rename-tag",
+        "mikestead.dotenv",
+        "christian-kohler.npm-intellisense",
+        "christian-kohler.path-intellisense",
+        "svelte.svelte-vscode",
+        "ardenivanov.svelte-intellisense",
+        "fivethree.vscode-svelte-snippets",
+        "proverbialninja.svelte-component-creator",
+        "stordahl.sveltekit-snippets",
+        "prisma.prisma",
+        "bierner.color-info",
+        "bradlc.vscode-tailwindcss",
+        "austenc.tailwind-docs",
+        "hwencc.html-tag-wrapper"
+    ]
+}

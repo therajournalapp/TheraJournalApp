@@ -1,0 +1,225 @@
+@import '@fontsource/fira-mono';
+
+/* Write your global styles here, in PostCSS syntax */
+
+/* Import tailwind base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	/* light background colors */
+	--almost-white: #fefbf6;
+	--off-white: #efebce;
+	--form-field-bg: #e3e9e0;
+
+	/* dark background colors */
+	--almost-black: #171f36;
+	--dark-blue: #2b4162;
+
+	/* primary brand colors */
+	--dark-green: #5f7938;
+	--light-green: #739244; /* same as logo */
+	--extra-light-green: #a0b479;
+
+	/* accent colors */
+	--accent-red: #ff595e;
+	--accent-yellow: #ffca3a;
+	--accent-green: #8ac926;
+	--accent-blue: #1982c4;
+	--accent-purple: #6a4c93;
+
+	/* From sveltekit demo app */
+	/* TODO install new fonts and make them css variable + tailwind */
+	--font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+		Cantarell, 'Open Sans', 'Helvetica Nseue', sans-serif;
+	--font-mono: 'Fira Mono', monospace;
+	--font-body2: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans',
+		'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+		'Noto Color Emoji';
+	font-family: var(--font-body2);
+	/* From sveltekit demo app */
+}
+
+body {
+	min-height: 100vh;
+	margin: 0;
+	/* background-attachment: fixed; */
+	/* background-color: var(--almost-white); */
+	/* background-color: #fefbf685; */
+
+	/* background: linear-gradient(
+		0deg,
+		hsl(53deg 51% 93%) 0%,
+		hsl(44deg 63% 95.5%) 50%,
+		hsl(37deg 80% 0%) 100%
+	); */
+	/* background: linear-gradient(
+		145deg,
+		hsla(0deg, 100%, 50%, 0.05) 0%,
+		hsla(26deg, 100%, 50%, 0.05) 18%,
+		hsla(39deg, 100%, 50%, 0.05) 26%,
+		hsla(50deg, 100%, 50%, 0.05) 33%,
+		hsla(51deg, 100%, 50%, 0.05) 39%,
+		hsla(52deg, 100%, 50%, 0.05) 44%,
+		hsla(53deg, 100%, 50%, 0.05) 50%,
+		hsla(66deg, 100%, 46%, 0.05) 56%,
+		hsla(83deg, 100%, 48%, 0.05) 61%,
+		hsla(119deg, 100%, 50%, 0.05) 67%,
+		hsla(171deg, 100%, 46%, 0.05) 74%,
+		hsla(193deg, 100%, 50%, 0.05) 82%,
+		hsla(205deg, 100%, 50%, 0.05) 100%
+	);
+	background-size: 400% 400%;
+	animation: GradientSlide 40s linear infinite; */
+}
+
+body {
+	/* background-color: hsla(37, 80%, 98%, 1); */
+	/* background-color: var(--off-white); */
+}
+
+#bg {
+	position: fixed;
+	z-index: -1;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--almost-white);
+	/* position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background-color: hsla(0, 100%, 50%, 0.25);
+	z-index: -1;
+	animation: bg-slide-x 2000s linear infinite;
+	animation: bg-slide-x 2000s linear infinite; */
+}
+
+#bg2 {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	/* background-color: hsla(115, 100%, 50%, 0.25); */
+	z-index: -1;
+	/* animation: bg-slide-y 3000s linear infinite; */
+}
+
+#bg3 {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	/* background-color: hsla(219, 100%, 50%, 0.25); */
+	z-index: -1;
+	/* animation: bg-slide-x 2000s linear infinite; */
+}
+
+#bg3::before,
+#bg3::after {
+	transform: translate(-25%, -25%);
+	width: 200vw;
+	height: 200vh;
+
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	/* --grad: radial-gradient(at 25%, red, rgba(255, 0, 0, 0.2) 50%, transparent 70%); */
+	--grad: radial-gradient(at 50%, red, rgba(255, 0, 0, 0.2) 37.5%, transparent 47.5%);
+	/* --grad: radial-gradient(
+		at 50%,
+		red 0%,
+		rgba(255, 0, 0, 0.2) 50%,
+		transparent 75%,
+		transparent 100%
+	); */
+	--mask: var(--grad), var(--grad), var(--grad);
+	mask-composite: source-in;
+	mask: var(--mask);
+	mix-blend-mode: color;
+	content: '';
+	opacity: 0.5;
+	/* animation: bg-opacity 100s linear infinite; */
+}
+
+@property --c {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: purple;
+}
+
+@property --c2 {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: navy;
+}
+
+@property --c3 {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: aqua;
+}
+
+#bg3::before {
+	background: #000;
+	filter: url(#f);
+}
+#bg3::after {
+	/* background: linear-gradient(90deg, purple, navy 60%, aqua); */
+	background: linear-gradient(
+		90deg,
+		hsl(240deg 100% 20%) 0%,
+		hsl(289deg 100% 21%) 11%,
+		hsl(315deg 100% 27%) 22%,
+		hsl(329deg 100% 36%) 33%,
+		hsl(337deg 100% 43%) 44%,
+		hsl(357deg 91% 59%) 56%,
+		hsl(17deg 100% 59%) 67%,
+		hsl(34deg 100% 53%) 78%,
+		hsl(45deg 100% 50%) 89%,
+		hsl(55deg 100% 50%) 100%
+	);
+	/* animation: AnimationName 30s ease infinite; */
+	/* will-change: background-position; */
+	/* background-size: 400% 400%; */
+}
+
+@keyframes AnimationName {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes bg-slide-x {
+	0% {
+		transform: translateX(0%);
+	}
+	25% {
+		transform: translateX(50%);
+	}
+	75% {
+		transform: translateX(-50%);
+	}
+	100% {
+		transform: translateX(0%);
+	}
+}
+
+@keyframes bg-slide-y {
+	0% {
+		transform: translateY(0%);
+	}
+	50% {
+		transform: translateY(50%);
+	}
+	100% {
+		transform: translateY(0%);
+	}
+}
+
+.app-container {
+	@apply mx-auto w-full px-8 md:w-10/12 md:pl-4 xl:max-w-screen-xl;
+}
