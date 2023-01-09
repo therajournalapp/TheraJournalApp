@@ -27,5 +27,6 @@ This is a rewrite of the original react version of the app using [SvelteKit](htt
 - [ ] WYSIWYG - Looking into [TinyMCE](https://www.tiny.cloud/), [tiptap](https://tiptap.dev/), [Quil](https://quilljs.com/), [ProseMirror](https://prosemirror.net/), and [Toast UI](https://github.com/nhn/tui.editor).
 - [ ] Journal Entry CRUD - Connection to database is already setup, need to choose a new WSIWYG editor and add CRUD operations for it.
 - [ ] tRPC - Looking into using [tRPC](trpc.io) with [tRPC-SvelteKit](https://github.com/icflorescu/trpc-sveltekit) for typesafe API.
+- [ ] AWS Hosting - Looking into using [SvelteKit Adapter AWS](https://github.com/MikeBild/sveltekit-adapter-aws) to deploy to AWS.
 
 ----
