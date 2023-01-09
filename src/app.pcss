@@ -45,7 +45,7 @@ body {
 	min-height: 100vh;
 	margin: 0;
 	/* background-attachment: fixed; */
-	/* background-color: var(--almost-white); */
+	background-color: var(--almost-white);
 	/* background-color: #fefbf685; */
 
 	/* background: linear-gradient(
@@ -80,11 +80,11 @@ body {
 }
 
 #bg {
-	position: fixed;
+	/* position: fixed;
 	z-index: -1;
 	width: 100vw;
 	height: 100vh;
-	background-color: var(--almost-white);
+	background-color: var(--almost-white); */
 	/* position: fixed;
 	width: 100vw;
 	height: 100vh;
@@ -95,34 +95,34 @@ body {
 }
 
 #bg2 {
-	position: fixed;
+	/* position: fixed;
 	width: 100vw;
-	height: 100vh;
+	height: 100vh; */
 	/* background-color: hsla(115, 100%, 50%, 0.25); */
-	z-index: -1;
+	/* z-index: -1; */
 	/* animation: bg-slide-y 3000s linear infinite; */
 }
 
 #bg3 {
-	position: fixed;
+	/* position: fixed;
 	width: 100vw;
-	height: 100vh;
+	height: 100vh; */
 	/* background-color: hsla(219, 100%, 50%, 0.25); */
-	z-index: -1;
+	/* z-index: -1; */
 	/* animation: bg-slide-x 2000s linear infinite; */
 }
 
 #bg3::before,
 #bg3::after {
-	transform: translate(-25%, -25%);
+	/* transform: translate(-25%, -25%);
 	width: 200vw;
 	height: 200vh;
 
 	position: fixed;
 	inset: 0;
-	z-index: -1;
+	z-index: -1; */
 	/* --grad: radial-gradient(at 25%, red, rgba(255, 0, 0, 0.2) 50%, transparent 70%); */
-	--grad: radial-gradient(at 50%, red, rgba(255, 0, 0, 0.2) 37.5%, transparent 47.5%);
+	/* --grad: radial-gradient(at 50%, red, rgba(255, 0, 0, 0.2) 37.5%, transparent 47.5%); */
 	/* --grad: radial-gradient(
 		at 50%,
 		red 0%,
@@ -130,12 +130,12 @@ body {
 		transparent 75%,
 		transparent 100%
 	); */
-	--mask: var(--grad), var(--grad), var(--grad);
+	/* --mask: var(--grad), var(--grad), var(--grad);
 	mask-composite: source-in;
 	mask: var(--mask);
 	mix-blend-mode: color;
 	content: '';
-	opacity: 0.5;
+	opacity: 0.5; */
 	/* animation: bg-opacity 100s linear infinite; */
 }
 
@@ -157,13 +157,13 @@ body {
 	initial-value: aqua;
 }
 
-#bg3::before {
+/* #bg3::before {
 	background: #000;
 	filter: url(#f);
-}
+} */
 #bg3::after {
 	/* background: linear-gradient(90deg, purple, navy 60%, aqua); */
-	background: linear-gradient(
+	/* background: linear-gradient(
 		90deg,
 		hsl(240deg 100% 20%) 0%,
 		hsl(289deg 100% 21%) 11%,
@@ -175,7 +175,7 @@ body {
 		hsl(34deg 100% 53%) 78%,
 		hsl(45deg 100% 50%) 89%,
 		hsl(55deg 100% 50%) 100%
-	);
+	); */
 	/* animation: AnimationName 30s ease infinite; */
 	/* will-change: background-position; */
 	/* background-size: 400% 400%; */
