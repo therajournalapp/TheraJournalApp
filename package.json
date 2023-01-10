@@ -31,7 +31,7 @@
 		"prettier": "^2.8.1",
 		"prettier-plugin-svelte": "^2.8.1",
 		"prettier-plugin-tailwindcss": "^0.2.1",
-		"prisma": "^4.8.0",
+		"prisma": "^4.8.1",
 		"svelte": "^3.54.0",
 		"svelte-check": "^2.9.2",
 		"svelte-preprocess": "^4.10.7",
@@ -43,8 +43,10 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@prisma/client": "^4.8.0",
+		"@lucia-auth/adapter-prisma": "^0.2.2",
+		"@prisma/client": "^4.8.1",
 		"iconify-icon": "^1.0.2",
+		"lucia-auth": "^0.4.3",
 		"svelte-add": "2022.12.0-9.0"
 	}
 }

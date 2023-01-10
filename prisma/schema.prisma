@@ -7,42 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Accesses {
-  PermissionLevel Accesses_PermissionLevel?
-  createdAt       DateTime                  @db.DateTime(0)
-  updatedAt       DateTime                  @db.DateTime(0)
-  jID             Int
-  uID             Int
-  JournalEntries  JournalEntries            @relation(fields: [jID], references: [jID], onDelete: Cascade, map: "Accesses_ibfk_1")
-  Users           Users                     @relation(fields: [uID], references: [uID], onDelete: Cascade, map: "Accesses_ibfk_2")
+model User {
+  id              String    @id @unique @default(cuid())
+  provider_id     String    @unique
+  hashed_password String?
+  session         Session[]
 
-  @@id([jID, uID])
-  @@index([uID], map: "uID")
+  @@map("user")
 }
 
-model JournalEntries {
-  jID       Int        @id @default(autoincrement())
-  Title     String?    @db.VarChar(255)
-  Body      Bytes      @db.MediumBlob
-  createdAt DateTime   @db.DateTime(0)
-  updatedAt DateTime   @db.DateTime(0)
-  Shared    Boolean    @default(false)
-  Accesses  Accesses[]
-}
+model Session {
+  id           String @id @unique
+  user_id      String
+  expires      BigInt
+  idle_expires BigInt
+  user         User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-model Users {
-  uID            Int        @id @default(autoincrement())
-  FirstName      String?    @db.VarChar(255)
-  Email          String     @unique(map: "Email") @db.VarChar(255)
-  HashedPassword Bytes      @db.TinyBlob
-  Salt           Bytes      @db.TinyBlob
-  Role           String     @db.VarChar(255)
-  createdAt      DateTime   @db.DateTime(0)
-  updatedAt      DateTime   @db.DateTime(0)
-  Accesses       Accesses[]
-}
-
-enum Accesses_PermissionLevel {
-  owner
-  viewer
+  @@index([user_id])
+  @@map("session")
 }
