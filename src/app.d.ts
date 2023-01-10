@@ -23,3 +23,11 @@ declare namespace App {
 		setSession: import("@lucia-auth/sveltekit").SetSession;
 	}
 }
+
+/// <reference types="lucia-auth" />
+declare namespace Lucia {
+	type Auth = import("$lib/server/lucia").Auth;
+	type UserAttributes = {
+		username: string;
+	};
+}
