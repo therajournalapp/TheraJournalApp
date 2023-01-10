@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@fontsource/fira-mono': ^4.5.10
   '@lucia-auth/adapter-prisma': ^0.2.2
+  '@lucia-auth/sveltekit': ^0.5.2
   '@neoconfetti/svelte': ^1.0.0
   '@playwright/test': ^1.28.1
   '@prisma/client': ^4.8.1
@@ -36,6 +37,7 @@ specifiers:
 
 dependencies:
   '@lucia-auth/adapter-prisma': 0.2.2_lucia-auth@0.4.3
+  '@lucia-auth/sveltekit': 0.5.2_hqup45dw5uobdbkvg5vvfeiw44
   '@prisma/client': 4.8.1_prisma@4.8.1
   iconify-icon: 1.0.2
   lucia-auth: 0.4.3
@@ -337,6 +339,17 @@ packages:
       lucia-auth: 0.4.x
     dependencies:
       lucia-auth: 0.4.3
+    dev: false
+
+  /@lucia-auth/sveltekit/0.5.2_hqup45dw5uobdbkvg5vvfeiw44:
+    resolution: {integrity: sha512-bCbDsCW4hSxxyQuP6pD+MOci+JHPsz/rayuQZ3Kohr85EcT0/+4FdxXB/naiCtQVpXwn8QV3fEpiJcPGt6mfMQ==}
+    peerDependencies:
+      lucia-auth: 0.3.x - 0.4.x
+      svelte: 3.x
+    dependencies:
+      '@noble/hashes': 1.1.5
+      lucia-auth: 0.4.3
+      svelte: 3.55.0
     dev: false
 
   /@neoconfetti/svelte/1.0.0:
