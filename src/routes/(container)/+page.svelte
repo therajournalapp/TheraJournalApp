@@ -2,6 +2,9 @@
 	import Counter from './Counter.svelte';
 	// import welcome from '$lib/images/svelte-welcome.webp';
 	// import welcome_fallback from '$lib/images/svelte-welcome.png';
+
+	import { getUser } from '@lucia-auth/sveltekit/client';
+	const user = getUser();
 </script>
 
 <svelte:head>
@@ -10,6 +13,12 @@
 </svelte:head>
 
 <section>
+	<h1>Profile</h1>
+	<div>
+		<p>User id: {$user?.userId}</p>
+		<p>Username: {$user?.username}</p>
+	</div>
+
 	<h1>
 		<!-- <span class="welcome">
 			<picture>
