@@ -24,6 +24,9 @@ const config = {
 					green: '#8ac926',
 					blue: '#1982c4',
 					purple: '#6a4c93',
+				},
+				'formbg': {
+					DEFAULT: '#E3E9E0;'
 				}
 			}
 		}
