@@ -11,8 +11,10 @@ declare namespace App {
 /// <reference types="lucia-auth" />
 declare namespace Lucia {
 	type Auth = import("$lib/server/lucia").Auth;
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	type UserAttributes = {};
+	type UserAttributes = {
+		username: string;
+
+	};
 }
 
 /// <reference types="@sveltejs/kit" />
@@ -22,12 +24,4 @@ declare namespace App {
 		validateUser: import("@lucia-auth/sveltekit").ValidateUser;
 		setSession: import("@lucia-auth/sveltekit").SetSession;
 	}
-}
-
-/// <reference types="lucia-auth" />
-declare namespace Lucia {
-	type Auth = import("$lib/server/lucia").Auth;
-	type UserAttributes = {
-		username: string;
-	};
 }
