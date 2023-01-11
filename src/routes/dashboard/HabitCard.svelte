@@ -2,7 +2,7 @@
 	import ShareToggle from './ShareToggle.svelte';
 
 	export let name: String;
-	export let shadowclr: String = 'shadow-offwhite';
+	export let shadowclr: String = 'shadow-offwhite-light';
 	export let sun: String = 'bg-primary';
 	export let mon: String = 'bg-primary';
 	export let tue: String = 'bg-primary';

@@ -1,5 +1,8 @@
 <script>
 	import { Popover, PopoverButton, PopoverPanel, Transition } from '@rgossiaux/svelte-headlessui';
+
+	import { signOut } from '@lucia-auth/sveltekit/client';
+	import { invalidateAll } from '$app/navigation';
 </script>
 
 <Popover class="relative z-10 max-h-[50px]" let:open>
@@ -163,9 +166,13 @@
 					<PopoverButton
 						as="a"
 						href="##"
+						on:click={async () => {
+							await signOut();
+							invalidateAll();
+						}}
 						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary"
 					>
-						Log Out
+						Sign Out
 					</PopoverButton>
 				</div>
 			</div>

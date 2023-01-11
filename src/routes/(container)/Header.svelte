@@ -5,6 +5,10 @@
 	import logo_small from '$lib/images/logo-no-text.svg';
 	import 'iconify-icon';
 	import NavPopover from './NavPopover.svelte';
+
+	import { signOut, getUser } from '@lucia-auth/sveltekit/client';
+	import { invalidateAll } from '$app/navigation';
+	const user = getUser();
 </script>
 
 <header
@@ -35,11 +39,9 @@
 		</ul>
 	</nav>
 
-	<NavPopover />
-	<!-- <iconify-icon icon="ph:user-circle-gear" style="font-size: 50px;" class="h-[50px] pr-3" /> -->
-	<!-- <div class="pr-3">
-		<img src={user} alt="TheraJournal" class="max-w-[50px]" />
-	</div> -->
+	{#if user != null}
+		<NavPopover />
+	{/if}
 </header>
 
 <style>

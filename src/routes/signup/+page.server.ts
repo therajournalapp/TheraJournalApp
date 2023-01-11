@@ -17,25 +17,25 @@ export const actions: Actions = {
         console.log("test");
 
         const form = await request.formData();
-        const username = form.get("username");
+        const email = form.get("email");
         const password = form.get("password");
 
         // check for empty values
-        if (!username || !password || typeof username !== "string" || typeof password !== "string") {
+        if (!email || !password || typeof email !== "string" || typeof password !== "string") {
             return fail(400);
         }
 
         try {
-            const user = await auth.createUser("username", username, {
+            const user = await auth.createUser("email", email, {
                 password,
                 attributes: {
-                    username
+                    email
                 }
             });
             const session = await auth.createSession(user.userId);
             locals.setSession(session);
         } catch (e) {
-            // username already in use
+            // email already in use
             if (e instanceof LuciaError) {
                 console.log(e.message);
             }

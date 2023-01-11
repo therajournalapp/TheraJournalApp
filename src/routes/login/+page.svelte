@@ -15,12 +15,13 @@
 					icon="ph:caret-left-thin"
 					width="25"
 					class="translate-y-1 translate-x-1"
-				/>Back
+				/>
+				Back
 			</a>
 		</div>
 		<form method="POST" use:enhance>
 			<div class="mb-6">
-				<input id="username" name="username" class="input" placeholder="Email" />
+				<input id="email" name="email" class="input" placeholder="Email" type="email" />
 			</div>
 			<div class="mb-6">
 				<input id="password" name="password" class="input" placeholder="Password" type="password" />

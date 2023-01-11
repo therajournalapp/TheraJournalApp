@@ -17,7 +17,7 @@
 	<h1>Profile</h1>
 	<div>
 		<p>User id: {$user?.userId}</p>
-		<p>Username: {$user?.username}</p>
+		<p>Email: {$user?.email}</p>
 	</div>
 
 	<button

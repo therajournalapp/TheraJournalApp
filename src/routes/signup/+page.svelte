@@ -17,7 +17,8 @@
 					icon="ph:caret-left-thin"
 					width="25"
 					class="translate-y-1 translate-x-1"
-				/>Back
+				/>
+				Back
 			</a>
 			<button
 				class:hidden={active_step !== 'Password'}
@@ -29,7 +30,8 @@
 					icon="ph:caret-left-thin"
 					width="25"
 					class="translate-y-1 translate-x-1"
-				/>Back
+				/>
+				Back
 			</button>
 		</div>
 		<form method="POST" use:enhance>
