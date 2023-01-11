@@ -1,6 +1,11 @@
 <script>
 	import '../app.pcss';
 	import Header from './(container)/Header.svelte';
+
+	import { page } from '$app/stores';
+	import { handleSession } from '@lucia-auth/sveltekit/client';
+
+	handleSession(page);
 </script>
 
 <div class="app">

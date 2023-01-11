@@ -1,64 +1,15 @@
-<script>
-	import Counter from './Counter.svelte';
-	// import welcome from '$lib/images/svelte-welcome.webp';
-	// import welcome_fallback from '$lib/images/svelte-welcome.png';
-</script>
+<h1 class="mb-3 text-center text-4xl font-medium">Welcome to TheraJournal</h1>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
+<div class="mx-auto mb-4 w-full max-w-screen-sm">
+	<p class="text-center">
+		TheraJournal is a journaling app for therapists and their clients. It is designed to help
+		therapists and their clients track their progress and stay on track with their therapy goals.
+		<br />
+		TheraJournal is currently in development. Please check back soon for updates.
+	</p>
+</div>
 
-<section>
-	<h1>
-		<!-- <span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span> -->
-		Welcome to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-		font-size: 2rem;
-		text-align: center;
-	}
-
-	h2 {
-		font-size: 1rem;
-	}
-
-	/* .welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	} */
-</style>
+<div class="mx-auto flex w-full max-w-2xl justify-center gap-5">
+	<a href="/signup" class="btn">Sign up</a>
+	<a href="/login" class="btn">Log in</a>
+</div>

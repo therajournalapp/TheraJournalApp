@@ -5,6 +5,9 @@
 	import logo_small from '$lib/images/logo-no-text.svg';
 	import 'iconify-icon';
 	import NavPopover from './NavPopover.svelte';
+
+	import { getUser } from '@lucia-auth/sveltekit/client';
+	const user = getUser();
 </script>
 
 <header
@@ -35,11 +38,18 @@
 		</ul>
 	</nav>
 
-	<NavPopover />
-	<!-- <iconify-icon icon="ph:user-circle-gear" style="font-size: 50px;" class="h-[50px] pr-3" /> -->
-	<!-- <div class="pr-3">
-		<img src={user} alt="TheraJournal" class="max-w-[50px]" />
-	</div> -->
+	{#if $user}
+		<NavPopover />
+	{:else if $page.url.pathname === '/'}
+		<!-- Hide Login  -->
+	{:else}
+		<div
+			class="relative mx-auto flex h-[48px] w-full max-w-2xl flex-wrap content-center justify-end gap-5"
+		>
+			<a href="/signup" class="btn">Sign up</a>
+			<a href="/login" class="btn">Log in</a>
+		</div>
+	{/if}
 </header>
 
 <style>
@@ -88,7 +98,7 @@
 		transition: color 0.2s linear;
 	}
 
-	a:hover {
+	nav a:hover {
 		color: var(--light-green);
 	}
 </style>
