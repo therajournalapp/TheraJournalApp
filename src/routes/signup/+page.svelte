@@ -8,7 +8,7 @@
 	<div class="mx-auto block w-full max-w-md rounded-l text-gray-700 ">
 		<div class="mb-6">
 			<a
-				href="/welcome"
+				href="/"
 				class:hidden={active_step !== 'Email'}
 				class="block -translate-x-[11px] text-lg font-normal transition duration-150 hover:underline"
 			>

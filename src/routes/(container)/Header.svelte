@@ -6,8 +6,7 @@
 	import 'iconify-icon';
 	import NavPopover from './NavPopover.svelte';
 
-	import { signOut, getUser } from '@lucia-auth/sveltekit/client';
-	import { invalidateAll } from '$app/navigation';
+	import { getUser } from '@lucia-auth/sveltekit/client';
 	const user = getUser();
 </script>
 
@@ -39,8 +38,17 @@
 		</ul>
 	</nav>
 
-	{#if user != null}
+	{#if $user}
 		<NavPopover />
+	{:else if $page.url.pathname === '/'}
+		<!-- Hide Login  -->
+	{:else}
+		<div
+			class="relative mx-auto flex h-[48px] w-full max-w-2xl flex-wrap content-center justify-end gap-5"
+		>
+			<a href="/signup" class="btn">Sign up</a>
+			<a href="/login" class="btn">Log in</a>
+		</div>
 	{/if}
 </header>
 
@@ -90,7 +98,7 @@
 		transition: color 0.2s linear;
 	}
 
-	a:hover {
+	nav a:hover {
 		color: var(--light-green);
 	}
 </style>

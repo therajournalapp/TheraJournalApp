@@ -165,7 +165,7 @@
 					</PopoverButton>
 					<PopoverButton
 						as="a"
-						href="##"
+						href=""
 						on:click={async () => {
 							await signOut();
 							invalidateAll();
