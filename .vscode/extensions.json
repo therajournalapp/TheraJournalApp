@@ -12,11 +12,11 @@
         "ardenivanov.svelte-intellisense",
         "fivethree.vscode-svelte-snippets",
         "proverbialninja.svelte-component-creator",
-        "stordahl.sveltekit-snippets",
         "prisma.prisma",
         "bierner.color-info",
         "bradlc.vscode-tailwindcss",
         "austenc.tailwind-docs",
-        "hwencc.html-tag-wrapper"
+        "hwencc.html-tag-wrapper",
+        "arielsalgado.kit-snippets"
     ]
 }
