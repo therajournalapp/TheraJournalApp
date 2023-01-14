@@ -17,6 +17,7 @@
         "bradlc.vscode-tailwindcss",
         "austenc.tailwind-docs",
         "hwencc.html-tag-wrapper",
-        "arielsalgado.kit-snippets"
+        "arielsalgado.kit-snippets",
+        "orta.vscode-twoslash-queries"
     ]
 }
