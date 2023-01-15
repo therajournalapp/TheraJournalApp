@@ -9,6 +9,18 @@ function getEntries() {
         {
             title: "hello",
             body: "test 123 *testing*"
+        },
+        {
+            title: "bingus",
+            body: "when the when when the when"
+        },
+        {
+            title: "very long title testing wow this title is very long!!!!",
+            body: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+            title: "pee pee",
+            body: "poo poo"
         }
     ]
 }
