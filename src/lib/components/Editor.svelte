@@ -12,8 +12,6 @@
 	let element: HTMLElement;
 	let editor: Editor;
 
-	function 
-
 	onMount(() => {
 		editor = new Editor({
 			element: element,

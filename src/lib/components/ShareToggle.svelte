@@ -78,6 +78,15 @@
 		}
 	}
 
+	.share-item-toggle.big {
+		width: 50px;
+		height: 50px;
+	}
+
+	.share-item-toggle.big label {
+		height: 50px;
+	}
+
 	.share-item-toggle.big label:before {
 		width: 50px;
 		height: 50px;
