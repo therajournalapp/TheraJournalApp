@@ -63,6 +63,30 @@
 {#if editor}
 	<div class="flex gap-1">
 		<button
+			on:click={() => editor.chain().focus().toggleBold().run()}
+			class:active={editor.isActive('bold')}
+		>
+			B
+		</button>
+		<button
+			on:click={() => editor.chain().focus().toggleItalic().run()}
+			class:active={editor.isActive('italic')}
+		>
+			i
+		</button>
+		<button
+			on:click={() => editor.chain().focus().toggleStrike().run()}
+			class:active={editor.isActive('strike')}
+		>
+			s
+		</button>
+
+		<!-- TODO: add color extension -->
+		<button> col </button>
+
+		<div class="divider" />
+
+		<!-- <button
 			on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
 			class:active={editor.isActive('heading', { level: 1 })}
 		>
@@ -79,7 +103,33 @@
 			class:active={editor.isActive('paragraph')}
 		>
 			P
+		</button> -->
+		<button
+			on:click={() => editor.chain().focus().toggleBulletList().run()}
+			class:active={editor.isActive('bulletList')}
+		>
+			bul
 		</button>
+		<button
+			on:click={() => editor.chain().focus().toggleOrderedList().run()}
+			class:active={editor.isActive('orderedList')}
+		>
+			ord
+		</button>
+
+		<div class="divider" />
+
+		<button
+			on:click={() => editor.chain().focus().toggleBlockquote().run()}
+			class:active={editor.isActive('blockquote')}
+		>
+			bq
+		</button>
+		<button on:click={() => editor.chain().focus().setHorizontalRule().run()}> hr </button>
+
+		<div class="divider" />
+
+		<!-- TODO: add emoji picker -->
 
 		<button on:click={() => editor.commands.undo()}> undo </button>
 		<button on:click={() => editor.commands.redo()}> redo </button>
@@ -89,6 +139,16 @@
 <div bind:this={element} class="" />
 
 <style lang="postcss">
+	.divider {
+		background-color: #0000001a;
+		height: 1.25rem;
+		/* margin-left: 0.5rem;
+		margin-right: 0.75rem; */
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
+		width: 2px;
+	}
+
 	button {
 		@apply h-10 w-10 rounded-lg bg-slate-300;
 	}
