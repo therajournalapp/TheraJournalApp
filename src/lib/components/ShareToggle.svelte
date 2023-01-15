@@ -4,7 +4,7 @@
 </script>
 
 <div class:big class="share-item-toggle">
-	<input type="checkbox" checked={shared} />
+	<input type="checkbox" checked={shared} class:big />
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label />
 </div>
@@ -76,5 +76,11 @@
 		100% {
 			box-shadow: 0 0 0 20px rgba(115, 146, 68, 0);
 		}
+	}
+
+	.share-item-toggle.big label:before {
+		width: 50px;
+		height: 50px;
+		background-size: 30px 30px;
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ShareToggle from './ShareToggle.svelte';
+	import ShareToggle from '../../../lib/components/ShareToggle.svelte';
 
 	export let title: String;
 	export let preview: String;

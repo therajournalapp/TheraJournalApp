@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 // and what to do when importing types
+
 declare namespace App {
 	// interface Error {}
 	// interface Locals {}
@@ -22,5 +23,11 @@ declare namespace App {
 		validate: import("@lucia-auth/sveltekit").Validate;
 		validateUser: import("@lucia-auth/sveltekit").ValidateUser;
 		setSession: import("@lucia-auth/sveltekit").SetSession;
+	}
+}
+
+declare namespace svelteHTML {
+	interface HTMLAttributes<T> {
+		"on:click_outside"?: CompositionEventHandler<T>;
 	}
 }

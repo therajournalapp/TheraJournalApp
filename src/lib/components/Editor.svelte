@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
+	import 'iconify-icon';
 
 	let element: HTMLElement;
 	let editor: Editor;
@@ -66,23 +67,23 @@
 			on:click={() => editor.chain().focus().toggleBold().run()}
 			class:active={editor.isActive('bold')}
 		>
-			B
+			<iconify-icon icon="ph:text-bolder-bold" width="20" />
 		</button>
 		<button
 			on:click={() => editor.chain().focus().toggleItalic().run()}
 			class:active={editor.isActive('italic')}
 		>
-			i
+			<iconify-icon icon="ph:text-italic" width="20" />
 		</button>
 		<button
 			on:click={() => editor.chain().focus().toggleStrike().run()}
 			class:active={editor.isActive('strike')}
 		>
-			s
+			<iconify-icon icon="ph:text-strikethrough" width="20" />
 		</button>
 
 		<!-- TODO: add color extension -->
-		<button> col </button>
+		<button> <iconify-icon icon="ph:palette" width="20" /> </button>
 
 		<div class="divider" />
 
@@ -90,31 +91,31 @@
 			on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
 			class:active={editor.isActive('heading', { level: 1 })}
 		>
-			H1
+			<iconify-icon icon="ph:text-h-one" width="20"></iconify-icon>
 		</button>
 		<button
 			on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
 			class:active={editor.isActive('heading', { level: 2 })}
 		>
-			H2
+			<iconify-icon icon="ph:text-h-two" width="20"></iconify-icon>
 		</button>
 		<button
 			on:click={() => editor.chain().focus().setParagraph().run()}
 			class:active={editor.isActive('paragraph')}
 		>
-			P
+			<iconify-icon icon="ph:text-aa" width="20"></iconify-icon>
 		</button> -->
 		<button
 			on:click={() => editor.chain().focus().toggleBulletList().run()}
 			class:active={editor.isActive('bulletList')}
 		>
-			bul
+			<iconify-icon icon="ph:list-bullets" width="20" />
 		</button>
 		<button
 			on:click={() => editor.chain().focus().toggleOrderedList().run()}
 			class:active={editor.isActive('orderedList')}
 		>
-			ord
+			<iconify-icon icon="ph:list-numbers" width="20" />
 		</button>
 
 		<div class="divider" />
@@ -123,16 +124,22 @@
 			on:click={() => editor.chain().focus().toggleBlockquote().run()}
 			class:active={editor.isActive('blockquote')}
 		>
-			bq
+			<iconify-icon icon="ph:quotes" width="20" />
 		</button>
-		<button on:click={() => editor.chain().focus().setHorizontalRule().run()}> hr </button>
+		<button on:click={() => editor.chain().focus().setHorizontalRule().run()}>
+			<iconify-icon icon="ph:dots-three-outline" width="20" />
+		</button>
 
 		<div class="divider" />
 
 		<!-- TODO: add emoji picker -->
 
-		<button on:click={() => editor.commands.undo()}> undo </button>
-		<button on:click={() => editor.commands.redo()}> redo </button>
+		<button on:click={() => editor.commands.undo()}>
+			<iconify-icon icon="ph:arrow-u-up-left" width="20" />
+		</button>
+		<button on:click={() => editor.commands.redo()}>
+			<iconify-icon icon="ph:arrow-u-up-right" width="20" />
+		</button>
 	</div>
 {/if}
 
@@ -150,7 +157,7 @@
 	}
 
 	button {
-		@apply h-10 w-10 rounded-lg bg-slate-300;
+		@apply h-[48px] w-[48px] rounded-lg bg-slate-300 p-[14px];
 	}
 
 	button.active,

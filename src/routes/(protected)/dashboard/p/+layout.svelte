@@ -1,14 +1,20 @@
-<div class="relative">
-	<a
-		href="/dashboard"
-		class="fixed inset-0 z-10 block h-screen w-screen bg-gray-500 bg-opacity-75 transition-opacity"
+<script lang="ts">
+	import { clickOutside } from './click_outside.js';
+	import { goto } from '$app/navigation';
+
+	function handleClickOutside(event: any) {
+		goto('/dashboard');
+	}
+</script>
+
+<div
+	class="overflow-x-hidde fixed top-0 left-0 z-10 h-screen w-screen overflow-y-auto bg-gray-500 bg-opacity-75"
+>
+	<div
+		class="pointer-events-auto mx-auto my-32 w-full max-w-screen-lg"
+		use:clickOutside
+		on:click_outside={handleClickOutside}
 	>
-		<!-- -->
-	</a>
-	<div class="fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-		<div class="h-[80vh] w-[80vw] rounded-lg bg-white">
-			<slot />
-		</div>
-		<!-- <slot /> -->
+		<slot />
 	</div>
 </div>
