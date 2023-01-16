@@ -71,7 +71,7 @@
 	<div class="left-pad" />
 
 	{#each data.entries as entry}
-		<JournalCard id={entry.id} title={entry.title} body={entry.body} />
+		<JournalCard id={entry.id} title={entry.title} body={entry.preview} />
 	{/each}
 
 	<!-- <JournalCard title="Really long title lorem ipsum dolar sit amet bingus bongus" preview={lorem} />

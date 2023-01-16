@@ -3,6 +3,7 @@
 	import ShareToggle from '$lib/components/ShareToggle.svelte';
 	import type { PageData } from './$types';
 	export let data: PageData;
+	import { page } from '$app/stores';
 </script>
 
 <!-- <div class="h-18 flex justify-between bg-offwhite py-5">
@@ -11,7 +12,11 @@
 	<ShareToggle big={true} />
 </div> -->
 
-<Editor title={data.entry?.title ?? ''} body={data.entry?.body ?? ''} />
+<Editor
+	id={parseInt($page.params.index)}
+	title={data.entry?.title ?? ''}
+	body={data.entry?.body ?? ''}
+/>
 
 <style>
 </style>

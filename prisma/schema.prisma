@@ -34,5 +34,6 @@ model JournalEntry {
   updatedAt DateTime? @updatedAt
   title     String    @db.VarChar(255)
   body      String    @default("") @db.LongText
+  preview   String    @default("") @db.VarChar(1000)
   shared    Boolean   @default(false)
 }

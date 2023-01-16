@@ -8,19 +8,23 @@ function getEntries() {
     return [
         {
             title: "hello",
-            body: "test 123 *testing*"
+            body: `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"hello world ??"}]}]}`,
+            preview: "preview"
         },
         {
             title: "bingus",
-            body: "when the when when the when"
+            body: `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"when the when when the when"}]}]}`,
+            preview: "preview"
         },
         {
             title: "very long title testing wow this title is very long!!!!",
-            body: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            body: `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}]}]}`,
+            preview: "preview"
         },
         {
             title: "pee pee",
-            body: "poo poo"
+            body: `{"type":"doc","content":[{"type":"blockquote","content":[{"type":"paragraph","content":[{"type":"text","text":"poo poo"}]}]}]}`,
+            preview: "preview"
         }
     ]
 }
