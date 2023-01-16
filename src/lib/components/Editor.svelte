@@ -74,7 +74,13 @@
 	<div class="title-bar">
 		<div class="mx-auto max-w-screen-lg">
 			<div class="h-18 flex content-baseline justify-between py-5">
-				<input type="text" id="entry-title" bind:value={title} class="title" />
+				<input
+					type="text"
+					id="entry-title"
+					on:change={saveContent}
+					bind:value={title}
+					class="title"
+				/>
 
 				<ShareToggle big={true} />
 			</div>
