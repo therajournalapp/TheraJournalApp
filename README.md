@@ -21,12 +21,13 @@ This is a rewrite of the original react version of the app using [SvelteKit](htt
 
 - [x] Routing - Using SvelteKit filebased routing with +layout.svelte.
 - [x] Styling - Ported from Bootstrap components to [Tailwind CSS](https://tailwindcss.com/), [PostCSS](https://postcss.org/), and [Svelte Headless UI](https://svelte-headlessui.goss.io/docs).
-- [x] ORM - Using [Prisma](https://www.prisma.io/) ORM with typesafety.
+- [x] ORM - Using [Prisma](https://www.prisma.io/) ORM with typesafety. (Need to experiment with migrations when developing with full team)
 - [x] Dashboard Layout - reworked using svelte components and tailwind. Added polish and improved mobile layout.
 - [x] Authentication - Using [Lucia Auth](https://github.com/pilcrowOnPaper/lucia-auth) and server handle hook. Protected routes should follow "/(protected)/".
-- [ ] WYSIWYG - Looking into [TinyMCE](https://www.tiny.cloud/), [tiptap](https://tiptap.dev/), [Quil](https://quilljs.com/), [ProseMirror](https://prosemirror.net/), and [Toast UI](https://github.com/nhn/tui.editor).
-- [ ] Journal Entry CRUD - Connection to database is already setup, need to choose a new WSIWYG editor and add CRUD operations for it.
-- [ ] tRPC - Looking into using [tRPC](trpc.io) with [tRPC-SvelteKit](https://github.com/icflorescu/trpc-sveltekit) for typesafe API.
-- [ ] AWS Hosting - Looking into using [SvelteKit Adapter AWS](https://github.com/MikeBild/sveltekit-adapter-aws) to deploy to AWS.
+- [x] WYSIWYG - Using [tiptap](https://tiptap.dev/) with the [tailwind typography plugin](https://tailwindcss.com/docs/typography-plugin) for text styling.
+- [~] Journal Entry CRUD - TODO brand new entry creation and deletion.
+- [~] Vercel Hosting - Deployed a private copy of this repo successfully, but need to create new accounts to host for team with CI/CD.
+- [ ] tRPC - Looking into using [tRPC](trpc.io) with [tRPC-SvelteKit](https://github.com/icflorescu/trpc-sveltekit) for typesafe API. Currently using sveltekit page load functions and fetch.
+- [ ] Zod - Looking into using [Zod](https://zod.dev/?id=introduction) for validation with TypeScript.
 
 ----
