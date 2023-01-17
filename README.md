@@ -25,7 +25,7 @@ This is a rewrite of the original react version of the app using [SvelteKit](htt
 - [x] Dashboard Layout - reworked using svelte components and tailwind. Added polish and improved mobile layout.
 - [x] Authentication - Using [Lucia Auth](https://github.com/pilcrowOnPaper/lucia-auth) and server handle hook. Protected routes should follow "/(protected)/".
 - [x] WYSIWYG - Using [tiptap](https://tiptap.dev/) with the [tailwind typography plugin](https://tailwindcss.com/docs/typography-plugin) for text styling.
-- [x] Vercel Hosting - The main branch of this repo is automatically deployed to [therajournalapp.vercel.app](therajournalapp.vercel.app)
+- [x] Vercel Hosting - The main branch of this repo is automatically deployed to [therajournalapp.vercel.app](https://therajournalapp.vercel.app)
 - [ ] Journal Entry CRUD - Editing journal entries with autosave is implemented. TODO brand new entry creation, deletion, and tying entries to user ids/auth check for api calls.
 - [ ] tRPC - Looking into using [tRPC](trpc.io) with [tRPC-SvelteKit](https://github.com/icflorescu/trpc-sveltekit) for typesafe API. Currently using sveltekit page load functions and fetch.
 - [ ] Zod - Looking into using [Zod](https://zod.dev/?id=introduction) for validation with TypeScript.
