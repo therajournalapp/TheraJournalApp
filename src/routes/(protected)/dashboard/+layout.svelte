@@ -20,6 +20,7 @@
 
 	const lorem =
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl suscipit adipiscing bibendum est ultricies integer quis auctor elit. Laoreet non curabitur gravida arcu ac. Amet tellus cras adipiscing enim eu turpis egestas pretium. Scelerisque viverra mauris in aliquam sem fringilla. Facilisis gravida neque convallis a cras semper auctor neque vitae. At auctor urna nunc id cursus metus aliquam eleifend mi. Nunc sed blandit libero volutpat sed. Magna etiam tempor orci eu lobortis elementum nibh tellus. Nam libero justo laoreet sit amet cursus sit amet. Mauris a diam maecenas sed enim. Ultricies integer quis auctor elit sed vulputate mi sit. Vulputate enim nulla aliquet porttitor lacus. Lacinia at quis risus sed vulputate. Ultrices in iaculis nunc sed. Ante metus dictum at tempor commodo ullamcorper a. Nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. At lectus urna duis convallis convallis tellus id. Phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis. Ac felis donec et odio pellentesque diam. Tortor pretium viverra suspendisse potenti nullam ac tortor vitae purus. Ipsum a arcu cursus vitae congue mauris rhoncus. Proin fermentum leo vel orci porta non pulvinar neque. Neque volutpat ac tincidunt vitae semper quis lectus. Morbi non arcu risus quis varius quam quisque id diam. Donec enim diam vulputate ut pharetra sit amet aliquam. Varius duis at consectetur lorem donec massa. Non quam lacus suspendisse faucibus interdum. Bibendum enim facilisis gravida neque. Lobortis feugiat vivamus at augue eget arcu.';
+	export let data: any;
 </script>
 
 <svelte:head>
@@ -69,7 +70,11 @@
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
 
-	<JournalCard title="Really long title lorem ipsum dolar sit amet bingus bongus" preview={lorem} />
+	{#each data.entries as entry}
+		<JournalCard id={entry.id} title={entry.title} body={entry.preview} />
+	{/each}
+
+	<!-- <JournalCard title="Really long title lorem ipsum dolar sit amet bingus bongus" preview={lorem} />
 
 	<JournalCard title="Jan 4th" preview={lorem} />
 
@@ -89,7 +94,7 @@
 
 	<JournalCard title="Dec 27th" preview={lorem} />
 
-	<JournalCard title="Dec 26th" preview={lorem} />
+	<JournalCard title="Dec 26th" preview={lorem} /> -->
 	<div class="right-pad" />
 </div>
 

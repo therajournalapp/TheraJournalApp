@@ -1,9 +1,17 @@
-/* A server.ts file is required to protect a route */
-
 import type { LayoutServerLoad } from './$types';
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
 export const load = (async () => {
+
+    const journalEntries = await prisma.journalEntry.findMany({
+        orderBy: {
+            id: 'desc'
+        },
+        take: 10
+    });
+
     return {
-        test: "test!"
+        entries: journalEntries
     };
 }) satisfies LayoutServerLoad;

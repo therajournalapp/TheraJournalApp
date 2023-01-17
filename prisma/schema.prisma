@@ -27,3 +27,13 @@ model Session {
   @@index([user_id])
   @@map("session")
 }
+
+model JournalEntry {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  title     String    @db.VarChar(255)
+  body      String    @default("") @db.LongText
+  preview   String    @default("") @db.VarChar(1000)
+  shared    Boolean   @default(false)
+}
