@@ -2,19 +2,18 @@ import { fail, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/lucia";
 import type { PageServerLoad, Actions } from "./$types";
 import { LuciaError } from "lucia-auth";
+import { fb_auth } from "$lib/server/admin";
 
 // If the user exists, redirect authenticated users to the profile page.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const load: PageServerLoad = async ({ locals }: { locals: any }) => {
+export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate();
     if (session) throw redirect(302, "/");
     return {};
 };
 
 export const actions: Actions = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     default: async ({ request, locals }) => {
-        console.log("test");
+        console.log("1. signup form recieved");
 
         const form = await request.formData();
         const email = form.get("email");
@@ -22,24 +21,53 @@ export const actions: Actions = {
 
         // check for empty values
         if (!email || !password || typeof email !== "string" || typeof password !== "string") {
-            return fail(400);
+            console.log("error: empty values in signup form");
+            return fail(400, { email, empty: true });
         }
 
+        console.log("2. creating fb user");
+
+        let fb_id: string | null = null;
+
         try {
-            const user = await auth.createUser("email", email, {
-                password,
-                attributes: {
-                    email
-                }
+            const userRecord = await fb_auth.createUser({
+                email: email,
+                emailVerified: false,
+                password: password,
             });
-            const session = await auth.createSession(user.userId);
-            locals.setSession(session);
-        } catch (e) {
-            // email already in use
-            if (e instanceof LuciaError) {
-                console.log(e.message);
+            console.log('3. Successfully created new fb user:', userRecord.uid);
+            fb_id = userRecord.uid;
+        }
+        catch (error) {
+            console.log('error: error creating new fb user:', error);
+            return fail(400, { email, error: true });
+        };
+
+        if (fb_id) {
+            try {
+                console.log("4. try create lucia auth user")
+                const user = await auth.createUser("fb_id", fb_id, {
+                    attributes: {
+                        fb_id
+                    }
+                });
+                const session = await auth.createSession(user.userId);
+                locals.setSession(session);
+                console.log("5. user and session created!")
+            } catch (e) {
+                // fb_id already in use
+                if (e instanceof LuciaError) {
+                    console.log(e.message);
+                }
+                else if (e instanceof Error) {
+                    console.log(e.message);
+                }
+
+                return fail(400, { email, error: true });
             }
-            return fail(400);
+        }
+        else {
+            console.log("error: fb_id is null");
         }
     }
 };

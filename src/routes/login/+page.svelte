@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import 'iconify-icon';
+
+	function handleSubmit(e: any) {
+		const formData = new FormData(e.target);
+	}
 </script>
 
 <div class="mx-auto">
@@ -19,7 +24,8 @@
 				Back
 			</a>
 		</div>
-		<form method="POST" use:enhance>
+		<!-- <form method="POST" use:enhance> -->
+		<form on:submit|preventDefault={handleSubmit}>
 			<div class="mb-6">
 				<input id="email" name="email" class="input" placeholder="Email" type="email" />
 			</div>
