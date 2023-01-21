@@ -3,7 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  // provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -32,8 +33,11 @@ model JournalEntry {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-  title     String    @db.VarChar(255)
-  body      String    @default("") @db.LongText
-  preview   String    @default("") @db.VarChar(1000)
+  // title     String    @db.VarChar(255)
+  title     String
+  // body      String    @default("") @db.LongText
+  body      String    @default("")
+  // preview   String    @default("") @db.VarChar(1000)
+  preview   String    @default("")
   shared    Boolean   @default(false)
 }
