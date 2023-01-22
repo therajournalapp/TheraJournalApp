@@ -4,6 +4,7 @@
 	import 'iconify-icon';
 	import { onMount } from 'svelte';
 	import { getUser } from '@lucia-auth/sveltekit/client';
+	import { z } from 'zod';
 
 	export let icon1 = 'ph:circle-dashed';
 	export let icon2 = 'ph:circle-dashed';
@@ -13,6 +14,8 @@
 	$: type = show_password ? 'text' : 'password';
 
 	export let password = '';
+
+	export let disabled = true;
 
 	onMount(async () => {
 		// setTimeout(() => {
@@ -34,14 +37,42 @@
 	});
 
 	function onInput(event: any) {
+		// TODO: server side validation
 		password = event.target.value;
 
-		if (password.length > 11) {
+		if (password == '') {
+			icon1 = 'ph:circle-dashed';
+			icon2 = 'ph:circle-dashed';
+			icon3 = 'ph:circle-dashed';
+			return;
+		}
+
+		const lengthReq = password.length > 11;
+		if (lengthReq) {
 			icon1 = 'ph:check-circle';
 		} else {
 			icon1 = 'ph:x-circle';
 		}
-		console.log(password.length);
+
+		const lettersAndNumbersRegex = /^(?=.*[A-Za-z])(?=.*[0-9])/;
+		const lettersAndNumbersReq = lettersAndNumbersRegex.test(password);
+		if (lettersAndNumbersReq) {
+			icon2 = 'ph:check-circle';
+		} else {
+			icon2 = 'ph:x-circle';
+		}
+
+		const specialCharacterRegex = /[!-\/:-@[-`{-~]/;
+		const specialCharacterReq = specialCharacterRegex.test(password);
+		if (specialCharacterReq) {
+			icon3 = 'ph:check-circle';
+		} else {
+			icon3 = 'ph:x-circle';
+		}
+
+		if (lengthReq && lettersAndNumbersReq && specialCharacterReq) {
+			disabled = false;
+		}
 	}
 </script>
 
@@ -129,7 +160,13 @@
 				</div>
 			</div> -->
 			<div class="flex justify-end">
-				<button type="submit" class="btn"> Sign up </button>
+				<button
+					{disabled}
+					type="submit"
+					class="btn disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+				>
+					Sign up
+				</button>
 			</div>
 		</form>
 	</div>
