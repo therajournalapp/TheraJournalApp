@@ -42,6 +42,7 @@
 
 	function onInput(event: any) {
 		// TODO: server side validation
+		// TODO: set email string and emailVerified bool on lucia user object
 		password = event.target.value;
 		disabled = true;
 
