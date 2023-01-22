@@ -95,7 +95,7 @@
 		</div>
 		<form method="POST" use:enhance autocomplete="off">
 			<div class="mb-6">
-				<input required id="email" name="email" placeholder="Email" class="input" />
+				<input required id="email" type="email" name="email" placeholder="Email" class="input" />
 			</div>
 
 			<div class="mb-2">
