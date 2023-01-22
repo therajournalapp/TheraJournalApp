@@ -13,7 +13,11 @@
 	let show_password = false;
 	$: type = show_password ? 'text' : 'password';
 
+	export let email = '';
 	export let password = '';
+
+	export let emailVal = 'inital';
+	export let passwordVal = 'inital';
 
 	export let disabled = true;
 
@@ -39,11 +43,25 @@
 	function onInput(event: any) {
 		// TODO: server side validation
 		password = event.target.value;
+		disabled = true;
+
+		const isEmail = z.string().email();
+		const emailReq = isEmail.safeParse(email).success;
+		if (emailReq) {
+			emailVal = 'true';
+		} else {
+			emailVal = 'false';
+		}
+
+		if (email == '') {
+			emailVal = 'inital';
+		}
 
 		if (password == '') {
 			icon1 = 'ph:circle-dashed';
 			icon2 = 'ph:circle-dashed';
 			icon3 = 'ph:circle-dashed';
+			passwordVal = 'inital';
 			return;
 		}
 
@@ -52,6 +70,7 @@
 			icon1 = 'ph:check-circle';
 		} else {
 			icon1 = 'ph:x-circle';
+			passwordVal = 'false';
 		}
 
 		const lettersAndNumbersRegex = /^(?=.*[A-Za-z])(?=.*[0-9])/;
@@ -60,6 +79,7 @@
 			icon2 = 'ph:check-circle';
 		} else {
 			icon2 = 'ph:x-circle';
+			passwordVal = 'false';
 		}
 
 		const specialCharacterRegex = /[!-\/:-@[-`{-~]/;
@@ -68,10 +88,14 @@
 			icon3 = 'ph:check-circle';
 		} else {
 			icon3 = 'ph:x-circle';
+			passwordVal = 'false';
 		}
 
-		if (lengthReq && lettersAndNumbersReq && specialCharacterReq) {
-			disabled = false;
+		if (emailReq && lengthReq && lettersAndNumbersReq && specialCharacterReq) {
+			passwordVal = 'true';
+			if (emailReq) {
+				disabled = false;
+			}
 		}
 	}
 </script>
@@ -95,7 +119,16 @@
 		</div>
 		<form method="POST" use:enhance autocomplete="off">
 			<div class="mb-6">
-				<input required id="email" type="email" name="email" placeholder="Email" class="input" />
+				<input
+					required
+					id="email"
+					type="email"
+					name="email"
+					placeholder="Email"
+					class="input"
+					bind:value={email}
+					class:!border-red-500={emailVal == 'false'}
+				/>
 			</div>
 
 			<div class="mb-2">
@@ -108,6 +141,7 @@
 					placeholder="Password"
 					value={password}
 					on:input={onInput}
+					class:!border-red-500={passwordVal == 'false'}
 				/>
 			</div>
 
@@ -171,3 +205,8 @@
 		</form>
 	</div>
 </div>
+
+<style lang="postcss">
+	.input-inval {
+	}
+</style>
