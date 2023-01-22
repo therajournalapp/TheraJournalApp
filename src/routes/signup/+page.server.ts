@@ -4,12 +4,12 @@ import type { PageServerLoad, Actions } from "./$types";
 import { LuciaError } from "lucia-auth";
 import { fb_auth } from "$lib/server/admin";
 
-// If the user exists, redirect authenticated users to the dashboard
-export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.validate();
-    if (session) throw redirect(302, "/dashboard");
-    return {};
-};
+// // If the user exists, redirect authenticated users to the dashboard
+// export const load: PageServerLoad = async ({ locals }) => {
+//     const session = await locals.validate();
+//     if (session) throw redirect(302, "/dashboard");
+//     return {};
+// };
 
 export const actions: Actions = {
     default: async ({ request, locals }) => {

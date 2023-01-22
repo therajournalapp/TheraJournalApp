@@ -13,11 +13,13 @@ specifiers:
   '@tailwindcss/typography': ^0.5.9
   '@tiptap/core': 2.0.0-beta.209
   '@tiptap/starter-kit': 2.0.0-beta.209
+  '@types/async-retry': ^1.4.5
   '@types/cookie': ^0.5.1
   '@types/lodash': ^4.14.191
   '@types/node': ^18.11.18
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  async-retry: ^1.3.3
   autoprefixer: ^10.4.7
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
@@ -51,6 +53,7 @@ dependencies:
   '@prisma/client': 4.9.0_prisma@4.9.0
   '@tiptap/core': 2.0.0-beta.209_rd5pjtxohzfgv2zee3iufpqkay
   '@tiptap/starter-kit': 2.0.0-beta.209_mr3bhnmfox2kjnahwbtgkxt4cy
+  async-retry: 1.3.3
   firebase: 9.16.0
   firebase-admin: 11.5.0
   iconify-icon: 1.0.2
@@ -67,6 +70,7 @@ devDependencies:
   '@sveltejs/adapter-auto': 1.0.0_@sveltejs+kit@1.0.1
   '@sveltejs/kit': 1.0.1_svelte@3.55.0+vite@4.0.3
   '@tailwindcss/typography': 0.5.9_tailwindcss@3.2.4
+  '@types/async-retry': 1.4.5
   '@types/cookie': 0.5.1
   '@types/lodash': 4.14.191
   '@types/node': 18.11.18
@@ -1380,6 +1384,12 @@ packages:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
 
+  /@types/async-retry/1.4.5:
+    resolution: {integrity: sha512-YrdjSD+yQv7h6d5Ip+PMxh3H6ZxKyQk0Ts+PvaNRInxneG9PFVZjFg77ILAN+N6qYf7g4giSJ1l+ZjQ1zeegvA==}
+    dependencies:
+      '@types/retry': 0.12.2
+    dev: true
+
   /@types/body-parser/1.19.2:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
@@ -1478,6 +1488,10 @@ packages:
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
     dev: false
+
+  /@types/retry/0.12.2:
+    resolution: {integrity: sha512-XISRgDJ2Tc5q4TRqvgJtzsRkFYNJzZrhTdtMoGVBttwzzQJkPnS3WWTFc7kuDRoPtPakl+T+OfdEUjYJj7Jbow==}
+    dev: true
 
   /@types/sass/1.43.1:
     resolution: {integrity: sha512-BPdoIt1lfJ6B7rw35ncdwBZrAssjcwzI5LByIrYs+tpXlj/CAkuVdRsgZDdP4lq5EjyWzwxZCqAoFyHKFwp32g==}
@@ -1740,7 +1754,6 @@ packages:
     dependencies:
       retry: 0.13.1
     dev: false
-    optional: true
 
   /autoprefixer/10.4.13_postcss@8.4.20:
     resolution: {integrity: sha512-49vKpMqcZYsJjwotvt4+h/BCjJVnhGwcLpDt5xkcaOG3eLrG/HUYLagrihYsQ+qrIBgIzX1Rw7a6L8I/ZA1Atg==}
@@ -3719,7 +3732,6 @@ packages:
     resolution: {integrity: sha512-XQBQ3I8W1Cge0Seh+6gjj03LbmRFWuoszgK9ooCpwYIrhhoO80pfq4cUkU5DkknwfOfFteRwlZ56PYOGYyFWdg==}
     engines: {node: '>= 4'}
     dev: false
-    optional: true
 
   /reusify/1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}

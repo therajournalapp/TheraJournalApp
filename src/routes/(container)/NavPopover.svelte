@@ -1,7 +1,8 @@
 <script>
 	import { Popover, PopoverButton, PopoverPanel, Transition } from '@rgossiaux/svelte-headlessui';
 
-	import { signOut } from '@lucia-auth/sveltekit/client';
+	// import { signOut } from '@lucia-auth/sveltekit/client';
+	import { signOut } from '$lib/firebase/client';
 	import { invalidateAll } from '$app/navigation';
 </script>
 

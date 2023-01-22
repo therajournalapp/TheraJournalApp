@@ -9,35 +9,39 @@
 	import { getUser } from '@lucia-auth/sveltekit/client';
 	const user = getUser();
 
-	export let verified = false;
+	export let verify = true;
 
 	function handleClick() {
-		verified = !verified;
+		verify = !verify;
 	}
 </script>
 
 <header class="flex flex-col">
-	<div
-		class:hidden={verified}
-		class="flex h-14 w-screen items-center justify-center bg-amber-300 text-xs sm:text-lg"
-	>
-		<div class="mr-3">Please check your email and follow the link to verify your email address</div>
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<button
-			class=" h-[30px] w-[30px] translate-y-[1.5px] rounded-full hover:bg-black hover:bg-opacity-5"
-			on:click={handleClick}
-		>
-			<iconify-icon icon="ph:x" style="font-size: 30px;" />
-		</button>
-		<div class="hidden" />
-	</div>
+	{#if verify}
+		<div class="flex h-14 w-screen items-center justify-center bg-amber-300 text-xs sm:text-lg">
+			<div class="mr-3">
+				<a href="/verify">
+					Please check your email and follow the link to verify your email address
+				</a>
+			</div>
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<button
+				class=" h-[30px] w-[30px] translate-y-[1.5px] rounded-full hover:bg-black hover:bg-opacity-5"
+				on:click={handleClick}
+			>
+				<iconify-icon icon="ph:x" style="font-size: 30px;" />
+			</button>
+			<div class="hidden" />
+		</div>
+	{/if}
+
 	<div
 		class="mx-auto my-5 flex w-full justify-between px-5 md:my-12 md:w-10/12 md:px-0 xl:max-w-screen-xl"
 	>
 		<nav>
 			<ul>
 				<div id="logo" class="mr-10">
-					<a href="/">
+					<a href={$user ? '/dashboard' : '/'}>
 						<picture class="ml-1 max-w-[40px] md:ml-0 md:max-w-[300px]">
 							<source media="(min-width:768px)" srcset={logo} />
 							<img src={logo_small} alt="TheraJournal" style="width:auto;" />
