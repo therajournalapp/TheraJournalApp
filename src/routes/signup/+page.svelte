@@ -43,6 +43,7 @@
 	function onInput(event: any) {
 		// TODO: server side validation
 		// TODO: set email string and emailVerified bool on lucia user object
+		// TODO: verify banner ssr + don't show for logged out users
 		password = event.target.value;
 		disabled = true;
 
@@ -206,8 +207,3 @@
 		</form>
 	</div>
 </div>
-
-<style lang="postcss">
-	.input-inval {
-	}
-</style>
