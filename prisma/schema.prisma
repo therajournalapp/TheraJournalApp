@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  // provider = "mysql"
-  provider = "sqlite"
+  provider = "mysql"
+  // provider = "sqlite" // use for local test db with DATABASE_URL=file:./dev.db
   url      = env("DATABASE_URL")
 }
 
@@ -33,11 +33,11 @@ model JournalEntry {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-  // title     String    @db.VarChar(255)
-  title     String
-  // body      String    @default("") @db.LongText
-  body      String    @default("")
-  // preview   String    @default("") @db.VarChar(1000)
-  preview   String    @default("")
+  title     String    @db.VarChar(255)
+  // title     String // sqlite
+  body      String    @db.LongText
+  // body      String    @default("")
+  preview   String    @default("") @db.VarChar(1000)
+  // preview   String    @default("")
   shared    Boolean   @default(false)
 }

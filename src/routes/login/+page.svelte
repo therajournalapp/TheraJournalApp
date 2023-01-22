@@ -1,9 +1,36 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { goto, invalidateAll } from '$app/navigation';
+	import { signIn } from '$lib/firebase/client';
 	import 'iconify-icon';
 
-	function handleSubmit(e: any) {
+	async function handleSubmit(e: any) {
 		const formData = new FormData(e.target);
+		const email = formData.get('email') as string;
+		const password = formData.get('password') as string;
+
+		const userCredential = await signIn(email, password);
+
+		const token = await userCredential.user.getIdToken();
+
+		console.log(token);
+
+		const response = await fetch('/api/signIn', {
+			method: 'POST',
+			body: JSON.stringify({ token: token }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		console.log(response);
+
+		if (response.ok) {
+			setTimeout(() => {
+				goto('/dashboard', { invalidateAll: true });
+			}, 500);
+		} else {
+			// TODO show error message
+		}
 	}
 </script>
 
