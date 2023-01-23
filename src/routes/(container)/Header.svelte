@@ -9,15 +9,18 @@
 	import { getUser } from '@lucia-auth/sveltekit/client';
 	const user = getUser();
 
-	export let verify = true;
+	let verified = true;
+	if ($user && !$user.email_verified) {
+		verified = false;
+	}
 
 	function handleClick() {
-		verify = !verify;
+		verified = !verified;
 	}
 </script>
 
 <header class="flex flex-col">
-	{#if verify}
+	{#if !verified}
 		<div class="flex h-14 w-screen items-center justify-center bg-amber-300 text-xs sm:text-lg">
 			<div class="mr-3">
 				<a href="/verify">

@@ -2,28 +2,71 @@
 	import {
 		sendVerificationEmail,
 		getCurrentUserEmail,
-		getEmailVerifiedStatus
+		getEmailVerifiedStatus,
+		getCurrentUser
 	} from '$lib/firebase/client';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { getUser } from '@lucia-auth/sveltekit/client';
 
 	async function handleSubmit(e: any) {
 		console.log('todo');
 	}
 
-	export let sendCodeText = 'Click here';
+	let sendCodeText = 'Click here';
 
-	export let email = '';
+	const user = getUser();
 
-	export let state = 'loading';
+	let email = '';
+	if ($user?.email) {
+		email = $user.email;
+	}
+
+	const lucia_email_verified = $user?.email_verified;
+	let state = lucia_email_verified ? 'verified' : 'loading';
+
+	onMount(async () => {
+		if ($user?.email_verified) {
+			state = 'verified';
+			return;
+		}
+
+		console.log('wweeee');
+
+		const fb_verified = await getEmailVerifiedStatus();
+		console.log('verified ' + fb_verified);
+		if (fb_verified) {
+			console.log('noooo');
+			const user = await getCurrentUser();
+			if (user != null && user.emailVerified) {
+				console.log('bingo');
+				console.log('setting verify on server');
+				const token = await user.getIdToken();
+				const response = await fetch('/api/verify', {
+					method: 'POST',
+					body: JSON.stringify({ token: token }),
+					headers: {
+						'content-type': 'application/json'
+					}
+				});
+				state = 'verified';
+			} else {
+				state = 'not verified';
+			}
+		} else {
+			state = 'not verified';
+		}
+	});
 
 	async function handleClick() {
 		sendCodeText = 'Sending...';
 		const redirect = $page.url.host + '/verify';
+		console.log(redirect);
 		const a = await sendVerificationEmail(redirect);
 		if (a === null) {
 			// Error
-			sendCodeText = 'Error sending code, try loging out and back in or contacting support';
+			sendCodeText =
+				'Error sending code, try logging out and back in and trying again or if issue persists contact support.';
 		} else {
 			sendCodeText = 'Sent.';
 			setTimeout(() => {
@@ -31,17 +74,6 @@
 			}, 10000);
 		}
 	}
-
-	onMount(async () => {
-		console.log('ping');
-		email = (await getCurrentUserEmail()) ?? '';
-		const verified = await getEmailVerifiedStatus();
-		if (verified) {
-			state = 'verified';
-		} else {
-			state = 'not verified';
-		}
-	});
 </script>
 
 {#if state == 'loading'}

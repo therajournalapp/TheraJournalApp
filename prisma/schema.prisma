@@ -14,6 +14,8 @@ model User {
   fb_id           String    @unique
   hashed_password String?
   session         Session[]
+  email           String
+  email_verified  Boolean
 
   @@map("user")
 }

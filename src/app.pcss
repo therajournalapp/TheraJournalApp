@@ -74,6 +74,10 @@ body {
 	animation: GradientSlide 40s linear infinite; */
 }
 
+.link {
+	@apply text-primary hover:text-primary-light active:text-primary-dark underline;
+}
+
 .btn {
 	@apply inline-block h-fit rounded bg-primary px-3.5 py-2 font-normal leading-snug text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-light focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-dark active:shadow-lg;
 }
@@ -87,18 +91,7 @@ body {
 }
 
 /* Loading animation */
-/* To use 
-{#if state == 'loading'}
-	<label class="loading">
-		<progress class="loading" />
-		Loading…
-	</label>
-{:else if state == ???}
-	<!-- content -->
-{:else}
-	<!-- content -->
-{/if}
-*/
+/* To be used with {#if} and {#await} blocks */
 label.loading {
 	height: 100%;
 	display: flex;

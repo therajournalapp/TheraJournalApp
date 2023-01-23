@@ -36,7 +36,7 @@ export async function getCurrentUser() {
                     }
                 },
                 {
-                    retries: 3,
+                    retries: 10,
                     minTimeout: 10
                 })
         }
@@ -63,8 +63,6 @@ export async function signOut() {
 }
 
 export async function sendVerificationEmail(redirect: string) {
-
-
     const actionCodeSettings = {
         url: redirect
     }
@@ -77,6 +75,20 @@ export async function sendVerificationEmail(redirect: string) {
     else {
         return null
     }
+}
+
+export async function sendsendVerificationEmailWithUser(redirect: string, user: User) {
+    if (redirect.startsWith("127.0.0.1")) {
+        return sendEmailVerification(user)
+    }
+
+    //TODO test on vercel and remove if it works
+    console.log(redirect)
+
+    const actionCodeSettings = {
+        url: redirect
+    }
+    return sendEmailVerification(user, actionCodeSettings)
 }
 
 export async function getCurrentUserEmail() {

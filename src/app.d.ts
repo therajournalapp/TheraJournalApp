@@ -14,6 +14,8 @@ declare namespace Lucia {
 	type Auth = import("$lib/server/lucia").Auth;
 	type UserAttributes = {
 		fb_id: string;
+		email: string;
+		email_verified: boolean?;
 	};
 }
 

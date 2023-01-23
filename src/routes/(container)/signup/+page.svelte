@@ -1,44 +1,74 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { getEmailVerifiedStatus } from '$lib/firebase/client';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { getEmailVerifiedStatus, sendVerificationEmail } from '$lib/firebase/client';
+	import { getUser } from '@lucia-auth/sveltekit/client';
 	import 'iconify-icon';
 	import { onMount } from 'svelte';
-	import { getUser } from '@lucia-auth/sveltekit/client';
 	import { z } from 'zod';
+	import type { ActionData } from './$types';
 
-	export let icon1 = 'ph:circle-dashed';
-	export let icon2 = 'ph:circle-dashed';
-	export let icon3 = 'ph:circle-dashed';
+	// Holds the current state of the email and password fields
+	// Used for validation
+	let email = '';
+	let password = '';
 
+	// Validation States used for live updating icons
+	// inital is when the form is empty, false is error, true means fields validate
+	let emailVal = 'inital';
+	let passwordVal = 'inital';
+
+	// Set the icon string to a valid iconify-icon to change the icon
+	let icon1 = 'ph:circle-dashed';
+	let icon2 = 'ph:circle-dashed';
+	let icon3 = 'ph:circle-dashed';
+
+	// Used to hide and show the password field
 	let show_password = false;
 	$: type = show_password ? 'text' : 'password';
 
-	export let email = '';
-	export let password = '';
+	// When true, disables the submit form button, false enables
+	// Is set based on validation
+	let disabled = true;
 
-	export let emailVal = 'inital';
-	export let passwordVal = 'inital';
+	// Used to export form data to server
+	export let form: ActionData;
 
-	export let disabled = true;
+	const user = getUser();
 
-	onMount(async () => {
-		// setTimeout(() => {
-		// 	icon1 = 'ph:circle';
-		// 	icon2 = 'ph:circle';
-		// 	icon3 = 'ph:circle';
-		// }, 1000);
-
-		const user = getUser();
-		if (JSON.stringify(user) === '{}') {
-			//not logged in
-		} else {
-			const verified = await getEmailVerifiedStatus();
-			console.log('verified? ' + verified);
-			if (verified === false) {
-				console.log('not verified ???');
-			}
-		}
-	});
+	// onMount(async () => {
+	// 	// Get lucia auth user
+	// 	// Check if logged in
+	// 	console.log('on mount');
+	// 	if ($user) {
+	// 		console.log('if user check');
+	// 		// if logged in check email verification status
+	// 		const verified = $user.email_verified;
+	// 		console.log('verified is ' + verified);
+	// 		if (verified == false) {
+	// 			const fb_verified = await getEmailVerifiedStatus();
+	// 			const redirect = $page.url.host + '/verify';
+	// 			console.log('redirect is ' + redirect);
+	// 			try {
+	// 				const response = await sendVerificationEmail(redirect);
+	// 				if (response === null) {
+	// 					console.log("didn't wark");
+	// 				} else {
+	// 					console.log('it worked??');
+	// 				}
+	// 			} catch (err) {
+	// 				console.log('oopsie');
+	// 				if (err instanceof Error) {
+	// 					console.log(err.message);
+	// 				}
+	// 			}
+	// 		}
+	// 		await goto('/dashboard');
+	// 	} else {
+	// 		console.log('not logged in');
+	// 	}
+	// });
 
 	function onInput(event: any) {
 		// TODO: server side validation
@@ -204,6 +234,9 @@
 					Sign up
 				</button>
 			</div>
+			{#if form?.error}
+				<p class="mt-4 text-red-500">{form.error}</p>
+			{/if}
 		</form>
 	</div>
 </div>
