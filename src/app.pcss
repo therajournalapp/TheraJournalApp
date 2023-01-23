@@ -74,6 +74,10 @@ body {
 	animation: GradientSlide 40s linear infinite; */
 }
 
+.link {
+	@apply text-primary hover:text-primary-light active:text-primary-dark underline;
+}
+
 .btn {
 	@apply inline-block h-fit rounded bg-primary px-3.5 py-2 font-normal leading-snug text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-light focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-dark active:shadow-lg;
 }
@@ -82,147 +86,154 @@ body {
 	@apply m-0 w-full rounded-md border border-solid border-gray-300 bg-formbg bg-clip-padding px-2 py-1.5 font-normal text-gray-900 shadow-inner transition ease-in-out placeholder:text-gray-500 focus:border-primary focus:bg-white focus:text-gray-700 focus:outline-none;
 }
 
-#bg {
-	/* position: fixed;
-	z-index: -1;
-	width: 100vw;
-	height: 100vh;
-	background-color: var(--almost-white); */
-	/* position: fixed;
-	width: 100vw;
-	height: 100vh;
-	background-color: hsla(0, 100%, 50%, 0.25);
-	z-index: -1;
-	animation: bg-slide-x 2000s linear infinite;
-	animation: bg-slide-x 2000s linear infinite; */
-}
-
-#bg2 {
-	/* position: fixed;
-	width: 100vw;
-	height: 100vh; */
-	/* background-color: hsla(115, 100%, 50%, 0.25); */
-	/* z-index: -1; */
-	/* animation: bg-slide-y 3000s linear infinite; */
-}
-
-#bg3 {
-	/* position: fixed;
-	width: 100vw;
-	height: 100vh; */
-	/* background-color: hsla(219, 100%, 50%, 0.25); */
-	/* z-index: -1; */
-	/* animation: bg-slide-x 2000s linear infinite; */
-}
-
-#bg3::before,
-#bg3::after {
-	/* transform: translate(-25%, -25%);
-	width: 200vw;
-	height: 200vh;
-
-	position: fixed;
-	inset: 0;
-	z-index: -1; */
-	/* --grad: radial-gradient(at 25%, red, rgba(255, 0, 0, 0.2) 50%, transparent 70%); */
-	/* --grad: radial-gradient(at 50%, red, rgba(255, 0, 0, 0.2) 37.5%, transparent 47.5%); */
-	/* --grad: radial-gradient(
-		at 50%,
-		red 0%,
-		rgba(255, 0, 0, 0.2) 50%,
-		transparent 75%,
-		transparent 100%
-	); */
-	/* --mask: var(--grad), var(--grad), var(--grad);
-	mask-composite: source-in;
-	mask: var(--mask);
-	mix-blend-mode: color;
-	content: '';
-	opacity: 0.5; */
-	/* animation: bg-opacity 100s linear infinite; */
-}
-
-@property --c {
-	syntax: '<color>';
-	inherits: false;
-	initial-value: purple;
-}
-
-@property --c2 {
-	syntax: '<color>';
-	inherits: false;
-	initial-value: navy;
-}
-
-@property --c3 {
-	syntax: '<color>';
-	inherits: false;
-	initial-value: aqua;
-}
-
-/* #bg3::before {
-	background: #000;
-	filter: url(#f);
-} */
-#bg3::after {
-	/* background: linear-gradient(90deg, purple, navy 60%, aqua); */
-	/* background: linear-gradient(
-		90deg,
-		hsl(240deg 100% 20%) 0%,
-		hsl(289deg 100% 21%) 11%,
-		hsl(315deg 100% 27%) 22%,
-		hsl(329deg 100% 36%) 33%,
-		hsl(337deg 100% 43%) 44%,
-		hsl(357deg 91% 59%) 56%,
-		hsl(17deg 100% 59%) 67%,
-		hsl(34deg 100% 53%) 78%,
-		hsl(45deg 100% 50%) 89%,
-		hsl(55deg 100% 50%) 100%
-	); */
-	/* animation: AnimationName 30s ease infinite; */
-	/* will-change: background-position; */
-	/* background-size: 400% 400%; */
-}
-
-@keyframes AnimationName {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
-
-@keyframes bg-slide-x {
-	0% {
-		transform: translateX(0%);
-	}
-	25% {
-		transform: translateX(50%);
-	}
-	75% {
-		transform: translateX(-50%);
-	}
-	100% {
-		transform: translateX(0%);
-	}
-}
-
-@keyframes bg-slide-y {
-	0% {
-		transform: translateY(0%);
-	}
-	50% {
-		transform: translateY(50%);
-	}
-	100% {
-		transform: translateY(0%);
-	}
-}
-
 .app-container {
 	@apply mx-auto w-full px-8 md:w-10/12 md:pl-4 xl:max-w-screen-xl;
 }
+
+/* Loading animation */
+/* To be used with {#if} and {#await} blocks */
+label.loading {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+}
+
+/* Remove browser styles */
+progress.loading {
+	appearance: none;
+	background: none;
+}
+progress.loading::-moz-progress-bar {
+	background: none;
+}
+progress.loading::-webkit-progress-bar {
+	display: none;
+}
+progress.loading::-ms-fill {
+	animation-name: none;
+}
+@media (-ms-high-contrast) {
+	/* …but show native spinner in Windows High-Contrast Mode */
+	progress.loading::-ms-fill {
+		animation-name: -ms-ring;
+	}
+}
+
+label.loading {
+	color: var(--light-green); /* change this to whatever you like */
+}
+
+progress.loading,
+label.loading::before {
+	margin: 1rem auto;
+	width: 1em;
+	height: 1em; /* Rely on font-size for spinner dimensions */
+	font-size: 5em;
+	border: 0.2em solid;
+	border-radius: 99em; /* set to a ludicrously large value instead of 100% to avoid becoming an oval if aspect ratio is off somehow */
+}
+
+/* Vertically align second ring with the first */
+label.loading::before {
+	margin-bottom: -1.2em;
+}
+
+@supports (clip-path: polygon(0 0)) {
+	/* Background light ring that doesn’t get clipped */
+	label.loading::before {
+		content: '';
+		opacity: 0.25;
+	}
+
+	progress.loading {
+		animation: inchworm 5s linear infinite, spin 1.5s linear infinite;
+	}
+}
+
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* See the blog post for how I got these values: https://dev.to/tigt/that-dang-material-design-spinner-in-one-element-3b3n */
+/* <generated-keyframes> */
+@keyframes inchworm {
+	4.167% {
+		clip-path: polygon(50% 150%, -50% 50%, -50% 50%, 50% -50%, 50% 50%);
+	}
+	8.333% {
+		clip-path: polygon(-50% 50%, -50% 50%, -50% 50%, 50% -50%, 50% 50%);
+	}
+	12.5% {
+		clip-path: polygon(0% -50%, 0% -50%, 0% -50%, 50% -50%, 50% 50%);
+	}
+	16.667% {
+		clip-path: polygon(50% -50%, 50% -50%, 50% -50%, 150% 50%, 50% 50%);
+	}
+	20.833% {
+		clip-path: polygon(50% -50%, 50% -50%, 150% 50%, 50% 150%, 50% 50%);
+	}
+	25% {
+		clip-path: polygon(50% -50%, 150% 50%, 50% 150%, -50% 50%, 50% 50%);
+	}
+	29.167% {
+		clip-path: polygon(150% 50%, 150% 50%, 50% 150%, -50% 50%, 50% 50%);
+	}
+	33.333% {
+		clip-path: polygon(50% 150%, 50% 150%, 50% 150%, -50% 50%, 50% 50%);
+	}
+	37.5% {
+		clip-path: polygon(-50% 100%, -50% 100%, -50% 100%, -50% 50%, 50% 50%);
+	}
+	41.667% {
+		clip-path: polygon(-50% 50%, -50% 50%, -50% 50%, 50% -50%, 50% 50%);
+	}
+	45.833% {
+		clip-path: polygon(-50% 50%, -50% 50%, 50% -50%, 150% 50%, 50% 50%);
+	}
+	50% {
+		clip-path: polygon(-50% 50%, 50% -50%, 150% 50%, 50% 150%, 50% 50%);
+	}
+	54.167% {
+		clip-path: polygon(50% -50%, 150% 50%, 150% 50%, 50% 150%, 50% 50%);
+	}
+	58.333% {
+		clip-path: polygon(150% 50%, 150% 50%, 150% 50%, 50% 150%, 50% 50%);
+	}
+	62.5% {
+		clip-path: polygon(100% 150%, 100% 150%, 100% 150%, 50% 150%, 50% 50%);
+	}
+	66.667% {
+		clip-path: polygon(50% 150%, 50% 150%, 50% 150%, -50% 50%, 50% 50%);
+	}
+	70.833% {
+		clip-path: polygon(50% 150%, 50% 150%, -50% 50%, 50% -50%, 50% 50%);
+	}
+	75% {
+		clip-path: polygon(50% 150%, -50% 50%, 50% -50%, 150% 50%, 50% 50%);
+	}
+	79.167% {
+		clip-path: polygon(-50% 50%, -50% 50%, 50% -50%, 150% 50%, 50% 50%);
+	}
+	83.333% {
+		clip-path: polygon(50% -50%, 50% -50%, 50% -50%, 150% 50%, 50% 50%);
+	}
+	87.5% {
+		clip-path: polygon(150% 0%, 150% 0%, 150% 0%, 150% 50%, 50% 50%);
+	}
+	91.667% {
+		clip-path: polygon(150% 50%, 150% 50%, 150% 50%, 50% 150%, 50% 50%);
+	}
+	95.833% {
+		clip-path: polygon(150% 50%, 150% 50%, 50% 150%, -50% 50%, 50% 50%);
+	}
+	0%,
+	100% {
+		clip-path: polygon(150% 50%, 50% 150%, -50% 50%, 50% -50%, 50% 50%);
+	}
+}
+/* </generated-keyframes> */

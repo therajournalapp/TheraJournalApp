@@ -4,15 +4,18 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  // provider = "sqlite" // use for local test db with DATABASE_URL=file:./dev.db
   url      = env("DATABASE_URL")
 }
 
 model User {
   id              String    @id @unique @default(cuid())
   provider_id     String    @unique
-  email           String    @unique
+  fb_id           String    @unique
   hashed_password String?
   session         Session[]
+  email           String
+  email_verified  Boolean
 
   @@map("user")
 }
@@ -33,7 +36,10 @@ model JournalEntry {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   title     String    @db.VarChar(255)
-  body      String    @default("") @db.LongText
+  // title     String // sqlite
+  body      String    @db.LongText
+  // body      String    @default("")
   preview   String    @default("") @db.VarChar(1000)
+  // preview   String    @default("")
   shared    Boolean   @default(false)
 }
