@@ -2,9 +2,9 @@ import type { PageServerLoad } from './$types';
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-export const load = (async ({ params }) => {
+export const load = (({ params }) => {
 
-    const entry = await prisma.journalEntry.findUnique({
+    const entry = prisma.journalEntry.findUnique({
         where: {
             id: parseInt(params.index)
         }

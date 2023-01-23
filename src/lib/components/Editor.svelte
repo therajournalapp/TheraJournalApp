@@ -6,11 +6,14 @@
 	import ShareToggle from '$lib/components/ShareToggle.svelte';
 	import debounce from 'lodash/debounce';
 	import { invalidateAll } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let id: number;
 	export let title: String;
 	export let body: string;
-	export let save: String = 'Saved';
+	let loaded = false;
+
+	let save: String = 'Saved';
 
 	let element: HTMLElement;
 	let editor: Editor;
@@ -51,24 +54,42 @@
 				// force re-render so `editor.isActive` works as expected
 				editor = editor;
 				// autosave on edit
-				saveContent();
+				if (browser) {
+					saveContent();
+				}
+			},
+			onBeforeCreate: () => {
+				// Switch ssr html to live editor
+				loaded = true;
 			}
 		});
 	});
 
 	onDestroy(() => {
 		// update dashboard preview by invalidating it's load function
-		saveNow();
-		invalidateAll();
-		setTimeout(() => {
+		if (browser) {
+			saveNow();
 			invalidateAll();
-		}, 1000);
+			setTimeout(() => {
+				invalidateAll();
+			}, 1000);
+		}
 
 		if (editor) {
 			editor.destroy();
 		}
 	});
 </script>
+
+<svelte:head>
+	<noscript>
+		<style>
+			.jsonly {
+				display: none;
+			}
+		</style>
+	</noscript>
+</svelte:head>
 
 <div class="max-h-[20vh]">
 	<div class="title-bar">
@@ -85,102 +106,153 @@
 				<ShareToggle big={true} />
 			</div>
 
-			{#if editor}
-				<div class="flex flex-wrap items-baseline justify-between">
-					<div class="editor-row flex gap-1">
-						<button
-							on:click={() => editor.chain().focus().toggleBold().run()}
-							class:active={editor.isActive('bold')}
-						>
-							<iconify-icon icon="ph:text-bolder-bold" width="20" />
-						</button>
-						<button
-							on:click={() => editor.chain().focus().toggleItalic().run()}
-							class:active={editor.isActive('italic')}
-						>
-							<iconify-icon icon="ph:text-italic" width="20" />
-						</button>
-						<button
-							on:click={() => editor.chain().focus().toggleStrike().run()}
-							class:active={editor.isActive('strike')}
-						>
-							<iconify-icon icon="ph:text-strikethrough" width="20" />
-						</button>
+			<noscript><p class="mb-3 text-white">Enable javascript to edit journal entries.</p></noscript>
 
-						<!-- TODO: add color extension -->
-						<button> <iconify-icon icon="ph:palette" width="20" /> </button>
+			<div class="jsonly flex flex-wrap items-baseline justify-between">
+				<div class="editor-row flex gap-1">
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.chain().focus().toggleBold().run();
+							}
+						}}
+						class:active={editor && editor.isActive('bold')}
+					>
+						<iconify-icon icon="ph:text-bolder-bold" width="20" />
+					</button>
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.chain().focus().toggleItalic().run();
+							}
+						}}
+						class:active={editor && editor.isActive('italic')}
+					>
+						<iconify-icon icon="ph:text-italic" width="20" />
+					</button>
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.chain().focus().toggleStrike().run();
+							}
+						}}
+						class:active={editor && editor.isActive('strike')}
+					>
+						<iconify-icon icon="ph:text-strikethrough" width="20" />
+					</button>
 
-						<div class="divider" />
+					<!-- TODO: add color extension -->
+					<button> <iconify-icon icon="ph:palette" width="20" /> </button>
 
-						<!-- <button
-							on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-							class:active={editor.isActive('heading', { level: 1 })}
+					<div class="divider" />
+
+					<!-- <button
+							on:click={() => {if (editor) {editor.chain().focus().toggleHeading({ level: 1 }).run()}}}
+							class:active={editor && editor.isActive('heading', { level: 1 })}
 						>
 							<iconify-icon icon="ph:text-h-one" width="20" />
 						</button>
 						<button
-							on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-							class:active={editor.isActive('heading', { level: 2 })}
+							on:click={() => {if (editor) {editor.chain().focus().toggleHeading({ level: 2 }).run()}}}
+							class:active={editor && editor.isActive('heading', { level: 2 })}
 						>
 							<iconify-icon icon="ph:text-h-two" width="20" />
 						</button>
 						<button
-							on:click={() => editor.chain().focus().setParagraph().run()}
-							class:active={editor.isActive('paragraph')}
+							on:click={() => {if (editor) {editor.chain().focus().setParagraph().run()}}}
+							class:active={editor && editor.isActive('paragraph')}
 						>
 							<iconify-icon icon="ph:text-aa" width="20" />
 						</button> -->
 
-						<button
-							on:click={() => editor.chain().focus().toggleBulletList().run()}
-							class:active={editor.isActive('bulletList')}
-						>
-							<iconify-icon icon="ph:list-bullets" width="20" />
-						</button>
-						<button
-							on:click={() => editor.chain().focus().toggleOrderedList().run()}
-							class:active={editor.isActive('orderedList')}
-						>
-							<iconify-icon icon="ph:list-numbers" width="20" />
-						</button>
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.chain().focus().toggleBulletList().run();
+							}
+						}}
+						class:active={editor && editor.isActive('bulletList')}
+					>
+						<iconify-icon icon="ph:list-bullets" width="20" />
+					</button>
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.chain().focus().toggleOrderedList().run();
+							}
+						}}
+						class:active={editor && editor.isActive('orderedList')}
+					>
+						<iconify-icon icon="ph:list-numbers" width="20" />
+					</button>
 
-						<div class="divider" />
-
-						<button
-							on:click={() => editor.chain().focus().toggleBlockquote().run()}
-							class:active={editor.isActive('blockquote')}
-						>
-							<iconify-icon icon="ph:quotes" width="20" />
-						</button>
-						<button on:click={() => editor.chain().focus().setHorizontalRule().run()}>
-							<iconify-icon icon="ph:dots-three-outline" width="20" />
-						</button>
-
-						<div class="divider" />
-
-						<!-- TODO: add emoji picker -->
-
-						<button on:click={() => editor.commands.undo()}>
-							<iconify-icon icon="ph:arrow-u-up-left" width="20" />
-						</button>
-						<button on:click={() => editor.commands.redo()}>
-							<iconify-icon icon="ph:arrow-u-up-right" width="20" />
-						</button>
-					</div>
-
-					<!-- <button on:click={saveContent} class="btn block">Save</button> -->
+					<div class="divider" />
 
 					<button
-						on:click={saveNow}
-						class="mr-3.5 inline h-fit -translate-y-1 text-white hover:text-neutral-300 active:text-neutral-700"
-						>{save}</button
+						on:click={() => {
+							if (editor) {
+								editor.chain().focus().toggleBlockquote().run();
+							}
+						}}
+						class:active={editor && editor.isActive('blockquote')}
 					>
+						<iconify-icon icon="ph:quotes" width="20" />
+					</button>
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.chain().focus().setHorizontalRule().run();
+							}
+						}}
+					>
+						<iconify-icon icon="ph:dots-three-outline" width="20" />
+					</button>
+
+					<div class="divider" />
+
+					<!-- TODO: add emoji picker -->
+
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.commands.undo();
+							}
+						}}
+					>
+						<iconify-icon icon="ph:arrow-u-up-left" width="20" />
+					</button>
+					<button
+						on:click={() => {
+							if (editor) {
+								editor.commands.redo();
+							}
+						}}
+					>
+						<iconify-icon icon="ph:arrow-u-up-right" width="20" />
+					</button>
 				</div>
-			{/if}
+
+				<!-- <button on:click={saveContent} class="btn block">Save</button> -->
+
+				<button
+					on:click={saveNow}
+					class="mr-3.5 inline h-fit -translate-y-1 text-white hover:text-neutral-300 active:text-neutral-700"
+				>
+					{save}
+				</button>
+			</div>
 		</div>
 	</div>
 
-	<div bind:this={element} class="" />
+	{#if !loaded}
+		<div
+			class="prose prose-sm mx-auto mt-[20vh] min-h-[80vh] w-full max-w-full break-words rounded-t-lg bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl"
+		>
+			{@html body.substring(1, body.length - 1)}
+		</div>
+	{/if}
+
+	<div bind:this={element} class:hidden={!loaded} />
 </div>
 
 <style lang="postcss">

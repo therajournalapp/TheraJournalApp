@@ -6,11 +6,9 @@
 	import { page } from '$app/stores';
 </script>
 
-<!-- <div class="h-18 flex justify-between bg-offwhite py-5">
-	<input type="text" id="entry-title" value={data.entry?.title} class="title" />
-
-	<ShareToggle big={true} />
-</div> -->
+<svelte:head>
+	<title>{data.entry?.title ?? 'Entry'}</title>
+</svelte:head>
 
 <Editor
 	id={parseInt($page.params.index)}
