@@ -63,7 +63,7 @@
 
 <style lang="postcss">
 	.card-scroll {
-		@apply flex w-screen shrink-0 gap-5 overflow-auto p-2;
+		@apply flex w-screen max-w-full shrink-0 gap-5 overflow-auto p-2;
 	}
 
 	.left-pad {
