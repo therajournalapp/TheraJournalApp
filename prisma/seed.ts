@@ -29,6 +29,43 @@ function getEntries() {
     ]
 }
 
+function getHabits() {
+    return [
+        {
+            type: "mood",
+            name: "hello world ??",
+            streak: 0,
+            HabitEntry: [
+                {
+
+                },
+                {
+
+                },
+                {
+
+                },
+            ]
+        },
+        {
+            type: "mood",
+            name: "hello world ??",
+            streak: 0,
+            HabitEntry: [
+                {
+
+                },
+                {
+
+                },
+                {
+
+                },
+            ]
+        },
+    ]
+}
+
 async function seed() {
     const entries = getEntries()
 

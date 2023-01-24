@@ -31,6 +31,7 @@ model Session {
   @@map("session")
 }
 
+//TODO: change from camel case to snake case?
 model JournalEntry {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
@@ -42,4 +43,26 @@ model JournalEntry {
   preview   String    @default("") @db.VarChar(1000)
   // preview   String    @default("")
   shared    Boolean   @default(false)
+}
+
+//TODO: add streak info? streak & longest streak
+//TODO: add index for ordering on dashboard?
+model Habit {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  type       String       @db.VarChar(255)
+  name       String       @db.VarChar(255)
+  shared     Boolean      @default(false)
+  HabitEntry HabitEntry[]
+}
+
+model HabitEntry {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habit_id  Int
+  habit     Habit    @relation(references: [id], fields: [habit_id], onDelete: Cascade)
+  date      DateTime
+  value     Int
 }

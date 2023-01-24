@@ -4,6 +4,22 @@ const prisma = new PrismaClient()
 
 export const load = (async () => {
 
+    const habits = await prisma.habit.findMany({
+        orderBy: {
+            id: 'desc'
+        },
+        include: {
+            HabitEntry: {
+                where: {
+                    date: {
+                        lte: new Date(),
+                        gte: new Date(new Date().setDate(new Date().getDate() - 7))
+                    }
+                }
+            }
+        }
+    });
+
     const journalEntries = await prisma.journalEntry.findMany({
         orderBy: {
             id: 'desc'
@@ -12,6 +28,7 @@ export const load = (async () => {
     });
 
     return {
-        entries: journalEntries
+        entries: journalEntries,
+        habits: habits
     };
 }) satisfies LayoutServerLoad;
