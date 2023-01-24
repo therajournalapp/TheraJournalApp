@@ -1,10 +1,9 @@
-import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { PrismaClient } from '@prisma/client'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 const prisma = new PrismaClient()
 
-export const POST = (async ({ request }) => {
+export const POST = (async ({ request, locals }) => {
     const body = await request.json()
 
     const preview = NodeHtmlMarkdown.translate(body.body).substring(0, 1000);

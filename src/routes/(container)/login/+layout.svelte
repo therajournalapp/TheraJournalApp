@@ -69,17 +69,11 @@
 
 		<div class="mx-auto mt-12 block w-full max-w-md rounded-l text-gray-700 ">
 			<div class="mb-6">
-				<a
-					href="/"
-					class="block -translate-x-[11px] text-lg font-normal transition duration-150 hover:underline"
-				>
-					<iconify-icon
-						inline
-						icon="ph:caret-left-thin"
-						width="25"
-						class="translate-y-1 translate-x-1"
-					/>
-					Back
+				<a href="/" class="arrow-link">
+					<div class="block h-[25px] w-[25px]">
+						<iconify-icon inline icon="ph:caret-left-thin" width="25" class="arrow" />
+					</div>
+					<span class="pl-2">Back</span>
 				</a>
 			</div>
 
@@ -106,6 +100,24 @@
 					<button type="submit" class="btn">Log in</button>
 				</div>
 			</form>
+
+			<div class="mt-4 text-center">
+				<p>Don't have an account? <a href="/signup" class="link">Register here</a></p>
+			</div>
 		</div>
 	</div>
 {/if}
+
+<style lang="postcss">
+	.arrow {
+		@apply translate-y-1 translate-x-1 duration-150 ease-in-out;
+	}
+
+	.arrow-link {
+		@apply flex -translate-x-[11px] items-baseline text-lg font-normal transition duration-150 hover:underline;
+	}
+
+	a:hover .arrow {
+		transform: translate(0, 0.25rem);
+	}
+</style>
