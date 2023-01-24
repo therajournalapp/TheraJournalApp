@@ -1,17 +1,92 @@
 <script lang="ts">
+	import 'iconify-icon';
+
 	export let big: boolean = false;
 	export let shared: boolean = false;
+	export let light: boolean = false;
+
+	let hover = false;
+	let icon = 'ph:lock-key';
+	let color = '#808080';
+
+	$: {
+		if (shared) {
+			icon = 'ph:users';
+			color = '#739244';
+		} else {
+			if (hover) {
+				icon = 'ph:lock-key-open';
+				color = '#5f7938';
+			} else {
+				icon = 'ph:lock-key';
+				color = '#808080';
+			}
+		}
+		if (light) {
+			color = '#FFFFFF';
+		}
+	}
 </script>
 
-<div class:big class="share-item-toggle">
+<!-- TODO: maybe redo using old toggle based code, but use light bool to apply additional css rules -->
+<!-- <div class:big class="share-item-toggle">
 	<input type="checkbox" checked={shared} class:big />
-	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label />
+</div> -->
+
+<div
+	class="toggle"
+	class:big
+	class:shared
+	class:light
+	on:click={() => {
+		shared = !shared;
+	}}
+	on:keypress={() => {
+		shared = !shared;
+	}}
+	on:mouseover={() => {
+		hover = true;
+	}}
+	on:mouseout={() => {
+		hover = false;
+	}}
+	on:focus={() => {
+		hover = true;
+	}}
+	on:blur={() => {
+		hover = false;
+	}}
+>
+	<iconify-icon inline {icon} class="text-[23px]" class:big-i={big} style="color: {color}" />
 </div>
 
 <style>
+	.toggle {
+		@apply relative m-[-5px] flex h-[35px] w-[35px] cursor-pointer items-center justify-center rounded-full hover:bg-[#73924440];
+	}
+
+	.toggle.light {
+		@apply hover:bg-white hover:bg-opacity-10;
+	}
+
+	.shared {
+		animation: 0.3s splash ease-in;
+	}
+
+	.shared.light {
+		animation: 0.3s splash-white ease-in;
+	}
+
+	.big {
+		@apply h-[50px] w-[50px];
+	}
+	.big-i {
+		@apply text-[30px];
+	}
+
 	/* modified from https://csstoggles.github.io/ */
-	.share-item-toggle {
+	/* .share-item-toggle {
 		position: relative;
 		box-sizing: border-box;
 	}
@@ -62,7 +137,7 @@
 	.share-item-toggle input[type='checkbox']:checked + label:before {
 		background-image: url('$lib/images/users.svg');
 		animation: 0.3s splash ease-in;
-	}
+	} */
 
 	@keyframes splash {
 		0% {
@@ -78,7 +153,21 @@
 		}
 	}
 
-	.share-item-toggle.big {
+	@keyframes splash-white {
+		0% {
+			box-shadow: 0 0 0 0 rgb(255, 255, 255);
+		}
+
+		50% {
+			box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.5);
+		}
+
+		100% {
+			box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+		}
+	}
+
+	/* .share-item-toggle.big {
 		width: 50px;
 		height: 50px;
 	}
@@ -91,5 +180,5 @@
 		width: 50px;
 		height: 50px;
 		background-size: 30px 30px;
-	}
+	} */
 </style>

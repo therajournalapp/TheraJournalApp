@@ -103,7 +103,7 @@
 					class="title"
 				/>
 
-				<ShareToggle big={true} />
+				<ShareToggle big light />
 			</div>
 
 			<noscript><p class="mb-3 text-white">Enable javascript to edit journal entries.</p></noscript>
