@@ -11,6 +11,16 @@
 	export let id: number;
 	export let title: String;
 	export let body: string;
+
+	let content: string = '';
+	if (body && body.length > 0) {
+		if (body.charAt(0) == '<') {
+			content = body;
+		} else {
+			content = JSON.parse(body);
+		}
+	}
+
 	let loaded = false;
 
 	let save: String = 'Saved';
@@ -22,7 +32,7 @@
 		if (editor != null) {
 			save = 'Saving...';
 			const response = await fetch('/api/journalEntry', {
-				method: 'POST',
+				method: 'PATCH',
 				body: JSON.stringify({ id: id, title: title, body: editor.getHTML() }),
 				headers: {
 					'content-type': 'application/json'
@@ -43,7 +53,7 @@
 		editor = new Editor({
 			element: element,
 			extensions: [StarterKit],
-			content: JSON.parse(body),
+			content: content,
 			editorProps: {
 				attributes: {
 					class:
