@@ -67,3 +67,19 @@ export const PATCH = (async ({ request }) => {
     // return new Response(JSON.stringify({ message: updateEntry }), { status: 201 })
     return new Response(JSON.stringify({ message: "success" }), { status: 201 })
 }) satisfies RequestHandler;
+
+export const DELETE = (async ({ request }) => {
+    const body = await request.json()
+
+    const id = parseInt(body.id);
+
+    const deleteEntry = await prisma.journalEntry.delete({
+        where: {
+            id: id
+        }
+    })
+
+    console.log(deleteEntry);
+
+    return new Response(JSON.stringify({ message: "success" }), { status: 201 })
+}) satisfies RequestHandler;
