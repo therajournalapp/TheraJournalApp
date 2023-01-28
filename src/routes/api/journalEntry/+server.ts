@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 const prisma = new PrismaClient()
 
-//TODO auth header or cookies?? look at lucia auth docs
+//TODO add local auth to all api methods
 
 export async function GET() {
     const entry = {
@@ -12,25 +12,35 @@ export async function GET() {
     return new Response(JSON.stringify(entry));
 }
 
-export const POST = (async () => {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = today.getFullYear();
-    const todayString = mm + '/' + dd + '/' + yyyy;
-
-    const newEntry = await prisma.journalEntry.create({
-        data: {
-            title: todayString,
-            body: "<p>Type here...</p>",
+export const POST = (async ({ locals}) => {
+    try {
+        const user = (await locals.validateUser()).user;
+        if(user) {
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            const yyyy = today.getFullYear();
+            const todayString = mm + '/' + dd + '/' + yyyy;
+        
+            const newEntry = await prisma.journalEntry.create({
+                data: {
+                    title: todayString,
+                    body: "<p>Type here...</p>",
+                    user_id: user.userId,
+                }
+            });
+        
+            const id = newEntry.id;
+        
+            console.log(id);
+        
+            return new Response(JSON.stringify({ id: id }), { status: 201 })
         }
-    });
-
-    const id = newEntry.id;
-
-    console.log(id);
-
-    return new Response(JSON.stringify({ id: id }), { status: 201 })
+        else return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 })
+        
+    } catch {
+        return new Response(JSON.stringify({ message: "failure" }), { status: 400 })
+    }
 }) satisfies RequestHandler;
 
 export const PATCH = (async ({ request }) => {

@@ -1,45 +1,48 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  // provider = "sqlite" // use for local test db with DATABASE_URL=file:./dev.db
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    // provider = "sqlite" // use for local test db with DATABASE_URL=file:./dev.db
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id              String    @id @unique @default(cuid())
-  provider_id     String    @unique
-  fb_id           String    @unique
-  hashed_password String?
-  session         Session[]
-  email           String
-  email_verified  Boolean
+    id              String         @id @unique @default(cuid())
+    provider_id     String         @unique
+    fb_id           String         @unique
+    hashed_password String?
+    session         Session[]
+    email           String
+    email_verified  Boolean
+    JournalEntry    JournalEntry[]
 
-  @@map("user")
+    @@map("user")
 }
 
 model Session {
-  id           String @id @unique
-  user_id      String
-  expires      BigInt
-  idle_expires BigInt
-  user         User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    id           String @id @unique
+    user_id      String
+    expires      BigInt
+    idle_expires BigInt
+    user         User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-  @@index([user_id])
-  @@map("session")
+    @@index([user_id])
+    @@map("session")
 }
 
 model JournalEntry {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  title     String    @db.VarChar(255)
-  // title     String // sqlite
-  body      String    @db.LongText
-  // body      String    @default("")
-  preview   String    @default("") @db.VarChar(1000)
-  // preview   String    @default("")
-  shared    Boolean   @default(false)
+    id        Int       @id @default(autoincrement())
+    user_id   String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+    title     String    @db.VarChar(255)
+    body      String    @db.LongText
+    preview   String    @default("") @db.VarChar(1000)
+    shared    Boolean   @default(false)
+    user      User      @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+    @@index([user_id])
+    @@map("journal_entry")
 }
