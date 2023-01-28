@@ -91,6 +91,12 @@ body {
 }
 
 /* Loading animation */
+/* 
+<label class="loading">
+	<progress class="loading" />
+	Loading…
+</label>
+*/
 /* To be used with {#if} and {#await} blocks */
 label.loading {
 	height: 100%;
@@ -124,6 +130,10 @@ progress.loading::-ms-fill {
 
 label.loading {
 	color: var(--light-green); /* change this to whatever you like */
+}
+
+label.loading.white {
+	color: white;
 }
 
 progress.loading,

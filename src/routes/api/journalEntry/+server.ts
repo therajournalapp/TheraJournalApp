@@ -3,7 +3,37 @@ import { PrismaClient } from '@prisma/client'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 const prisma = new PrismaClient()
 
-export const POST = (async ({ request, locals }) => {
+//TODO auth header or cookies?? look at lucia auth docs
+
+export async function GET() {
+    const entry = {
+        name: "test"
+    }
+    return new Response(JSON.stringify(entry));
+}
+
+export const POST = (async () => {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+    const todayString = mm + '/' + dd + '/' + yyyy;
+
+    const newEntry = await prisma.journalEntry.create({
+        data: {
+            title: todayString,
+            body: "<p>Type here...</p>",
+        }
+    });
+
+    const id = newEntry.id;
+
+    console.log(id);
+
+    return new Response(JSON.stringify({ id: id }), { status: 201 })
+}) satisfies RequestHandler;
+
+export const PATCH = (async ({ request }) => {
     const body = await request.json()
 
     const preview = NodeHtmlMarkdown.translate(body.body).substring(0, 1000);
@@ -35,5 +65,21 @@ export const POST = (async ({ request, locals }) => {
     console.log(updateEntry);
 
     // return new Response(JSON.stringify({ message: updateEntry }), { status: 201 })
+    return new Response(JSON.stringify({ message: "success" }), { status: 201 })
+}) satisfies RequestHandler;
+
+export const DELETE = (async ({ request }) => {
+    const body = await request.json()
+
+    const id = parseInt(body.id);
+
+    const deleteEntry = await prisma.journalEntry.delete({
+        where: {
+            id: id
+        }
+    })
+
+    console.log(deleteEntry);
+
     return new Response(JSON.stringify({ message: "success" }), { status: 201 })
 }) satisfies RequestHandler;
