@@ -27,7 +27,7 @@ This is a rewrite of the original react version of the app using [SvelteKit](htt
 - [x] WYSIWYG - Using [tiptap](https://tiptap.dev/) with the [tailwind typography plugin](https://tailwindcss.com/docs/typography-plugin) for text styling.
 - [x] Vercel Hosting - The main branch of this repo is automatically deployed to [therajournalapp.vercel.app](https://therajournalapp.vercel.app)
 - [x] Zod - Using [Zod](https://zod.dev/?id=introduction) for validation with TypeScript.
-- [ ] Journal Entry CRUD - Editing journal entries with autosave is implemented. TODO brand new entry creation, deletion, and tying entries to user ids/auth check for api calls.
+- [x] Journal Entry Journal Entry CRUD - Creating, Deleting, and Editing journal entries with autosave is implemented.
 - [ ] tRPC - Looking into using [tRPC](trpc.io) with [tRPC-SvelteKit](https://github.com/icflorescu/trpc-sveltekit) for typesafe API. Currently using sveltekit page load functions and fetch.
 
 ----
