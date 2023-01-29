@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 
 	function handleClickOutside(event: any) {
-		goto('/dashboard');
+		goto('/shared');
 	}
 </script>
 
