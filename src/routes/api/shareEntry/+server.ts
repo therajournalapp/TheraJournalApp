@@ -5,13 +5,6 @@ const prisma = new PrismaClient()
 
 //TODO add local auth to all api methods
 
-// export async function GET() {
-//     const entry = {
-//         name: "test"
-//     }
-//     return new Response(JSON.stringify(entry));
-// }
-
 export const POST = (async ({ request, locals }) => {
     const body = await request.json()
 
