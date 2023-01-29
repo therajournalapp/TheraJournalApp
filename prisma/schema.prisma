@@ -41,7 +41,6 @@ model JournalEntry {
     title       String        @db.VarChar(255)
     body        String        @db.LongText
     preview     String        @default("") @db.VarChar(1000)
-    shared      Boolean       @default(false)
     user        User          @relation(references: [id], fields: [user_id], onDelete: Cascade)
     SharedEntry SharedEntry[]
 

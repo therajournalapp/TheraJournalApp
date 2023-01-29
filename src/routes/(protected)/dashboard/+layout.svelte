@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import HabitCard from './HabitCard.svelte';
-	import JournalCard from './JournalCard.svelte';
+	import HabitCard from '$lib/components/HabitCard.svelte';
+	import JournalCard from '$lib/components/JournalCard.svelte';
 	import 'iconify-icon';
 
 	// Lets desktop users scroll horizontal sections with scroll wheel
@@ -61,7 +61,7 @@
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
 	{#each data.entries as entry}
-		<JournalCard id={entry.id} title={entry.title} body={entry.preview} />
+		<JournalCard id={entry.id} title={entry.title} body={entry.preview} shared={entry.shared} />
 	{/each}
 	<div class="right-pad" />
 </div>

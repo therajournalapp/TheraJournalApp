@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import HabitCard from './HabitCard.svelte';
-	import JournalCard from './JournalCard.svelte';
+	import HabitCard from '$lib/components/HabitCard.svelte';
+	import JournalCard from '$lib/components/JournalCard.svelte';
 	import 'iconify-icon';
 
 	// Lets desktop users scroll horizontal sections with scroll wheel
