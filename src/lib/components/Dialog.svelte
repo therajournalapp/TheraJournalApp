@@ -10,11 +10,6 @@
 	:root {
 		padding: 10px;
 	}
-	[contenteditable] {
-		margin: 10px 0 0 0;
-		background: #eee;
-		padding: 20px;
-	}
 	dialog {
 		border-radius: 5px;
 		border-width: 1px;
