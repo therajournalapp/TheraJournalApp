@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import HabitCard from './HabitCard.svelte';
 	import JournalCard from './JournalCard.svelte';
+	import 'iconify-icon';
 
 	// Lets desktop users scroll horizontal sections with scroll wheel
 	let habit: any;
@@ -47,8 +48,14 @@
 	<div class="right-pad" />
 </div>
 
-<div class="app-container mt-10 mb-2">
-	<a href="/dashboard#" class="text-3xl font-medium hover:underline">Journal Entries</a>
+<div class="app-container mt-10 mb-2 flex items-baseline">
+	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline">Journal Entries</a>
+	<a
+		href="/dashboard/new"
+		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700"
+	>
+		create new <iconify-icon inline icon="ph:plus-circle" class="translate-y-[1px]" />
+	</a>
 </div>
 
 <div class="card-scroll" bind:this={journal}>

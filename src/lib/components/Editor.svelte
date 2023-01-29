@@ -5,12 +5,23 @@
 	import 'iconify-icon';
 	import ShareToggle from '$lib/components/ShareToggle.svelte';
 	import debounce from 'lodash/debounce';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import EditorOptionMenu from './EditorOptionMenu.svelte';
 
 	export let id: number;
 	export let title: String;
 	export let body: string;
+
+	let content: string = '';
+	if (body && body.length > 0) {
+		if (body.charAt(0) == '<') {
+			content = body;
+		} else {
+			content = JSON.parse(body);
+		}
+	}
+
 	let loaded = false;
 
 	let save: String = 'Saved';
@@ -18,11 +29,13 @@
 	let element: HTMLElement;
 	let editor: Editor;
 
+	let deleting = false;
+
 	const saveNow = async () => {
 		if (editor != null) {
 			save = 'Saving...';
 			const response = await fetch('/api/journalEntry', {
-				method: 'POST',
+				method: 'PATCH',
 				body: JSON.stringify({ id: id, title: title, body: editor.getHTML() }),
 				headers: {
 					'content-type': 'application/json'
@@ -43,7 +56,7 @@
 		editor = new Editor({
 			element: element,
 			extensions: [StarterKit],
-			content: JSON.parse(body),
+			content: content,
 			editorProps: {
 				attributes: {
 					class:
@@ -66,18 +79,23 @@
 	});
 
 	onDestroy(() => {
-		// update dashboard preview by invalidating it's load function
-		if (browser) {
-			saveNow();
-			invalidateAll();
-			setTimeout(() => {
+		console.log('destroying editor');
+
+		if (!deleting) {
+			// update dashboard preview by invalidating it's load function
+			if (browser) {
+				saveNow();
 				invalidateAll();
-			}, 1000);
+				setTimeout(() => {
+					invalidateAll();
+				}, 1000);
+			}
 		}
 
 		if (editor) {
 			editor.destroy();
 		}
+		console.log('destroyed editor');
 	});
 </script>
 
@@ -102,8 +120,16 @@
 					bind:value={title}
 					class="title"
 				/>
-
-				<ShareToggle big light />
+				<div class="flex gap-3">
+					<ShareToggle big light />
+					<EditorOptionMenu
+						deleteCallBack={() => {
+							console.log("why isn't this working?");
+							deleting = true;
+							window.location.href = '/dashboard/delete/' + id;
+						}}
+					/>
+				</div>
 			</div>
 
 			<noscript><p class="mb-3 text-white">Enable javascript to edit journal entries.</p></noscript>
