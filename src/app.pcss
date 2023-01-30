@@ -75,11 +75,17 @@ body {
 }
 
 .link {
-	@apply text-primary hover:text-primary-light active:text-primary-dark underline;
+	@apply text-primary underline hover:text-primary-light active:text-primary-dark;
 }
 
 .btn {
-	@apply inline-block h-fit rounded bg-primary px-3.5 py-2 font-normal leading-snug text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-light focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-dark active:shadow-lg;
+	@apply inline-block h-fit rounded bg-primary px-3.5 py-2 font-normal leading-snug text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-light focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-dark active:shadow-lg disabled:cursor-not-allowed disabled:bg-primary-dark disabled:bg-opacity-70;
+}
+.btn-danger {
+	@apply rounded bg-red-500 px-3.5 py-2 font-normal leading-snug text-white shadow-md transition duration-150 ease-in-out hover:bg-red-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-700 active:shadow-lg disabled:cursor-not-allowed disabled:bg-red-900 disabled:bg-opacity-70;
+}
+.btn-gray {
+	@apply rounded bg-gray-500 px-3.5 py-2 font-normal leading-snug text-white shadow-md transition duration-150 ease-in-out hover:bg-gray-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-700 active:shadow-lg;
 }
 
 .input {

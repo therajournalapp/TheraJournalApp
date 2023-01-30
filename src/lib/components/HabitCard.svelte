@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
-	import ShareToggle from '../../../lib/components/ShareToggle.svelte';
+
+	import ShareToggle from '$lib/components/ShareToggle.svelte';
 
 	export let name: String;
 	export let shadowclr: String = 'shadow-offwhite-light';

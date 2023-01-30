@@ -29,7 +29,7 @@
 </svelte:head>
 
 <div class="app-container mb-2">
-	<a href="/dashboard#" class="text-3xl font-medium hover:underline">Habits</a>
+	<a href="/shared#" class="text-3xl font-medium hover:underline">Habits</a>
 </div>
 
 <div class="card-scroll" bind:this={habit}>
@@ -49,19 +49,28 @@
 </div>
 
 <div class="app-container mt-10 mb-2 flex items-baseline">
-	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline">Journal Entries</a>
-	<a
-		href="/dashboard/new"
-		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700"
-	>
-		create new <iconify-icon inline icon="ph:plus-circle" class="translate-y-[1px]" />
-	</a>
+	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
 </div>
 
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
+	{#if !data.entires}
+		<div
+			class="relative flex h-56 w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
+		>
+			<div class="flex h-full w-full items-center justify-center">
+				<iconify-icon icon="ph:x-circle" width="125" class="mr-2 opacity-60" />
+				<div class="w-fit max-w-[250px]">
+					<p class="text-xl font-medium hover:underline">No Shared Entires</p>
+
+					<p>If anyone shares entries with you in the future they will show up here.</p>
+				</div>
+			</div>
+		</div>
+	{/if}
+
 	{#each data.entries as entry}
-		<JournalCard id={entry.id} title={entry.title} body={entry.preview} shared={entry.shared} />
+		<JournalCard id={entry.id} title={entry.title} body={entry.preview} />
 	{/each}
 	<div class="right-pad" />
 </div>
