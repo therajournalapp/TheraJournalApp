@@ -4,6 +4,9 @@
 	export let big: boolean = false;
 	export let shared: boolean = false;
 	export let light: boolean = false;
+	export let shareCallback: Function = () => {
+		console.log('Testy');
+	};
 
 	let hover = false;
 	let icon = 'ph:lock-key';
@@ -41,9 +44,11 @@
 	class:light
 	on:click={() => {
 		shared = !shared;
+		shareCallback(shared);
 	}}
 	on:keypress={() => {
 		shared = !shared;
+		shareCallback(shared);
 	}}
 	on:mouseover={() => {
 		hover = true;

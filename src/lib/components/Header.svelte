@@ -4,7 +4,7 @@
 	// import logo from '$lib/images/logov2.svg';
 	// import logo_small from '$lib/images/logo-no-text.svg';
 	import 'iconify-icon';
-	import NavPopover from './NavPopover.svelte';
+	import NavPopover from '$lib/components/NavPopover.svelte';
 
 	import { getUser } from '@lucia-auth/sveltekit/client';
 	import { onMount } from 'svelte';
@@ -198,15 +198,15 @@
 				<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
 					<a href="/dashboard">Dashboard</a>
 				</li>
-				<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-					<a href="/about">About</a>
+				<li aria-current={$page.url.pathname === '/shared' ? 'page' : undefined}>
+					<a href="/shared">Shared</a>
 				</li>
-				<li
+				<!-- <li
 					aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}
 					class="hidden md:block"
 				>
 					<a href="/sverdle">Sverdle</a>
-				</li>
+				</li> -->
 			</ul>
 		</nav>
 
