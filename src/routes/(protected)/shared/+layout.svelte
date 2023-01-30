@@ -54,6 +54,21 @@
 
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
+	{#if !data.entires}
+		<div
+			class="relative flex h-56 w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
+		>
+			<div class="flex h-full w-full items-center justify-center">
+				<iconify-icon icon="ph:x-circle" width="125" class="mr-2 opacity-60" />
+				<div class="w-fit max-w-[250px]">
+					<p class="text-xl font-medium hover:underline">No Shared Entires</p>
+
+					<p>If anyone shares entries with you in the future they will show up here.</p>
+				</div>
+			</div>
+		</div>
+	{/if}
+
 	{#each data.entries as entry}
 		<JournalCard id={entry.id} title={entry.title} body={entry.preview} />
 	{/each}

@@ -4,7 +4,6 @@
 	export let big: boolean = false;
 	export let shared: boolean = false;
 	export let light: boolean = false;
-
 	export let shareCallback: Function = () => {
 		console.log('Testy');
 	};
