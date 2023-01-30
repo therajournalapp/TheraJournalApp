@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+
 	import ShareToggle from '$lib/components/ShareToggle.svelte';
 
 	export let name: String;
@@ -10,6 +13,14 @@
 	export let thu: String = 'circle-future';
 	export let fri: String = 'circle-future';
 	export let sat: String = 'circle-future';
+
+	function getCurrentDay() {
+		const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+		const today = new Date().getDay();
+		return days[today];
+	}
+
+	let currentDay = getCurrentDay();
 </script>
 
 <div
@@ -25,13 +36,13 @@
 
 	<div class="mx-[-5px]">
 		<div class="flex w-full justify-around font-mono">
-			<span class="day-label">Sun</span>
-			<span class="day-label">Mon</span>
-			<span class="day-label">Tue</span>
-			<span class="day-label">Wed</span>
-			<span class="day-label current-day">Thu</span>
-			<span class="day-label">Fri </span>
-			<span class="day-label">Sat</span>
+			<span class="day-label {currentDay == 'sun' ? 'current-day' : ''}">Sun</span>
+			<span class="day-label {currentDay == 'mon' ? 'current-day' : ''}">Mon</span>
+			<span class="day-label {currentDay == 'tue' ? 'current-day' : ''}">Tue</span>
+			<span class="day-label {currentDay == 'wed' ? 'current-day' : ''}">Wed</span>
+			<span class="day-label {currentDay == 'thu' ? 'current-day' : ''}">Thu</span>
+			<span class="day-label {currentDay == 'fri' ? 'current-day' : ''}">Fri </span>
+			<span class="day-label {currentDay == 'sat' ? 'current-day' : ''}">Sat</span>
 		</div>
 
 		<div class="flex justify-around">

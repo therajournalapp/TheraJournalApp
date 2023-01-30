@@ -2,6 +2,7 @@ import type { LayoutServerLoad } from './$types';
 import { PrismaClient, type JournalEntry } from '@prisma/client';
 const prisma = new PrismaClient()
 
+
 export const load = (async ({locals}) => {
     const { session, user } = await locals.validateUser();
     if(!session) return { error: 401, message: "Unauthorized" };
@@ -33,9 +34,26 @@ export const load = (async ({locals}) => {
             return rest
         });
     console.log(journal_entries);
+    
+    const habits = await prisma.habit.findMany({
+        orderBy: {
+            id: 'desc'
+        },
+        include: {
+            HabitEntry: {
+                where: {
+                    date: {
+                        lte: new Date(),
+                        gte: new Date(new Date().setDate(new Date().getDate() - 7))
+                    }
+                }
+            }
+        }
+    });
+    
     return {
-        entries: journal_entries
-        // entries: post_by_user,
+        entries: journalEntries,
+        habits: habits
     };
 }
 return { error: 401, message: "Unauthorized" };
