@@ -9,10 +9,16 @@
 	} from '@rgossiaux/svelte-headlessui';
 	import 'iconify-icon';
 
+	// Used to set the title of the dialog, should be the same as the entry or habit title
 	export let title: string;
+
+	// Used to change the button size
 	export let big: boolean = true; //TODO: change back to false by default
 
+	// Used to track if the dialog is open or not
 	let isOpen = false;
+
+	// Used to show an error for the add user form
 	let error = false;
 
 	// Used for styling button
@@ -20,6 +26,9 @@
 	let icon = 'ph:lock-key';
 	let color = '#808080';
 
+	// Handles the submit of the add user form
+	// takes in user email
+	// TODO: hook up to backend
 	function handleSubmit(e: any) {
 		const formData = new FormData(e.target);
 		const data = Object.fromEntries(formData);
@@ -33,6 +42,8 @@
 		shared_to = shared_to;
 	}
 
+	// TODO: test function used to generate random emails
+	// remove when hooked up to backend
 	function makeid(length: number) {
 		let result = '';
 		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -45,6 +56,7 @@
 		return result;
 	}
 
+	// TODO: set to test array to test frontend, change to be loaded from backend
 	export let shared_to = [
 		{
 			email: makeid(8) + '@test'
@@ -72,13 +84,30 @@
 		}
 	];
 
+	// Used to track if the entry is shared or not
+	// Changes the icon of the button
 	let share = shared_to.length > 0 ? true : false;
 	$: {
 		share = shared_to.length > 0 ? true : false;
 	}
 
-	const colors = ['e9f5db', 'dcebca', 'cfe1b9', 'c2d5aa', 'b5c99a', 'a6b98b', '97a97c', '849669'];
+	// TODO: hook up to backend, maybe even preload on hover??
+	// Used to track if the dialog has been opened for the first time
+	// so you can load the shared_to list from the backend
+	let opened = false;
+	let hovered = false;
+	$: {
+		if (!opened && isOpen) {
+			opened = true;
+		}
+		if (!hovered && hover) {
+			hovered = true;
+		}
+	}
 
+	// Colors used to generate the background for shared user icons
+	const colors = ['e9f5db', 'dcebca', 'cfe1b9', 'c2d5aa', 'b5c99a', 'a6b98b', '97a97c', '849669'];
+	// Colors used to generate the text for shared user icons
 	const tx_col = ['606f49', '5D6746', '595D41', '3D5D3C', '425535', '3C4828', '2A3B1C', '1F2513'];
 
 	// Hash function string to positive int
@@ -109,6 +138,18 @@
 		on:click={() => {
 			isOpen = true;
 		}}
+		on:mouseover={() => {
+			hover = true;
+		}}
+		on:mouseout={() => {
+			hover = false;
+		}}
+		on:focus={() => {
+			hover = true;
+		}}
+		on:blur={() => {
+			hover = false;
+		}}
 	>
 		<div class="mr-1 h-[20px] w-[20px]">
 			<iconify-icon
@@ -127,10 +168,26 @@
 		on:click={() => {
 			isOpen = true;
 		}}
+		on:mouseover={() => {
+			hover = true;
+		}}
+		on:mouseleave={() => {
+			hover = false;
+		}}
+		on:focus={() => {
+			hover = true;
+		}}
+		on:blur={() => {
+			hover = false;
+		}}
 	>
 		<iconify-icon inline {icon} class="text-[23px]" class:big-i={big} style="color: {color}" />
 	</button>
 {/if}
+<p>open: {isOpen}</p>
+<p>opened: {opened}</p>
+<p>hover: {hover}</p>
+<p>hovered: {hovered}</p>
 
 <Transition show={isOpen}>
 	<Dialog on:close={() => (isOpen = false)}>
