@@ -1,3 +1,17 @@
+<script lang="ts">
+	import { getUser } from '@lucia-auth/sveltekit/client';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+
+	const user = getUser();
+
+	onMount(() => {
+		if ($user) {
+			goto('/dashboard');
+		}
+	});
+</script>
+
 <h1 class="mb-3 text-center text-4xl font-medium">Welcome to TheraJournal</h1>
 
 <div class="mx-auto mb-4 w-full max-w-screen-sm">
@@ -9,7 +23,9 @@
 	</p>
 </div>
 
-<div class="mx-auto flex w-full max-w-2xl justify-center gap-5">
-	<a href="/signup" class="btn">Sign up</a>
-	<a href="/login" class="btn">Log in</a>
-</div>
+{#if !$user}
+	<div class="mx-auto flex w-full max-w-2xl justify-center gap-5">
+		<a href="/signup" class="btn">Sign up</a>
+		<a href="/login" class="btn">Log in</a>
+	</div>
+{/if}
