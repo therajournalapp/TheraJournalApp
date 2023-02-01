@@ -47,6 +47,7 @@
 		const data = Object.fromEntries(formData);
 		e.target.reset();
 		console.log(data);
+		error = false;
 		if (shared_to.filter((u) => u.email === data.user).length > 0) {
 			error = true;
 			return;
