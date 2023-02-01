@@ -56,6 +56,7 @@
 		editor = new Editor({
 			element: element,
 			extensions: [StarterKit],
+			autofocus: 'end',
 			content: content,
 			editorProps: {
 				attributes: {
