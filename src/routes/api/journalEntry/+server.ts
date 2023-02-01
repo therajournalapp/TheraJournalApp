@@ -15,7 +15,9 @@ export async function GET() {
 export const POST = (async ({ locals}) => {
     try {
         const user = (await locals.validateUser()).user;
-        if(user) {
+        if(!user) {
+            return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+        }
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -35,15 +37,18 @@ export const POST = (async ({ locals}) => {
             console.log(id);
         
             return new Response(JSON.stringify({ id: id }), { status: 201 })
-        }
-        else return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 })
         
-    } catch {
+        } catch {
         return new Response(JSON.stringify({ message: "failure" }), { status: 400 })
     }
 }) satisfies RequestHandler;
 
-export const PATCH = (async ({ request }) => {
+export const PATCH = (async ({ request, locals }) => {
+    const user = (await locals.validateUser()).user;
+    if(!user) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
+
     const body = await request.json()
 
     const preview = NodeHtmlMarkdown.translate(body.body).substring(0, 1000);
@@ -78,7 +83,11 @@ export const PATCH = (async ({ request }) => {
     return new Response(JSON.stringify({ message: "success" }), { status: 201 })
 }) satisfies RequestHandler;
 
-export const DELETE = (async ({ request }) => {
+export const DELETE = (async ({ request, locals }) => {
+    const user = (await locals.validateUser()).user;
+    if(!user) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
     const body = await request.json()
 
     const id = parseInt(body.id);
