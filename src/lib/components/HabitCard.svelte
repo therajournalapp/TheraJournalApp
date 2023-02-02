@@ -98,40 +98,22 @@
 </div>
 
 <Dialog bind:dialog={newDatePicker}>
-	<div class="h-[600px] w-[600px]">
-		<h1 class="mb-4 text-xl">{name}</h1>
-		<h2>{selectedDate.toDateString()}</h2>
+	<div class="p-6 text-center">
+		<h1 class="mb-4 text-left text-2xl">{name}</h1>
 		<form action="?/newHabitEntry" method="POST">
-			<input
-				class="input"
-				type="hidden"
-				value={selectedDate.toDateString()}
-				name="date"
-				id="date"
-				maxlength="255"
-			/>
-			<input
-				class="input"
-				type="hidden"
-				value={habitID}
-				name="habitID"
-				id="habitID"
-				maxlength="255"
-			/>
-			<button type="submit" class="btn">+</button>
+			<span class="text-md">Mark habit completed on {selectedDate.toDateString()}</span>
+			<button type="submit" class="text-md"
+				><iconify-icon inline icon="ph:plus-circle" class="translate-y-[-1px]" /></button
+			>
+			<input type="hidden" value={selectedDate.toDateString()} name="date" id="date" />
+			<input type="hidden" value={habitID} name="habitID" id="habitID" />
 		</form>
-		<div class="box">
-			<div class="month-name">
-				<div class="center">
-					<button on:click={prev}>Prev</button>
-				</div>
-				<div class="center">{getMonthName(month)} {year}</div>
-				<div class="center">
-					<button on:click={next}>Next</button>
-				</div>
-			</div>
-			<Calender {month} {year} date={selectedDate} {isAllowed} on:datechange={onDateChange} />
+		<div class="mt-4 mb-1 flex flex-row justify-center space-x-2">
+			<button class="" on:click={prev}>Prev</button>
+			<div class="center text-xl underline">{getMonthName(month)} {year}</div>
+			<button class="" on:click={next}>Next</button>
 		</div>
+		<Calender {month} {year} date={selectedDate} {isAllowed} on:datechange={onDateChange} />
 	</div>
 </Dialog>
 
