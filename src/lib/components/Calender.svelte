@@ -8,6 +8,7 @@
 	export let month: number;
 	export let year: number;
 	export let isAllowed: any;
+	export let entryDays: any;
 
 	// local vars to help in render
 	const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -46,6 +47,7 @@
 				class:disabled={!allowed}
 				class:selected={new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime() ===
 					new Date(year, month, value).getTime()}
+				class:recorded={entryDays.has(value)}
 			>
 				{value || ''}
 			</div>
@@ -74,6 +76,10 @@
 		margin: 1px;
 	}
 
+	.recorded {
+		background: #45c1e3;
+	}
+
 	.selected {
 		@apply bg-primary-light;
 	}
@@ -83,7 +89,7 @@
 	}
 
 	.disabled {
-		background: #efefef;
+		background: #ffffff;
 		cursor: not-allowed;
 		color: #bfbfbf;
 	}

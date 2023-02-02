@@ -23,6 +23,25 @@
 
 	let newDatePicker: HTMLDialogElement;
 
+	let monthlyEntries = new Set();
+
+	async function getEntriesForSelectedMonth() {
+		const response = await fetch(`/api/habitEntry/${habitID}/${selectedDate.toDateString()}`, {
+			method: 'GET'
+		});
+
+		const json = await response.json();
+
+		for (let i = 0; i < json.entries.length; i++) {
+			monthlyEntries.add(new Date(json.entries[i].date).getDay());
+		}
+	}
+
+	onMount(async () => {
+		monthlyEntries.clear();
+		getEntriesForSelectedMonth();
+	});
+
 	const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 	function getCurrentDay() {
 		const today = new Date().getDay();
@@ -158,7 +177,14 @@
 			<div class="center text-xl underline">{getMonthName(month)} {year}</div>
 			<button class="" on:click={next}>Next</button>
 		</div>
-		<Calender {month} {year} date={selectedDate} {isAllowed} on:datechange={onDateChange} />
+		<Calender
+			{month}
+			{year}
+			date={selectedDate}
+			{isAllowed}
+			entryDays={monthlyEntries}
+			on:datechange={onDateChange}
+		/>
 	</div>
 </Dialog>
 
