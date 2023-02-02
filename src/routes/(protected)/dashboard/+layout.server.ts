@@ -29,14 +29,12 @@ export const load = (async ({ locals }) => {
                 }
             }
         });
-        // console.log("post_by_user");
-        // console.log(post_by_user);
 
         const journal_entries = post_by_user.map(entry => {
             const { SharedEntry, ...rest } = entry;
 
             rest as JournalEntryWithShared;
-            
+
             if (SharedEntry.length > 0) {
                 rest.shared = SharedEntry.map(shared => {
                     return {
@@ -46,18 +44,9 @@ export const load = (async ({ locals }) => {
             } else {
                 rest.shared = [];
             }
-            // console.log("SharedEntry");
-            // console.log(entry.SharedEntry);
 
             return rest
         });
-        // console.log("journal_entries");
-        // console.log(journal_entries);
-
-        // console.log("shared:")
-        // journal_entries.forEach(entry => {
-        //    console.log(entry.shared);
-        //})
 
         const habits = await prisma.habit.findMany({
             orderBy: {

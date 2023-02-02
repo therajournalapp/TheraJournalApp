@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { sendsendVerificationEmailWithUser, signIn } from '$lib/firebase/client';
+	import { sendVerificationEmailWithUser, signIn } from '$lib/firebase/client';
 	import { z } from 'zod';
 	import 'iconify-icon';
 
@@ -29,7 +29,7 @@
 
 			if (!emailVerified) {
 				const redirect = $page.url.host + '/verify';
-				sendsendVerificationEmailWithUser(redirect, user);
+				sendVerificationEmailWithUser(redirect, user);
 			}
 
 			const response = await fetch('/api/signIn', {
@@ -48,11 +48,6 @@
 				error = 'Error signing in please check your email and password are correct.';
 			}
 		} catch (err) {
-			//TODO remove this after testing
-			if (err instanceof Error) {
-				console.log(err.message);
-			}
-
 			error = 'Error signing in. Please check that your email and password are correct.';
 		}
 	}

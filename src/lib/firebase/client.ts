@@ -77,13 +77,10 @@ export async function sendVerificationEmail(redirect: string) {
     }
 }
 
-export async function sendsendVerificationEmailWithUser(redirect: string, user: User) {
+export async function sendVerificationEmailWithUser(redirect: string, user: User) {
     if (redirect.startsWith("127.0.0.1")) {
         return sendEmailVerification(user)
     }
-
-    //TODO test on vercel and remove if it works
-    console.log(redirect)
 
     const actionCodeSettings = {
         url: redirect

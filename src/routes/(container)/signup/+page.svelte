@@ -37,43 +37,7 @@
 
 	const user = getUser();
 
-	// onMount(async () => {
-	// 	// Get lucia auth user
-	// 	// Check if logged in
-	// 	console.log('on mount');
-	// 	if ($user) {
-	// 		console.log('if user check');
-	// 		// if logged in check email verification status
-	// 		const verified = $user.email_verified;
-	// 		console.log('verified is ' + verified);
-	// 		if (verified == false) {
-	// 			const fb_verified = await getEmailVerifiedStatus();
-	// 			const redirect = $page.url.host + '/verify';
-	// 			console.log('redirect is ' + redirect);
-	// 			try {
-	// 				const response = await sendVerificationEmail(redirect);
-	// 				if (response === null) {
-	// 					console.log("didn't wark");
-	// 				} else {
-	// 					console.log('it worked??');
-	// 				}
-	// 			} catch (err) {
-	// 				console.log('oopsie');
-	// 				if (err instanceof Error) {
-	// 					console.log(err.message);
-	// 				}
-	// 			}
-	// 		}
-	// 		await goto('/dashboard');
-	// 	} else {
-	// 		console.log('not logged in');
-	// 	}
-	// });
-
 	function onInput(event: any) {
-		// TODO: server side validation
-		// TODO: set email string and emailVerified bool on lucia user object
-		// TODO: verify banner ssr + don't show for logged out users
 		password = event.target.value;
 		disabled = true;
 

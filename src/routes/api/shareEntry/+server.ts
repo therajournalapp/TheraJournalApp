@@ -19,7 +19,6 @@ export const POST = (async ({ request, locals }) => {
     try {
         // try to get lucia auth user by email
         const fb_user = await fb_auth.getUserByEmail(email)
-        console.log(fb_user.uid);
         const fb_uid = fb_user.uid;
 
         // check if user with fb_id exists in db, if not create one
@@ -31,7 +30,6 @@ export const POST = (async ({ request, locals }) => {
         let la_user: LAUser;
         try {
             la_user = await auth.getUserByProviderId("fb_id", fb_uid)
-            console.log(la_user);
         } catch (e) {
             console.log("fb_id not found, creating new lucia auth user");
             la_user = await createUser(fb_uid, fb_user.email ? fb_user.email : email, fb_user.emailVerified);
@@ -39,14 +37,12 @@ export const POST = (async ({ request, locals }) => {
         }
 
         try {
-            const newShare = await prisma.sharedEntry.create({
+            await prisma.sharedEntry.create({
                 data: {
                     user_id: la_user.userId,
                     entry_id: entry_id,
                 }
             })
-            console.log("prisma object for new share:");
-            console.log(newShare);
         }
         catch (e) {
             console.log("share already exists");
@@ -89,7 +85,6 @@ export const DELETE = (async ({ request, locals }) => {
     try {
         // try to get lucia auth user by email
         const fb_user = await fb_auth.getUserByEmail(email)
-        console.log(fb_user.uid);
         const fb_uid = fb_user.uid;
 
         // check if user with fb_id exists in db, if not create one
@@ -101,14 +96,13 @@ export const DELETE = (async ({ request, locals }) => {
         let la_user: LAUser;
         try {
             la_user = await auth.getUserByProviderId("fb_id", fb_uid)
-            console.log(la_user);
         } catch (e) {
             console.log("fb_id not found, creating new lucia auth user");
             la_user = await createUser(fb_uid, fb_user.email ? fb_user.email : email, fb_user.emailVerified);
             console.log(la_user);
         }
 
-        const deleteShare = await prisma.sharedEntry.delete({
+        await prisma.sharedEntry.delete({
             where: {
                 entry_id_user_id: {
                     entry_id: entry_id,
@@ -116,7 +110,6 @@ export const DELETE = (async ({ request, locals }) => {
                 }
             }
         })
-        console.log(deleteShare);
 
         return new Response(JSON.stringify({ message: "success" }), { status: 201 })
 

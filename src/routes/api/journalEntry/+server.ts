@@ -27,8 +27,6 @@ export const POST = (async ({ locals }) => {
 
         const id = newEntry.id;
 
-        console.log(id);
-
         return new Response(JSON.stringify({ id: id }), { status: 201 })
     }
     catch {
@@ -45,9 +43,8 @@ export const PATCH = (async ({ request, locals }) => {
     const body = await request.json()
 
     const preview = NodeHtmlMarkdown.translate(body.body).substring(0, 1000);
-    console.log(preview);
 
-    const updateEntry = await prisma.journalEntry.update({
+    await prisma.journalEntry.update({
         where: {
             // ... provide filter here
             id: body.id
@@ -60,8 +57,6 @@ export const PATCH = (async ({ request, locals }) => {
             updatedAt: new Date()
         }
     })
-
-    console.log(updateEntry);
 
     return new Response(JSON.stringify({ message: "success" }), { status: 201 })
 }) satisfies RequestHandler;
@@ -85,13 +80,11 @@ export const DELETE = (async ({ request, locals }) => {
         return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }
 
-    const deleteEntry = await prisma.journalEntry.delete({
+    await prisma.journalEntry.delete({
         where: {
             id: id
         }
     })
-
-    console.log(deleteEntry);
 
     return new Response(JSON.stringify({ message: "success" }), { status: 201 })
 }) satisfies RequestHandler;

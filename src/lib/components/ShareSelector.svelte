@@ -62,10 +62,8 @@
 		const formData = new FormData(e.target);
 		const data = Object.fromEntries(formData);
 		e.target.reset();
-		// console.log(data);
 		error = '';
 		const result: Error | string = await shareCallback(data.user);
-		console.log('recieved result: ' + result);
 		if (result instanceof Error) {
 			error = result.message;
 			console.log(result.message);
@@ -73,14 +71,10 @@
 		}
 	}
 
-	// Used to trigger animation when going from unshared to shared
-	let shareAnim = false;
-
 	// Colors used to generate the background for shared user icons
 	const colors = ['e9f5db', 'dcebca', 'cfe1b9', 'c2d5aa', 'b5c99a', 'a6b98b', '97a97c', '849669'];
 	// Colors used to generate the text for shared user icons
 	const tx_col = ['606f49', '5D6746', '595D41', '3D5D3C', '425535', '3C4828', '2A3B1C', '1F2513'];
-
 	// Hash function string to positive int
 	// used to pick a random color for the user icon
 	const hash = function (input: string) {

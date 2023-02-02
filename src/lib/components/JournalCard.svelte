@@ -1,13 +1,11 @@
 <script lang="ts">
-	import type internal from 'stream';
-	import ShareToggle from '$lib/components/ShareToggle.svelte';
 	import ShareSelector from './ShareSelector.svelte';
 	import { invalidateAll } from '$app/navigation';
 
 	export let id: number;
 	export let title: string;
 	export let body: string;
-	export let shared: any | undefined = undefined; //TODO interface
+	export let shared: any | undefined = undefined;
 	export let shadowclr: string = 'shadow-offwhite-light';
 
 	let onShare: Function = async (email: string): Promise<string | Error> => {
@@ -48,40 +46,6 @@
 			return Error('Error deleting share.');
 		}
 	};
-
-	// let onShare = async () => {
-	// 	console.log(shared.toString() + ' from JournalCard ' + id.toString());
-	// 	if (shared) {
-	// 		console.log('Delete');
-	// 		const response = await fetch('/api/shareEntry', {
-	// 			method: 'DELETE',
-	// 			body: JSON.stringify({ id: id }),
-	// 			headers: {
-	// 				'content-type': 'application/json'
-	// 			}
-	// 		})
-	// 			.then((response) => response.json())
-	// 			.then((data) => {
-	// 				console.log('Heller?');
-	// 				console.log(data.message);
-	// 			});
-	// 	} else {
-	// 		console.log('Create');
-
-	// 		const response = await fetch('/api/shareEntry', {
-	// 			method: 'POST',
-	// 			body: JSON.stringify({ id: id }),
-	// 			headers: {
-	// 				'content-type': 'application/json'
-	// 			}
-	// 		})
-	// 			.then((response) => response.json())
-	// 			.then((data) => {
-	// 				console.log('Heller?');
-	// 				console.log(data.message);
-	// 			});
-	// 	}
-	// };
 </script>
 
 <div
@@ -103,7 +67,6 @@
 				</div>
 			{/if}
 		</div>
-		<!-- <ShareToggle shareCallback={onShare} {shared} /> -->
 		{#if shared}
 			<ShareSelector
 				{title}
