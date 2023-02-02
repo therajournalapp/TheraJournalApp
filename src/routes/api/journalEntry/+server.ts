@@ -12,18 +12,16 @@ export async function GET() {
     return new Response(JSON.stringify(entry));
 }
 
-export const POST = (async ({ locals}) => {
+export const POST = (async ({ locals }) => {
     try {
         const user = (await locals.validateUser()).user;
-        if(!user) {
-            return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
-        }
+        if (user) {
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             const yyyy = today.getFullYear();
             const todayString = mm + '/' + dd + '/' + yyyy;
-        
+
             const newEntry = await prisma.journalEntry.create({
                 data: {
                     title: todayString,
@@ -31,14 +29,16 @@ export const POST = (async ({ locals}) => {
                     user_id: user.userId,
                 }
             });
-        
+
             const id = newEntry.id;
-        
+
             console.log(id);
-        
+
             return new Response(JSON.stringify({ id: id }), { status: 201 })
-        
-        } catch {
+        }
+        else return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 })
+
+    } catch {
         return new Response(JSON.stringify({ message: "failure" }), { status: 400 })
     }
 }) satisfies RequestHandler;
@@ -68,15 +68,6 @@ export const PATCH = (async ({ request, locals }) => {
         }
     })
 
-    // console.log(NodeHtmlMarkdown.translate(body.body));
-
-    // console.log("begin")
-    // console.log(body.title)
-    // console.log(body.body)
-    // console.log("end")
-
-    // console.log(body)
-
     console.log(updateEntry);
 
     // return new Response(JSON.stringify({ message: updateEntry }), { status: 201 })
@@ -85,12 +76,22 @@ export const PATCH = (async ({ request, locals }) => {
 
 export const DELETE = (async ({ request, locals }) => {
     const user = (await locals.validateUser()).user;
-    if(!user) {
+    if (!user) {
         return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }
-    const body = await request.json()
 
+    const body = await request.json()
     const id = parseInt(body.id);
+
+    const entry = await prisma.journalEntry.findUnique({
+        where: {
+            id: id
+        }
+    });
+
+    if (!entry || entry.user_id !== user.userId) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
 
     const deleteEntry = await prisma.journalEntry.delete({
         where: {

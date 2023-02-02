@@ -7,9 +7,6 @@
 </dialog>
 
 <style>
-	:root {
-		padding: 10px;
-	}
 	dialog {
 		border-radius: 5px;
 		border-width: 1px;
