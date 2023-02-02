@@ -2,11 +2,16 @@
 	import { onMount } from 'svelte';
 	import HabitCard from '$lib/components/HabitCard.svelte';
 	import JournalCard from '$lib/components/JournalCard.svelte';
+	import Dialog from '$lib/components/Dialog.svelte';
+	import StandardToggle from '$lib/components/StandardToggle.svelte';
 	import 'iconify-icon';
 
+	let newMedication = false;
 	// Lets desktop users scroll horizontal sections with scroll wheel
 	let habit: any;
 	let journal: any;
+
+	let newHabitDialog: HTMLDialogElement;
 	onMount(() => {
 		habit.addEventListener('wheel', (ev: any) => {
 			ev.preventDefault();
@@ -28,8 +33,16 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<div class="app-container mb-2">
-	<a href="/dashboard#" class="text-3xl font-medium hover:underline">Habits</a>
+<div class="app-container mb-2 flex items-baseline">
+	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline">Habits</a>
+	<button
+		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700"
+		on:click={() => {
+			newHabitDialog.showModal();
+		}}
+	>
+		add new <iconify-icon inline icon="ph:plus-circle" class="translate-y-[1px]" />
+	</button>
 </div>
 
 <div class="card-scroll" bind:this={habit}>
@@ -71,6 +84,35 @@
 </div>
 
 <slot />
+
+<Dialog bind:dialog={newHabitDialog}>
+	<div class=" p-2">
+		<form action="?/newHabit" method="post" class="form">
+			<h1 class="mb-4 text-xl text-primary-dark">Add New Habit Tracker</h1>
+			<label for="name" class="label">Habit name: </label>
+			<input
+				class="input"
+				type="text"
+				placeholder="Give your habit a name"
+				name="name"
+				id="name"
+				maxlength="255"
+			/>
+			<!-- Debatable if this needs a 'type', let this be 'custom' for now-->
+			<!-- <div class="mt-2 flex items-center justify-center space-x-2">
+				<label for="type">Is this for tracking a medication?</label>
+				<StandardToggle id="type" value="Medication" name="type" />
+			</div> -->
+
+			<div class="mt-4 flex flex-row justify-end space-x-2">
+				<button type="button" class="btn-gray" on:click={() => newHabitDialog.close()}
+					>Cancel</button
+				>
+				<button type="submit" class="btn">Save</button>
+			</div>
+		</form>
+	</div>
+</Dialog>
 
 <style lang="postcss">
 	.card-scroll {
