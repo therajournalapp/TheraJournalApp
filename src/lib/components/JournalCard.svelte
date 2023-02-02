@@ -2,21 +2,51 @@
 	import type internal from 'stream';
 	import ShareToggle from '$lib/components/ShareToggle.svelte';
 	import ShareSelector from './ShareSelector.svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	export let id: number;
 	export let title: string;
 	export let body: string;
-	export let shared: any; //TODO interface
+	export let shared: any | undefined; //TODO interface
 	export let shadowclr: string = 'shadow-offwhite-light';
 
-	let onShare: Function = (email: string): string | Error => {
-		console.log('from share callback! + email: ' + email);
-		return Error('from share callback! + email: ' + email);
+	let onShare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareEntry', {
+			method: 'POST',
+			body: JSON.stringify({ email: email, entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			if (response.status == 409) {
+				return Error('Entry is already shared with this user.');
+			}
+			return Error("User couldn't be found.");
+		}
 	};
 
-	let onUnshare: Function = (email: string): string | Error => {
-		console.log('from unshare callback! + email: ' + email);
-		return Error('from unshare callback! + email: ' + email);
+	let onUnshare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareEntry', {
+			method: 'DELETE',
+			body: JSON.stringify({ email: email, entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			return Error('Error deleting share.');
+		}
 	};
 
 	// let onShare = async () => {
@@ -59,15 +89,29 @@
 >
 	<div class="flex justify-between">
 		<div class="flex">
-			<div class="relative max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap">
-				<a href="/dashboard/{id}" class="text-xl font-medium hover:underline">
-					{title}
-				</a>
-			</div>
-			<!-- <div class="h-[25px] w-[25px] overflow-visible bg-red-600 opacity-50" /> -->
+			{#if shared}
+				<div class="relative max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap">
+					<a href="/dashboard/{id}" class="text-xl font-medium hover:underline">
+						{title}
+					</a>
+				</div>
+			{:else}
+				<div class="relative max-w-[225px] overflow-hidden text-ellipsis whitespace-nowrap">
+					<a href="/shared/{id}" class="text-xl font-medium hover:underline">
+						{title}
+					</a>
+				</div>
+			{/if}
 		</div>
 		<!-- <ShareToggle shareCallback={onShare} {shared} /> -->
-		<ShareSelector {title} shareCallback={onShare} unshareCallback={onUnshare} shared_to={shared} />
+		{#if shared}
+			<ShareSelector
+				{title}
+				shareCallback={onShare}
+				unshareCallback={onUnshare}
+				shared_to={shared}
+			/>
+		{/if}
 	</div>
 
 	<div class="w-full break-words">

@@ -11,6 +11,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 
 	// Used to set the title of the dialog, should be the same as the entry or habit title
 	export let title: string;
@@ -56,11 +57,13 @@
 		const formData = new FormData(e.target);
 		const data = Object.fromEntries(formData);
 		e.target.reset();
-		console.log(data);
+		// console.log(data);
 		error = '';
-		const result: Error | string = shareCallback(data.user);
+		const result: Error | string = await shareCallback(data.user);
+		console.log('recieved result: ' + result);
 		if (result instanceof Error) {
 			error = result.message;
+			console.log(result.message);
 			return;
 		}
 
@@ -191,6 +194,7 @@
 			class:shared={shareAnim}
 			on:click={() => {
 				isOpen = true;
+				invalidateAll();
 			}}
 			on:mouseover={() => {
 				hover = true;
@@ -221,6 +225,7 @@
 			class:shared={shareAnim}
 			on:click={() => {
 				isOpen = true;
+				invalidateAll();
 			}}
 			on:mouseover={() => {
 				hover = true;
@@ -265,7 +270,7 @@
 					leaveTo="opacity-0 scale-95"
 				>
 					<div
-						class="pointer-events-auto h-[500px] w-[350px] rounded-lg bg-white p-5 shadow-xl transition-all"
+						class="pointer-events-auto h-[500px] w-[375px] rounded-lg bg-white p-5 shadow-xl transition-all"
 					>
 						<div class="flex h-full flex-col justify-between">
 							<div class="flex flex-col gap-3">
@@ -320,18 +325,20 @@
 															hash(user.email) % tx_col.length
 														]};"
 													>
-														<span class="select-none font-medium"
-															>{user.email.charAt(0).toUpperCase()}</span
-														>
+														<span class="select-none font-medium">
+															{user.email.charAt(0).toUpperCase()}
+														</span>
 													</div>
-													<span class="p-3 text-sm font-medium">{user.email}</span>
+													<div class="max-w-[240px] overflow-hidden text-ellipsis">
+														<span class="p-3 text-sm font-medium" title={user.email}>
+															{user.email}
+														</span>
+													</div>
 												</div>
 												<button
 													class="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10"
 													on:click={() => {
-														//TODO: change to remove from backend
 														unshareCallback(user.email);
-														shared_to = shared_to.filter((u) => u.email !== user.email);
 													}}
 												>
 													<iconify-icon icon="ph:x" size="16" class="max-h-[16px] max-w-[16px]" />

@@ -13,6 +13,8 @@
 	export let title: String;
 	export let body: string;
 
+	export let viewOnly: boolean = false;
+
 	let content: string = '';
 	if (body && body.length > 0) {
 		if (body.charAt(0) == '<') {
@@ -53,6 +55,10 @@
 	const saveContent = debounce(saveNow, 2000);
 
 	onMount(() => {
+		if (viewOnly) {
+			return;
+		}
+
 		editor = new Editor({
 			element: element,
 			extensions: [StarterKit],
@@ -80,7 +86,9 @@
 	});
 
 	onDestroy(() => {
-		console.log('destroying editor');
+		if (viewOnly) {
+			return;
+		}
 
 		if (!deleting) {
 			// update dashboard preview by invalidating it's load function
@@ -96,7 +104,6 @@
 		if (editor) {
 			editor.destroy();
 		}
-		console.log('destroyed editor');
 	});
 </script>
 
@@ -114,66 +121,69 @@
 	<div class="title-bar">
 		<div class="mx-auto max-w-screen-lg">
 			<div class="h-18 flex content-baseline justify-between py-5">
-				<input
-					type="text"
-					id="entry-title"
-					on:change={saveContent}
-					bind:value={title}
-					class="title"
-				/>
-				<div class="flex gap-3">
-					<ShareToggle big light />
-					<EditorOptionMenu
-						deleteCallBack={() => {
-							console.log("why isn't this working?");
-							deleting = true;
-							window.location.href = '/dashboard/delete/' + id;
-						}}
+				{#if !viewOnly}
+					<input
+						type="text"
+						id="entry-title"
+						on:change={saveContent}
+						bind:value={title}
+						class="title"
 					/>
-				</div>
+					<div class="flex gap-3">
+						<ShareToggle big light />
+						<EditorOptionMenu
+							deleteCallBack={() => {
+								deleting = true;
+								window.location.href = '/dashboard/delete/' + id;
+							}}
+						/>
+					</div>
+				{:else}
+					<h1 class="title hover:!no-underline">{title}</h1>
+				{/if}
 			</div>
 
 			<noscript><p class="mb-3 text-white">Enable javascript to edit journal entries.</p></noscript>
+			{#if !viewOnly}
+				<div class="jsonly flex flex-wrap items-baseline justify-between">
+					<div class="editor-row flex gap-1">
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleBold().run();
+								}
+							}}
+							class:active={editor && editor.isActive('bold')}
+						>
+							<iconify-icon icon="ph:text-bolder-bold" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleItalic().run();
+								}
+							}}
+							class:active={editor && editor.isActive('italic')}
+						>
+							<iconify-icon icon="ph:text-italic" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleStrike().run();
+								}
+							}}
+							class:active={editor && editor.isActive('strike')}
+						>
+							<iconify-icon icon="ph:text-strikethrough" width="20" />
+						</button>
 
-			<div class="jsonly flex flex-wrap items-baseline justify-between">
-				<div class="editor-row flex gap-1">
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleBold().run();
-							}
-						}}
-						class:active={editor && editor.isActive('bold')}
-					>
-						<iconify-icon icon="ph:text-bolder-bold" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleItalic().run();
-							}
-						}}
-						class:active={editor && editor.isActive('italic')}
-					>
-						<iconify-icon icon="ph:text-italic" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleStrike().run();
-							}
-						}}
-						class:active={editor && editor.isActive('strike')}
-					>
-						<iconify-icon icon="ph:text-strikethrough" width="20" />
-					</button>
+						<!-- TODO: add color extension -->
+						<button> <iconify-icon icon="ph:palette" width="20" /> </button>
 
-					<!-- TODO: add color extension -->
-					<button> <iconify-icon icon="ph:palette" width="20" /> </button>
+						<div class="divider" />
 
-					<div class="divider" />
-
-					<!-- <button
+						<!-- <button
 							on:click={() => {if (editor) {editor.chain().focus().toggleHeading({ level: 1 }).run()}}}
 							class:active={editor && editor.isActive('heading', { level: 1 })}
 						>
@@ -192,86 +202,87 @@
 							<iconify-icon icon="ph:text-aa" width="20" />
 						</button> -->
 
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleBulletList().run();
-							}
-						}}
-						class:active={editor && editor.isActive('bulletList')}
-					>
-						<iconify-icon icon="ph:list-bullets" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleOrderedList().run();
-							}
-						}}
-						class:active={editor && editor.isActive('orderedList')}
-					>
-						<iconify-icon icon="ph:list-numbers" width="20" />
-					</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleBulletList().run();
+								}
+							}}
+							class:active={editor && editor.isActive('bulletList')}
+						>
+							<iconify-icon icon="ph:list-bullets" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleOrderedList().run();
+								}
+							}}
+							class:active={editor && editor.isActive('orderedList')}
+						>
+							<iconify-icon icon="ph:list-numbers" width="20" />
+						</button>
 
-					<div class="divider" />
+						<div class="divider" />
+
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleBlockquote().run();
+								}
+							}}
+							class:active={editor && editor.isActive('blockquote')}
+						>
+							<iconify-icon icon="ph:quotes" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().setHorizontalRule().run();
+								}
+							}}
+						>
+							<iconify-icon icon="ph:dots-three-outline" width="20" />
+						</button>
+
+						<div class="divider" />
+
+						<!-- TODO: add emoji picker -->
+
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.commands.undo();
+								}
+							}}
+						>
+							<iconify-icon icon="ph:arrow-u-up-left" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.commands.redo();
+								}
+							}}
+						>
+							<iconify-icon icon="ph:arrow-u-up-right" width="20" />
+						</button>
+					</div>
+
+					<!-- <button on:click={saveContent} class="btn block">Save</button> -->
 
 					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleBlockquote().run();
-							}
-						}}
-						class:active={editor && editor.isActive('blockquote')}
+						on:click={saveNow}
+						class="mr-3.5 inline h-fit -translate-y-1 text-white hover:text-neutral-300 active:text-neutral-700"
 					>
-						<iconify-icon icon="ph:quotes" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().setHorizontalRule().run();
-							}
-						}}
-					>
-						<iconify-icon icon="ph:dots-three-outline" width="20" />
-					</button>
-
-					<div class="divider" />
-
-					<!-- TODO: add emoji picker -->
-
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.commands.undo();
-							}
-						}}
-					>
-						<iconify-icon icon="ph:arrow-u-up-left" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.commands.redo();
-							}
-						}}
-					>
-						<iconify-icon icon="ph:arrow-u-up-right" width="20" />
+						{save}
 					</button>
 				</div>
-
-				<!-- <button on:click={saveContent} class="btn block">Save</button> -->
-
-				<button
-					on:click={saveNow}
-					class="mr-3.5 inline h-fit -translate-y-1 text-white hover:text-neutral-300 active:text-neutral-700"
-				>
-					{save}
-				</button>
-			</div>
+			{/if}
 		</div>
 	</div>
 
-	{#if !loaded}
+	{#if !loaded || viewOnly}
 		<div
 			class="prose prose-sm mx-auto mt-[20vh] min-h-[80vh] w-full max-w-full break-words rounded-t-lg bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl"
 		>
@@ -279,7 +290,9 @@
 		</div>
 	{/if}
 
-	<div bind:this={element} class:hidden={!loaded} />
+	{#if !viewOnly}
+		<div bind:this={element} class:hidden={!loaded} />
+	{/if}
 </div>
 
 <style lang="postcss">
