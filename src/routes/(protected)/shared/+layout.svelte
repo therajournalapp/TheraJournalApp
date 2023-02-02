@@ -54,7 +54,7 @@
 
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
-	{#if !data.entires}
+	{#if data.entries && data.entries.length === 0}
 		<div
 			class="relative flex h-56 w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
 		>
