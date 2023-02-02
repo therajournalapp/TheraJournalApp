@@ -14,7 +14,9 @@
 	id={parseInt($page.params.index)}
 	title={data.entry?.title ?? ''}
 	body={data.entry?.body ?? ''}
+	shared={data.entries?.find((entry) => entry.id === parseInt($page.params.index))?.shared ?? null}
 />
 
+<!-- shared={data.entry?.shared ?? undefined} -->
 <style>
 </style>

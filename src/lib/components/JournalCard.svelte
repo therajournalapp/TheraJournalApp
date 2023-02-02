@@ -7,7 +7,7 @@
 	export let id: number;
 	export let title: string;
 	export let body: string;
-	export let shared: any | undefined; //TODO interface
+	export let shared: any | undefined = undefined; //TODO interface
 	export let shadowclr: string = 'shadow-offwhite-light';
 
 	let onShare: Function = async (email: string): Promise<string | Error> => {

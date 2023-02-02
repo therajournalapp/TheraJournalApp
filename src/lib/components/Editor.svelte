@@ -3,15 +3,16 @@
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import 'iconify-icon';
-	import ShareToggle from '$lib/components/ShareToggle.svelte';
+	import ShareSelector from './ShareSelector.svelte';
 	import debounce from 'lodash/debounce';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import EditorOptionMenu from './EditorOptionMenu.svelte';
 
 	export let id: number;
-	export let title: String;
+	export let title: string;
 	export let body: string;
+	export let shared: any | undefined = undefined;
 
 	export let viewOnly: boolean = false;
 
@@ -62,12 +63,12 @@
 		editor = new Editor({
 			element: element,
 			extensions: [StarterKit],
-			autofocus: 'end',
+			autofocus: 'start',
 			content: content,
 			editorProps: {
 				attributes: {
 					class:
-						'prose min-h-[80vh] mt-[20vh] prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none bg-white p-8 rounded-t-lg w-full max-w-full sm:max-w-full'
+						'prose mt-[150px] min-h-[calc(100vh-150px)] prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none bg-white p-8 rounded-t-lg w-full max-w-full sm:max-w-full'
 				}
 			},
 			onTransaction: () => {
@@ -105,6 +106,45 @@
 			editor.destroy();
 		}
 	});
+
+	let onShare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareEntry', {
+			method: 'POST',
+			body: JSON.stringify({ email: email, entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			if (response.status == 409) {
+				return Error('Entry is already shared with this user.');
+			}
+			return Error("User couldn't be found.");
+		}
+	};
+
+	let onUnshare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareEntry', {
+			method: 'DELETE',
+			body: JSON.stringify({ email: email, entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			return Error('Error deleting share.');
+		}
+	};
 </script>
 
 <svelte:head>
@@ -118,7 +158,7 @@
 </svelte:head>
 
 <div class="max-h-[20vh]">
-	<div class="title-bar">
+	<div class="title-bar overflow-clip [scroll-gutter:stable]">
 		<div class="mx-auto max-w-screen-lg">
 			<div class="h-18 flex content-baseline justify-between py-5">
 				{#if !viewOnly}
@@ -130,7 +170,14 @@
 						class="title"
 					/>
 					<div class="flex gap-3">
-						<ShareToggle big light />
+						<ShareSelector
+							{title}
+							shared_to={shared ?? []}
+							big
+							shareCallback={onShare}
+							unshareCallback={onUnshare}
+						/>
+						<!-- <ShareToggle > -->
 						<EditorOptionMenu
 							deleteCallBack={() => {
 								deleting = true;
@@ -143,8 +190,10 @@
 				{/if}
 			</div>
 
-			<noscript><p class="mb-3 text-white">Enable javascript to edit journal entries.</p></noscript>
 			{#if !viewOnly}
+				<noscript>
+					<p class="mb-3 text-white">Enable javascript to edit journal entries.</p>
+				</noscript>
 				<div class="jsonly flex flex-wrap items-baseline justify-between">
 					<div class="editor-row flex gap-1">
 						<button
@@ -179,7 +228,7 @@
 						</button>
 
 						<!-- TODO: add color extension -->
-						<button> <iconify-icon icon="ph:palette" width="20" /> </button>
+						<!-- <button> <iconify-icon icon="ph:palette" width="20" /> </button> -->
 
 						<div class="divider" />
 
@@ -223,7 +272,7 @@
 							<iconify-icon icon="ph:list-numbers" width="20" />
 						</button>
 
-						<div class="divider" />
+						<div class="divider hidden sm:block" />
 
 						<button
 							on:click={() => {
@@ -232,6 +281,7 @@
 								}
 							}}
 							class:active={editor && editor.isActive('blockquote')}
+							class="hidden sm:block"
 						>
 							<iconify-icon icon="ph:quotes" width="20" />
 						</button>
@@ -241,6 +291,7 @@
 									editor.chain().focus().setHorizontalRule().run();
 								}
 							}}
+							class="hidden sm:block"
 						>
 							<iconify-icon icon="ph:dots-three-outline" width="20" />
 						</button>
@@ -273,7 +324,7 @@
 
 					<button
 						on:click={saveNow}
-						class="mr-3.5 inline h-fit -translate-y-1 text-white hover:text-neutral-300 active:text-neutral-700"
+						class="mr-3.5 inline h-fit -translate-y-1 text-xs text-white hover:text-neutral-300 active:text-neutral-700 sm:text-sm"
 					>
 						{save}
 					</button>
@@ -284,7 +335,9 @@
 
 	{#if !loaded || viewOnly}
 		<div
-			class="prose prose-sm mx-auto mt-[20vh] min-h-[80vh] w-full max-w-full break-words rounded-t-lg bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl"
+			class="prose prose-sm mx-auto w-full max-w-full break-words rounded-t-lg
+			bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl
+			{viewOnly ? 'mt-[100px] min-h-[calc(100vh-100px)]' : 'mt-[150px] min-h-[calc(100vh-150px)]'}"
 		>
 			{@html body.substring(1, body.length - 1)}
 		</div>
@@ -297,8 +350,7 @@
 
 <style lang="postcss">
 	.title-bar {
-		@apply fixed top-0 left-0 z-30 w-full;
-		background: rgba(0, 0, 0, 0.25);
+		@apply fixed top-0 left-0 z-30 w-full overflow-clip bg-black bg-opacity-60 px-4 sm:bg-opacity-40;
 	}
 
 	.title {

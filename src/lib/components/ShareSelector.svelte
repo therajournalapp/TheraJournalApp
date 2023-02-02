@@ -3,25 +3,27 @@
 		Dialog,
 		DialogOverlay,
 		DialogTitle,
-		DialogDescription,
 		Transition,
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
 	import 'iconify-icon';
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 
 	// Used to set the title of the dialog, should be the same as the entry or habit title
 	export let title: string;
 	// Used to change the button size
-	export let big: boolean = false; //TODO: change back to false by default
+	export let big: boolean = false;
 
+	// Used to load the shared users
+	export let shared_to: { email: string }[];
+	// Callback function to share an entry to a new user
 	export let shareCallback: Function = (email: string): string | Error => {
 		console.log('no share callback + email: ' + email);
 		return Error('No share callback ' + email);
 	};
+	// Callback function to unshare an entry from a user
 	export let unshareCallback: Function = (email: string): string | Error => {
 		console.log('no unshare callback + email: ' + email);
 		return Error('No unshare callback ' + email);
@@ -35,6 +37,10 @@
 	let hover = false;
 	let icon = 'ph:lock-key';
 	let color = '#808080';
+	let share = shared_to.length > 0 ? true : false;
+	$: {
+		share = shared_to.length > 0 ? true : false;
+	}
 	$: {
 		if (share) {
 			icon = 'ph:users';
@@ -51,8 +57,7 @@
 	}
 
 	// Handles the submit of the add user form
-	// takes in user email
-	// TODO: hook up to backend
+	// takes in user email and calls the shareCallback
 	async function handleSubmit(e: any) {
 		const formData = new FormData(e.target);
 		const data = Object.fromEntries(formData);
@@ -66,99 +71,10 @@
 			console.log(result.message);
 			return;
 		}
-
-		// const response = await fetch('/api/shareEntry', {
-		// 	method: 'POST',
-		// 	body: JSON.stringify({ email: data.user, entry_id: 1 }),
-		// 	headers: {
-		// 		'content-type': 'application/json'
-		// 	}
-		// });
-		// const json = await response.json();
-		// const { message } = json;
-		// console.log(message);
-
-		// if (shared_to.filter((u) => u.email === data.user).length > 0) {
-		// 	error = true;
-		// 	return;
-		// }
-		// if (shared_to.length == 0) {
-		// 	shareAnim = true;
-		// 	setTimeout(() => {
-		// 		shareAnim = false;
-		// 	}, 350);
-		// }
-		// shareCallback(data.user);
-		// shared_to.push({ email: data.user as string });
-		// shared_to = shared_to;
-	}
-
-	// TODO: test function used to generate random emails
-	// remove when hooked up to backend
-	function makeid(length: number) {
-		let result = '';
-		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		const charactersLength = characters.length;
-		let counter = 0;
-		while (counter < length) {
-			result += characters.charAt(Math.floor(Math.random() * charactersLength));
-			counter += 1;
-		}
-		return result;
-	}
-
-	// TODO: set to test array to test frontend, change to be loaded from backend
-	export let shared_to = [
-		{
-			email: makeid(8) + '@test'
-		},
-		{
-			email: makeid(8) + '@test'
-		},
-		{
-			email: makeid(8) + '@test'
-		},
-		{
-			email: makeid(8) + '@test'
-		},
-		{
-			email: makeid(8) + '@test'
-		},
-		{
-			email: makeid(8) + '@test'
-		},
-		{
-			email: makeid(8) + '@test'
-		},
-		{
-			email: makeid(8) + '@test'
-		}
-	];
-
-	// Used to track if the entry is shared or not
-	// Changes the icon of the button
-	// TODO: hook up to backend
-	let share = shared_to.length > 0 ? true : false;
-	$: {
-		share = shared_to.length > 0 ? true : false;
 	}
 
 	// Used to trigger animation when going from unshared to shared
 	let shareAnim = false;
-
-	// TODO: hook up to backend, maybe even preload on hover??
-	// Used to track if the dialog has been opened for the first time
-	// so you can load the shared_to list from the backend
-	let opened = false;
-	let hovered = false;
-	$: {
-		if (!opened && isOpen) {
-			opened = true;
-		}
-		if (!hovered && hover) {
-			hovered = true;
-		}
-	}
 
 	// Colors used to generate the background for shared user icons
 	const colors = ['e9f5db', 'dcebca', 'cfe1b9', 'c2d5aa', 'b5c99a', 'a6b98b', '97a97c', '849669'];
@@ -184,14 +100,10 @@
 	};
 </script>
 
-<!-- TODO: replicate share toggle styling for small button -->
-<!-- TODO: hook up to back end methods to save and load SharedEntrys-->
-
 <div>
 	{#if big}
 		<button
 			class="btn-alt !px-3"
-			class:shared={shareAnim}
 			on:click={() => {
 				isOpen = true;
 				invalidateAll();
@@ -222,7 +134,6 @@
 	{:else}
 		<button
 			class="toggle"
-			class:shared={shareAnim}
 			on:click={() => {
 				isOpen = true;
 				invalidateAll();
@@ -255,11 +166,11 @@
 				leaveTo="opacity-0"
 			>
 				<DialogOverlay
-					class="fixed inset-0 flex h-full w-full cursor-pointer items-center justify-center bg-black bg-opacity-20"
+					class="fixed inset-0 z-30 flex h-full w-full cursor-pointer items-center justify-center bg-black bg-opacity-20"
 				/>
 			</TransitionChild>
 			<div
-				class="pointer-events-none fixed inset-0 flex h-screen w-screen items-center justify-center"
+				class="pointer-events-none fixed inset-0 z-40 flex h-screen w-screen items-center justify-center"
 			>
 				<TransitionChild
 					enter="ease-out duration-300"
@@ -394,23 +305,5 @@
 
 	.ppl-scroll:hover::-webkit-scrollbar-thumb {
 		border: 6px solid transparent;
-	}
-
-	.shared {
-		animation: 0.3s splash ease-in;
-	}
-
-	@keyframes splash {
-		0% {
-			box-shadow: 0 0 0 0 rgba(115, 146, 68, 1);
-		}
-
-		50% {
-			box-shadow: 0 0 0 10px rgba(115, 146, 68, 0.5);
-		}
-
-		100% {
-			box-shadow: 0 0 0 20px rgba(115, 146, 68, 0);
-		}
 	}
 </style>
