@@ -48,7 +48,7 @@
 	<div class="right-pad" />
 </div>
 
-<div class="app-container mt-10 mb-2 flex items-baseline">
+<div class="app-container mt-10 mb-2 flex items-baseline" data-sveltekit-preload-data="off">
 	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline">Journal Entries</a>
 	<a
 		href="/dashboard/new"
