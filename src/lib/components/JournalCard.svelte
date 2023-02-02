@@ -1,46 +1,57 @@
 <script lang="ts">
 	import type internal from 'stream';
 	import ShareToggle from '$lib/components/ShareToggle.svelte';
+	import ShareSelector from './ShareSelector.svelte';
 
 	export let id: number;
-	export let title: String;
-	export let body: String;
-	export let shared: boolean = false;
-	export let shadowclr: String = 'shadow-offwhite-light';
+	export let title: string;
+	export let body: string;
+	export let shared: any; //TODO interface
+	export let shadowclr: string = 'shadow-offwhite-light';
 
-	let onShare = async () => {
-		console.log(shared.toString() + ' from JournalCard ' + id.toString());
-		if (shared) {
-			console.log('Delete');
-			const response = await fetch('/api/shareEntry', {
-				method: 'DELETE',
-				body: JSON.stringify({ id: id }),
-				headers: {
-					'content-type': 'application/json'
-				}
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					console.log('Heller?');
-					console.log(data.message);
-				});
-		} else {
-			console.log('Create');
-
-			const response = await fetch('/api/shareEntry', {
-				method: 'POST',
-				body: JSON.stringify({ id: id }),
-				headers: {
-					'content-type': 'application/json'
-				}
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					console.log('Heller?');
-					console.log(data.message);
-				});
-		}
+	let onShare: Function = (email: string): string | Error => {
+		console.log('from share callback! + email: ' + email);
+		return Error('from share callback! + email: ' + email);
 	};
+
+	let onUnshare: Function = (email: string): string | Error => {
+		console.log('from unshare callback! + email: ' + email);
+		return Error('from unshare callback! + email: ' + email);
+	};
+
+	// let onShare = async () => {
+	// 	console.log(shared.toString() + ' from JournalCard ' + id.toString());
+	// 	if (shared) {
+	// 		console.log('Delete');
+	// 		const response = await fetch('/api/shareEntry', {
+	// 			method: 'DELETE',
+	// 			body: JSON.stringify({ id: id }),
+	// 			headers: {
+	// 				'content-type': 'application/json'
+	// 			}
+	// 		})
+	// 			.then((response) => response.json())
+	// 			.then((data) => {
+	// 				console.log('Heller?');
+	// 				console.log(data.message);
+	// 			});
+	// 	} else {
+	// 		console.log('Create');
+
+	// 		const response = await fetch('/api/shareEntry', {
+	// 			method: 'POST',
+	// 			body: JSON.stringify({ id: id }),
+	// 			headers: {
+	// 				'content-type': 'application/json'
+	// 			}
+	// 		})
+	// 			.then((response) => response.json())
+	// 			.then((data) => {
+	// 				console.log('Heller?');
+	// 				console.log(data.message);
+	// 			});
+	// 	}
+	// };
 </script>
 
 <div
@@ -55,7 +66,8 @@
 			</div>
 			<!-- <div class="h-[25px] w-[25px] overflow-visible bg-red-600 opacity-50" /> -->
 		</div>
-		<ShareToggle shareCallback={onShare} {shared} />
+		<!-- <ShareToggle shareCallback={onShare} {shared} /> -->
+		<ShareSelector {title} shareCallback={onShare} unshareCallback={onUnshare} shared_to={shared} />
 	</div>
 
 	<div class="w-full break-words">
