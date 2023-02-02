@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { getDateRows, uuid, noop } from './date-time.js';
 	import { createEventDispatcher } from 'svelte';
-
 	const dispatch = createEventDispatcher();
 
 	// props
@@ -54,7 +53,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	.container {
 		margin-top: 8px;
 		padding: 6px;
@@ -76,7 +75,7 @@
 	}
 
 	.selected {
-		background: #84e791;
+		@apply bg-primary-light;
 	}
 
 	.highlight {
@@ -98,5 +97,6 @@
 
 	.selected.highlight:hover {
 		background: green;
+		@apply bg-primary;
 	}
 </style>
