@@ -12,6 +12,7 @@
 	let journal: any;
 
 	let newHabitDialog: HTMLDialogElement;
+
 	onMount(() => {
 		habit.addEventListener('wheel', (ev: any) => {
 			ev.preventDefault();
@@ -46,22 +47,9 @@
 </div>
 
 <div class="card-scroll" bind:this={habit}>
-	<!-- <div class="left-pad" />
-	<HabitCard
-		name="Mood"
-		sun="bg-accent-yellow"
-		mon="bg-accent-purple"
-		tue="bg-accent-blue"
-		wed="bg-accent-red"
-		thu="circle-future"
-		fri="circle-future"
-		sat="circle-future"
-	/>
-	<HabitCard name="Medication 10mg" mon="circle-untracked" />
-	<div class="right-pad" /> -->
 	<div class="left-pad" />
 	{#each data.habits as habit}
-		<HabitCard name={habit.name} entries={habit.HabitEntry} />
+		<HabitCard habitID={habit.id} name={habit.name} entries={habit.HabitEntry} />
 	{/each}
 </div>
 
