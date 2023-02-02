@@ -43,7 +43,12 @@ export const POST = (async ({ locals }) => {
     }
 }) satisfies RequestHandler;
 
-export const PATCH = (async ({ request }) => {
+export const PATCH = (async ({ request, locals }) => {
+    const user = (await locals.validateUser()).user;
+    if(!user) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
+
     const body = await request.json()
 
     const preview = NodeHtmlMarkdown.translate(body.body).substring(0, 1000);
@@ -62,15 +67,6 @@ export const PATCH = (async ({ request }) => {
             updatedAt: new Date()
         }
     })
-
-    // console.log(NodeHtmlMarkdown.translate(body.body));
-
-    // console.log("begin")
-    // console.log(body.title)
-    // console.log(body.body)
-    // console.log("end")
-
-    // console.log(body)
 
     console.log(updateEntry);
 
