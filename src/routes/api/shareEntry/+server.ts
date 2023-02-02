@@ -1,55 +1,118 @@
 import type { RequestHandler } from './$types';
 import { PrismaClient } from '@prisma/client'
-import { NodeHtmlMarkdown } from 'node-html-markdown'
 const prisma = new PrismaClient()
-
-//TODO add local auth to all api methods
+import { fb_auth } from "$lib/server/admin";
+import { auth } from '$lib/server/lucia';
 
 export const POST = (async ({ request, locals }) => {
-    const body = await request.json()
+    const user = (await locals.validateUser()).user;
+    if (!user) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
 
-    const id = parseInt(body.id);
+    const body = await request.json()
+    const email = body.email;
+    const entry_id = body.entry_id;
+
+    console.log("trying to create new share for entry: " + entry_id + " with email: " + email);
 
     try {
-        const user = (await locals.validateUser()).user;
-        if(user) {
-            const newShare = await prisma.sharedEntry.create({
-                    data: {
-                        user_id : 'cldhr15i60000v364squlah44',
-                        entry_id : id,
-                    }
-                })
-            console.log(newShare);
+        // try to get lucia auth user by email
+        const fb_user = await fb_auth.getUserByEmail(email)
+        const fb_uid = fb_user.uid;
 
-            return new Response(JSON.stringify({ message: "success" }), { status: 201 })
+        // check if user with fb_id exists in db, if not create one
+        type LAUser = {
+            userId: string;
+            email: string;
+            email_verified: boolean | null;
+        };
+        let la_user: LAUser;
+        try {
+            la_user = await auth.getUserByProviderId("fb_id", fb_uid)
+        } catch (e) {
+            console.log("fb_id not found, creating new lucia auth user");
+            la_user = await createUser(fb_uid, fb_user.email ? fb_user.email : email, fb_user.emailVerified);
+            console.log(la_user);
         }
-        else return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 })
-        
-    } catch {
+
+        try {
+            await prisma.sharedEntry.create({
+                data: {
+                    user_id: la_user.userId,
+                    entry_id: entry_id,
+                }
+            })
+        }
+        catch (e) {
+            console.log("share already exists");
+            return new Response(JSON.stringify({ message: "share already exists" }), { status: 409 })
+        }
+
+        return new Response(JSON.stringify({ message: "success" }), { status: 201 })
+    } catch (e) {
+        console.log(e);
         return new Response(JSON.stringify({ message: "failure" }), { status: 400 })
     }
 }) satisfies RequestHandler;
 
+// Creates a new user or throws an error
+async function createUser(fb_id: string, email: string, email_verified: boolean) {
+    const user = await auth.createUser("fb_id", fb_id, {
+        password: fb_id,
+        attributes: {
+            fb_id: fb_id,
+            email: email,
+            email_verified: email_verified
+        }
+    });
+
+    return user;
+}
 
 export const DELETE = (async ({ request, locals }) => {
-    const body = await request.json()
+    const user = (await locals.validateUser()).user;
+    if (!user) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
 
-    const id = parseInt(body.id);
+    const body = await request.json()
+    const email = body.email;
+    const entry_id = body.entry_id;
+
+    console.log("trying to delete share for entry: " + entry_id + " with email: " + email);
 
     try {
-        const user = (await locals.validateUser()).user;
-        if(user) {
-            const deleteShare = await prisma.sharedEntry.deleteMany({
-                where: {
-                    entry_id: id
-                }
-            })
-            console.log(deleteShare);
+        // try to get lucia auth user by email
+        const fb_user = await fb_auth.getUserByEmail(email)
+        const fb_uid = fb_user.uid;
 
-            return new Response(JSON.stringify({ message: "success" }), { status: 201 })
+        // check if user with fb_id exists in db, if not create one
+        type LAUser = {
+            userId: string;
+            email: string;
+            email_verified: boolean | null;
+        };
+        let la_user: LAUser;
+        try {
+            la_user = await auth.getUserByProviderId("fb_id", fb_uid)
+        } catch (e) {
+            console.log("fb_id not found, creating new lucia auth user");
+            la_user = await createUser(fb_uid, fb_user.email ? fb_user.email : email, fb_user.emailVerified);
+            console.log(la_user);
         }
-        else return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 })
-        
+
+        await prisma.sharedEntry.delete({
+            where: {
+                entry_id_user_id: {
+                    entry_id: entry_id,
+                    user_id: la_user.userId
+                }
+            }
+        })
+
+        return new Response(JSON.stringify({ message: "success" }), { status: 201 })
+
     } catch {
         return new Response(JSON.stringify({ message: "failure" }), { status: 400 })
     }

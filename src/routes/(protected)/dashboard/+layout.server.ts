@@ -7,32 +7,46 @@ export const load = (async ({ locals }) => {
     const { session, user } = await locals.validateUser();
     if (!session) return { error: 401, message: "Unauthorized" };
     if (user) {
+        interface Shared {
+            email: string
+        }
 
-        // const post_by_user : JournalEntry[] | null =  await prisma.user.findUnique({
-        //     where: {
-        //         id: user.userId
-        //     }}).JournalEntry();
-        const post_by_user: JournalEntry[] | null = await prisma.journalEntry.findMany({
+        interface JournalEntryWithShared extends JournalEntry {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            SharedEntry: any[],
+            shared?: Shared[],
+        }
+
+        const post_by_user: JournalEntryWithShared[] | null = await prisma.journalEntry.findMany({
             where: {
                 user_id: user.userId,
             },
             include: {
-                SharedEntry: true,
+                SharedEntry: {
+                    include: {
+                        user: true
+                    }
+                }
             }
         });
-        console.log(post_by_user);
+
         const journal_entries = post_by_user.map(entry => {
             const { SharedEntry, ...rest } = entry;
 
+            rest as JournalEntryWithShared;
+
             if (SharedEntry.length > 0) {
-                rest.shared = true;
+                rest.shared = SharedEntry.map(shared => {
+                    return {
+                        email: shared.user.email as string,
+                    }
+                });
             } else {
-                rest.shared = false;
+                rest.shared = [];
             }
 
             return rest
         });
-        console.log(journal_entries);
 
         const habits = await prisma.habit.findMany({
             orderBy: {

@@ -9,10 +9,6 @@
 	import { page } from '$app/stores';
 	import { getUser } from '@lucia-auth/sveltekit/client';
 
-	async function handleSubmit(e: any) {
-		console.log('todo');
-	}
-
 	let sendCodeText = 'Click here';
 
 	const user = getUser();
@@ -31,16 +27,10 @@
 			return;
 		}
 
-		console.log('wweeee');
-
 		const fb_verified = await getEmailVerifiedStatus();
-		console.log('verified ' + fb_verified);
 		if (fb_verified) {
-			console.log('noooo');
 			const user = await getCurrentUser();
 			if (user != null && user.emailVerified) {
-				console.log('bingo');
-				console.log('setting verify on server');
 				const token = await user.getIdToken();
 				const response = await fetch('/api/verify', {
 					method: 'POST',
@@ -61,7 +51,6 @@
 	async function handleClick() {
 		sendCodeText = 'Sending...';
 		const redirect = $page.url.host + '/verify';
-		console.log(redirect);
 		const a = await sendVerificationEmail(redirect);
 		if (a === null) {
 			// Error

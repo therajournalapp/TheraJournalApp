@@ -14,6 +14,7 @@
 	id={parseInt($page.params.index)}
 	title={data.entry?.title ?? ''}
 	body={data.entry?.body ?? ''}
+	viewOnly
 />
 
 <style>

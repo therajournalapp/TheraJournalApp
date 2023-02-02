@@ -14,11 +14,6 @@ export const POST = (async ({ request, locals }) => {
         const email = body.email
         const email_verified = body.email_verified
 
-        console.log(token)
-        console.log(email)
-        console.log(email_verified)
-
-        console.log(token)
         const decodedToken = await fb_auth.verifyIdToken(token)
 
         const fb_id = decodedToken.uid
@@ -26,7 +21,7 @@ export const POST = (async ({ request, locals }) => {
         // If fb_id exists for lucia auth login, otherwise create new lucia auth user and sign in
         try {
             const user = await auth.authenticateUser("fb_id", fb_id, fb_id);
-            console.log(user)
+
             if (user.email != email) {
                 user.email = email
             }

@@ -14,7 +14,6 @@
 			}
 		});
 		const ok = response.ok;
-		console.log(ok);
 		invalidateAll();
 		window.location.href = '/dashboard/';
 	});

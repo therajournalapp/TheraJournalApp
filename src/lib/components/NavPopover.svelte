@@ -6,7 +6,7 @@
 	import { invalidateAll } from '$app/navigation';
 </script>
 
-<Popover class="relative z-10 max-h-[50px]" let:open>
+<Popover class="relative max-h-[50px]" let:open>
 	<PopoverButton class="z-0 max-h-[50px]">
 		<div
 			class="h-[50px] pr-3 before:absolute before:left-[-5px] before:z-[-1] before:h-[60px] before:w-[60px] before:translate-y-[-5px] before:rounded-full hover:text-primary-dark hover:before:bg-green-900/5 active:before:bg-green-900/20"

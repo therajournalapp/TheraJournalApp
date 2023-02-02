@@ -3,15 +3,18 @@
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import 'iconify-icon';
-	import ShareToggle from '$lib/components/ShareToggle.svelte';
+	import ShareSelector from './ShareSelector.svelte';
 	import debounce from 'lodash/debounce';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import EditorOptionMenu from './EditorOptionMenu.svelte';
 
 	export let id: number;
-	export let title: String;
+	export let title: string;
 	export let body: string;
+	export let shared: any | undefined = undefined;
+
+	export let viewOnly: boolean = false;
 
 	let content: string = '';
 	if (body && body.length > 0) {
@@ -53,14 +56,19 @@
 	const saveContent = debounce(saveNow, 2000);
 
 	onMount(() => {
+		if (viewOnly) {
+			return;
+		}
+
 		editor = new Editor({
 			element: element,
 			extensions: [StarterKit],
+			autofocus: 'start',
 			content: content,
 			editorProps: {
 				attributes: {
 					class:
-						'prose min-h-[80vh] mt-[20vh] prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none bg-white p-8 rounded-t-lg w-full max-w-full sm:max-w-full'
+						'prose mt-[150px] min-h-[calc(100vh-150px)] prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none bg-white p-8 rounded-t-lg w-full max-w-full sm:max-w-full'
 				}
 			},
 			onTransaction: () => {
@@ -79,7 +87,9 @@
 	});
 
 	onDestroy(() => {
-		console.log('destroying editor');
+		if (viewOnly) {
+			return;
+		}
 
 		if (!deleting) {
 			// update dashboard preview by invalidating it's load function
@@ -95,8 +105,46 @@
 		if (editor) {
 			editor.destroy();
 		}
-		console.log('destroyed editor');
 	});
+
+	let onShare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareEntry', {
+			method: 'POST',
+			body: JSON.stringify({ email: email, entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			if (response.status == 409) {
+				return Error('Entry is already shared with this user.');
+			}
+			return Error("User couldn't be found.");
+		}
+	};
+
+	let onUnshare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareEntry', {
+			method: 'DELETE',
+			body: JSON.stringify({ email: email, entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			return Error('Error deleting share.');
+		}
+	};
 </script>
 
 <svelte:head>
@@ -110,69 +158,81 @@
 </svelte:head>
 
 <div class="max-h-[20vh]">
-	<div class="title-bar">
+	<div class="title-bar overflow-clip [scroll-gutter:stable]">
 		<div class="mx-auto max-w-screen-lg">
 			<div class="h-18 flex content-baseline justify-between py-5">
-				<input
-					type="text"
-					id="entry-title"
-					on:change={saveContent}
-					bind:value={title}
-					class="title"
-				/>
-				<div class="flex gap-3">
-					<ShareToggle big light />
-					<EditorOptionMenu
-						deleteCallBack={() => {
-							console.log("why isn't this working?");
-							deleting = true;
-							window.location.href = '/dashboard/delete/' + id;
-						}}
+				{#if !viewOnly}
+					<input
+						type="text"
+						id="entry-title"
+						on:change={saveContent}
+						bind:value={title}
+						class="title"
 					/>
-				</div>
+					<div class="flex gap-3">
+						<ShareSelector
+							{title}
+							shared_to={shared ?? []}
+							big
+							shareCallback={onShare}
+							unshareCallback={onUnshare}
+						/>
+						<!-- <ShareToggle > -->
+						<EditorOptionMenu
+							deleteCallBack={() => {
+								deleting = true;
+								window.location.href = '/dashboard/delete/' + id;
+							}}
+						/>
+					</div>
+				{:else}
+					<h1 class="title hover:!no-underline">{title}</h1>
+				{/if}
 			</div>
 
-			<noscript><p class="mb-3 text-white">Enable javascript to edit journal entries.</p></noscript>
+			{#if !viewOnly}
+				<noscript>
+					<p class="mb-3 text-white">Enable javascript to edit journal entries.</p>
+				</noscript>
+				<div class="jsonly flex flex-wrap items-baseline justify-between">
+					<div class="editor-row flex gap-1">
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleBold().run();
+								}
+							}}
+							class:active={editor && editor.isActive('bold')}
+						>
+							<iconify-icon icon="ph:text-bolder-bold" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleItalic().run();
+								}
+							}}
+							class:active={editor && editor.isActive('italic')}
+						>
+							<iconify-icon icon="ph:text-italic" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleStrike().run();
+								}
+							}}
+							class:active={editor && editor.isActive('strike')}
+						>
+							<iconify-icon icon="ph:text-strikethrough" width="20" />
+						</button>
 
-			<div class="jsonly flex flex-wrap items-baseline justify-between">
-				<div class="editor-row flex gap-1">
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleBold().run();
-							}
-						}}
-						class:active={editor && editor.isActive('bold')}
-					>
-						<iconify-icon icon="ph:text-bolder-bold" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleItalic().run();
-							}
-						}}
-						class:active={editor && editor.isActive('italic')}
-					>
-						<iconify-icon icon="ph:text-italic" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleStrike().run();
-							}
-						}}
-						class:active={editor && editor.isActive('strike')}
-					>
-						<iconify-icon icon="ph:text-strikethrough" width="20" />
-					</button>
+						<!-- TODO: add color extension -->
+						<!-- <button> <iconify-icon icon="ph:palette" width="20" /> </button> -->
 
-					<!-- TODO: add color extension -->
-					<button> <iconify-icon icon="ph:palette" width="20" /> </button>
+						<div class="divider" />
 
-					<div class="divider" />
-
-					<!-- <button
+						<!-- <button
 							on:click={() => {if (editor) {editor.chain().focus().toggleHeading({ level: 1 }).run()}}}
 							class:active={editor && editor.isActive('heading', { level: 1 })}
 						>
@@ -191,100 +251,106 @@
 							<iconify-icon icon="ph:text-aa" width="20" />
 						</button> -->
 
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleBulletList().run();
-							}
-						}}
-						class:active={editor && editor.isActive('bulletList')}
-					>
-						<iconify-icon icon="ph:list-bullets" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleOrderedList().run();
-							}
-						}}
-						class:active={editor && editor.isActive('orderedList')}
-					>
-						<iconify-icon icon="ph:list-numbers" width="20" />
-					</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleBulletList().run();
+								}
+							}}
+							class:active={editor && editor.isActive('bulletList')}
+						>
+							<iconify-icon icon="ph:list-bullets" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleOrderedList().run();
+								}
+							}}
+							class:active={editor && editor.isActive('orderedList')}
+						>
+							<iconify-icon icon="ph:list-numbers" width="20" />
+						</button>
 
-					<div class="divider" />
+						<div class="divider hidden sm:block" />
+
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().toggleBlockquote().run();
+								}
+							}}
+							class:active={editor && editor.isActive('blockquote')}
+							class="hidden sm:block"
+						>
+							<iconify-icon icon="ph:quotes" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.chain().focus().setHorizontalRule().run();
+								}
+							}}
+							class="hidden sm:block"
+						>
+							<iconify-icon icon="ph:dots-three-outline" width="20" />
+						</button>
+
+						<div class="divider" />
+
+						<!-- TODO: add emoji picker -->
+
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.commands.undo();
+								}
+							}}
+						>
+							<iconify-icon icon="ph:arrow-u-up-left" width="20" />
+						</button>
+						<button
+							on:click={() => {
+								if (editor) {
+									editor.commands.redo();
+								}
+							}}
+						>
+							<iconify-icon icon="ph:arrow-u-up-right" width="20" />
+						</button>
+					</div>
+
+					<!-- <button on:click={saveContent} class="btn block">Save</button> -->
 
 					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().toggleBlockquote().run();
-							}
-						}}
-						class:active={editor && editor.isActive('blockquote')}
+						on:click={saveNow}
+						class="mr-3.5 inline h-fit -translate-y-1 text-xs text-white hover:text-neutral-300 active:text-neutral-700 sm:text-sm"
 					>
-						<iconify-icon icon="ph:quotes" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.chain().focus().setHorizontalRule().run();
-							}
-						}}
-					>
-						<iconify-icon icon="ph:dots-three-outline" width="20" />
-					</button>
-
-					<div class="divider" />
-
-					<!-- TODO: add emoji picker -->
-
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.commands.undo();
-							}
-						}}
-					>
-						<iconify-icon icon="ph:arrow-u-up-left" width="20" />
-					</button>
-					<button
-						on:click={() => {
-							if (editor) {
-								editor.commands.redo();
-							}
-						}}
-					>
-						<iconify-icon icon="ph:arrow-u-up-right" width="20" />
+						{save}
 					</button>
 				</div>
-
-				<!-- <button on:click={saveContent} class="btn block">Save</button> -->
-
-				<button
-					on:click={saveNow}
-					class="mr-3.5 inline h-fit -translate-y-1 text-white hover:text-neutral-300 active:text-neutral-700"
-				>
-					{save}
-				</button>
-			</div>
+			{/if}
 		</div>
 	</div>
 
-	{#if !loaded}
+	{#if !loaded || viewOnly}
 		<div
-			class="prose prose-sm mx-auto mt-[20vh] min-h-[80vh] w-full max-w-full break-words rounded-t-lg bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl"
+			class="prose prose-sm mx-auto w-full max-w-full break-words rounded-t-lg
+			bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl
+			{viewOnly ? 'mt-[100px] min-h-[calc(100vh-100px)]' : 'mt-[150px] min-h-[calc(100vh-150px)]'}"
 		>
 			{@html body.substring(1, body.length - 1)}
 		</div>
 	{/if}
 
-	<div bind:this={element} class:hidden={!loaded} />
+	{#if !viewOnly}
+		<div bind:this={element} class:hidden={!loaded} />
+	{/if}
 </div>
 
 <style lang="postcss">
 	.title-bar {
-		@apply fixed top-0 left-0 z-30 w-full;
-		background: rgba(0, 0, 0, 0.25);
+		@apply fixed top-0 left-0 z-30 w-full overflow-clip bg-black bg-opacity-60 px-4 sm:bg-opacity-40;
 	}
 
 	.title {
