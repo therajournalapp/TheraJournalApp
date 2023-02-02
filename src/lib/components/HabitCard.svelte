@@ -1,26 +1,27 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import type internal from 'stream';
 	import { onMount } from 'svelte';
 
 	import ShareToggle from '$lib/components/ShareToggle.svelte';
 
+	export let entries: any[];
 	export let name: String;
 	export let shadowclr: String = 'shadow-offwhite-light';
-	export let sun: String = 'bg-primary';
-	export let mon: String = 'bg-primary';
-	export let tue: String = 'bg-primary';
-	export let wed: String = 'bg-primary';
-	export let thu: String = 'circle-future';
-	export let fri: String = 'circle-future';
-	export let sat: String = 'circle-future';
 
+	const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 	function getCurrentDay() {
-		const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 		const today = new Date().getDay();
 		return days[today];
 	}
 
 	let currentDay = getCurrentDay();
+	const dayValueMap = new Map();
+
+	//for each entry, create a map entry of day to value
+	entries.forEach(function (entry: any) {
+		dayValueMap.set(days[entry.date.getDay()], entry.value);
+	});
 </script>
 
 <div
@@ -36,23 +37,15 @@
 
 	<div class="mx-[-5px]">
 		<div class="flex w-full justify-around font-mono">
-			<span class="day-label {currentDay == 'sun' ? 'current-day' : ''}">Sun</span>
-			<span class="day-label {currentDay == 'mon' ? 'current-day' : ''}">Mon</span>
-			<span class="day-label {currentDay == 'tue' ? 'current-day' : ''}">Tue</span>
-			<span class="day-label {currentDay == 'wed' ? 'current-day' : ''}">Wed</span>
-			<span class="day-label {currentDay == 'thu' ? 'current-day' : ''}">Thu</span>
-			<span class="day-label {currentDay == 'fri' ? 'current-day' : ''}">Fri </span>
-			<span class="day-label {currentDay == 'sat' ? 'current-day' : ''}">Sat</span>
+			{#each days as day}
+				<span class="day-label {currentDay == day ? 'current-day' : ''}">{day}</span>
+			{/each}
 		</div>
 
 		<div class="flex justify-around">
-			<div class="circle {sun}" />
-			<div class="circle {mon}" />
-			<div class="circle {tue}" />
-			<div class="circle {wed}" />
-			<div class="circle {thu}" />
-			<div class="circle {fri}" />
-			<div class="circle {sat}" />
+			{#each days as day}
+				<div class="circle {dayValueMap.has(day) ? 'bg-primary' : 'circle-future'}" />
+			{/each}
 		</div>
 	</div>
 </div>

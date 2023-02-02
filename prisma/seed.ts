@@ -83,8 +83,15 @@ function getHabits() {
                         // habit_id: 1,
                         date: new Date('2023-1-6'),
                         value: 1 
-                },
-            ]}
+                    },
+                    {
+                        updatedAt: new Date(),
+                        // habit_id: 1,
+                        date: new Date('2023-1-31'),
+                        value: 1 
+                    }
+                ]
+            }
         },
     ]
 }
@@ -93,9 +100,9 @@ async function seed() {
     const entries = getEntries()
     const habits = getHabits()
 
-    for (const entry of entries) {
-        await prisma.journalEntry.create({ data: entry })
-    }
+    // for (const entry of entries) {
+    //     await prisma.journalEntry.create({ data: entry })
+    // }
 
     for (const habit of habits) {
         await prisma.habit.create({ data: habit })

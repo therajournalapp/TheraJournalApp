@@ -33,7 +33,7 @@
 </div>
 
 <div class="card-scroll" bind:this={habit}>
-	<div class="left-pad" />
+	<!-- <div class="left-pad" />
 	<HabitCard
 		name="Mood"
 		sun="bg-accent-yellow"
@@ -45,7 +45,11 @@
 		sat="circle-future"
 	/>
 	<HabitCard name="Medication 10mg" mon="circle-untracked" />
-	<div class="right-pad" />
+	<div class="right-pad" /> -->
+	<div class="left-pad" />
+	{#each data.habits as habit}
+		<HabitCard name={habit.name} entries={habit.HabitEntry} />
+	{/each}
 </div>
 
 <div class="app-container mt-10 mb-2 flex items-baseline">
