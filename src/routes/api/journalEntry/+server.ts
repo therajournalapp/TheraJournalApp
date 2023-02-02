@@ -3,49 +3,42 @@ import { PrismaClient } from '@prisma/client'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 const prisma = new PrismaClient()
 
-//TODO add local auth to all api methods
-
-export async function GET() {
-    const entry = {
-        name: "test"
-    }
-    return new Response(JSON.stringify(entry));
-}
-
 export const POST = (async ({ locals }) => {
+    const user = (await locals.validateUser()).user;
+    if (!user) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
+
     try {
-        const user = (await locals.validateUser()).user;
-        if (user) {
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            const yyyy = today.getFullYear();
-            const todayString = mm + '/' + dd + '/' + yyyy;
 
-            const newEntry = await prisma.journalEntry.create({
-                data: {
-                    title: todayString,
-                    body: "<p>Type here...</p>",
-                    user_id: user.userId,
-                }
-            });
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+        const todayString = mm + '/' + dd + '/' + yyyy;
 
-            const id = newEntry.id;
+        const newEntry = await prisma.journalEntry.create({
+            data: {
+                title: todayString,
+                body: "<p>Type here...</p>",
+                user_id: user.userId,
+            }
+        });
 
-            console.log(id);
+        const id = newEntry.id;
 
-            return new Response(JSON.stringify({ id: id }), { status: 201 })
-        }
-        else return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 })
+        console.log(id);
 
-    } catch {
+        return new Response(JSON.stringify({ id: id }), { status: 201 })
+    }
+    catch {
         return new Response(JSON.stringify({ message: "failure" }), { status: 400 })
     }
 }) satisfies RequestHandler;
 
 export const PATCH = (async ({ request, locals }) => {
     const user = (await locals.validateUser()).user;
-    if(!user) {
+    if (!user) {
         return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }
 
@@ -70,7 +63,6 @@ export const PATCH = (async ({ request, locals }) => {
 
     console.log(updateEntry);
 
-    // return new Response(JSON.stringify({ message: updateEntry }), { status: 201 })
     return new Response(JSON.stringify({ message: "success" }), { status: 201 })
 }) satisfies RequestHandler;
 

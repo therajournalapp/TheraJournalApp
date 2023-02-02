@@ -4,8 +4,6 @@ const prisma = new PrismaClient()
 import { fb_auth } from "$lib/server/admin";
 import { auth } from '$lib/server/lucia';
 
-//TODO add local auth to all api methods
-
 export const POST = (async ({ request, locals }) => {
     const user = (await locals.validateUser()).user;
     if (!user) {
