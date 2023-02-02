@@ -70,7 +70,12 @@
 	{/if}
 
 	{#each data.entries as entry}
-		<JournalCard id={entry.id} title={entry.title} body={entry.preview} />
+		<JournalCard
+			id={entry.id}
+			title={entry.title}
+			body={entry.preview}
+			shared_by={entry.user.email}
+		/>
 	{/each}
 	<div class="right-pad" />
 </div>
