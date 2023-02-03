@@ -1,6 +1,9 @@
 # Therajournal
+![image](https://user-images.githubusercontent.com/60304853/216665091-d8d79335-69cf-4f24-a9f7-a4de4f04da00.png)
 
-TheraJournal is a privacy-focused journal designed specifically for people who go to therapy.
+TheraJournal is a privacy focused journaling web app for therapy and mental health. Therapists often ask for their patients to keep a personal journal. A problem arises where this journal is often never revisited, even when patients may feel the desire to share certain parts of it with their trusted therapist. The project’s core aim is to solve that problem by providing a patient with a secure way to create journal entries and selectively share any specific entries with a trusted person - their therapist.
+
+**Public Alpha Version of TheraJournal:** [Site](https://therajournal.app)
 
 This is a rewrite of the original react version of the app using [SvelteKit](https://kit.svelte.dev/) and several different libraries.
 
