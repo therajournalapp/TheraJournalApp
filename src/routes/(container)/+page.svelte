@@ -12,6 +12,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>TheraJournal</title>
+</svelte:head>
+
 <h1 class="mb-3 text-center text-4xl font-medium">Welcome to TheraJournal</h1>
 
 <div class="mx-auto mb-4 w-full max-w-screen-sm">
