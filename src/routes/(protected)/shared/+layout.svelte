@@ -34,7 +34,7 @@
 
 <div class="card-scroll" bind:this={habit}>
 	<div class="left-pad" />
-	<HabitCard
+	<!-- <HabitCard
 		name="Mood"
 		sun="bg-accent-yellow"
 		mon="bg-accent-purple"
@@ -43,8 +43,8 @@
 		thu="circle-future"
 		fri="circle-future"
 		sat="circle-future"
-	/>
-	<HabitCard name="Medication 10mg" mon="circle-untracked" />
+	/> -->
+	<!-- <HabitCard name="Medication 10mg" mon="circle-untracked" /> -->
 	<div class="right-pad" />
 </div>
 
