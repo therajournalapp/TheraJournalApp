@@ -73,7 +73,7 @@
 </script>
 
 <div
-	class="relative flex h-56 w-64 min-w-[16rem] flex-col overflow-hidden rounded-lg bg-white p-4 shadow-md {shadowclr} ring-1 ring-black ring-opacity-10"
+	class="relative mb-4 flex h-56 w-64 min-w-[16rem] flex-col overflow-hidden rounded-lg bg-white p-4 shadow-md {shadowclr} ring-1 ring-black ring-opacity-10"
 >
 	<div class="flex justify-between">
 		<div class="flex">
