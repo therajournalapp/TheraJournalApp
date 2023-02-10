@@ -27,6 +27,9 @@ export const load = (async ({ locals }) => {
                         user: true
                     }
                 }
+            },
+            orderBy: {
+                updatedAt: 'desc'
             }
         });
 

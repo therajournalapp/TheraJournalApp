@@ -54,7 +54,7 @@
 </div>
 
 <div class="app-container mt-10 mb-2 flex items-baseline" data-sveltekit-preload-data="off">
-	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline">Journal Entries</a>
+	<a href="/journals" class="mr-3 text-3xl font-medium hover:underline">Journal Entries</a>
 	<a
 		href="/dashboard/new"
 		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700"
