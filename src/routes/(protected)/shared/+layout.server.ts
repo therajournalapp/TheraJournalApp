@@ -29,7 +29,7 @@ export const load = (async ({ locals }) => {
 				user: true
 			}
 		});
-		console.log('posts', shared_posts);
+
 		return {
 			entries: shared_posts
 		};
