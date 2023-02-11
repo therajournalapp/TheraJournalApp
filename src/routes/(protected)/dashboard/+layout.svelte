@@ -7,12 +7,12 @@
 	import 'iconify-icon';
 
 	let newMedication = false;
-	// Lets desktop users scroll horizontal sections with scroll wheel
 	let habit: any;
 	let journal: any;
-
+	
 	let newHabitDialog: HTMLDialogElement;
-
+	
+	// Lets desktop users scroll horizontal sections with scroll wheel
 	onMount(() => {
 		habit.addEventListener('wheel', (ev: any) => {
 			ev.preventDefault();

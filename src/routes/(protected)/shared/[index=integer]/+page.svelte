@@ -1,7 +1,6 @@
 <script lang="ts">
 	import EditorWrapper from '$lib/components/EditorWrapper.svelte';
 	import Editor from '$lib/components/Editor.svelte';
-	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	export let data: PageData;
 </script>

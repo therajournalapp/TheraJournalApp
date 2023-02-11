@@ -1,16 +1,12 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
-	import ShareToggle from '$lib/components/ShareToggle.svelte';
-	import Dialog from '$lib/components/Dialog.svelte';
-	import Calender from '$lib/components/Calender.svelte';
-	import { getMonthName } from './date-time.js';
 	import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
+	import { onMount } from 'svelte';
+	import Calender from './Calender.svelte';
+	import { getMonthName } from './date-time.js';
 
 	export let habitID: number;
 	export let entries: any[];
 	export let name: String;
-	export let shadowclr: String = 'shadow-offwhite-light';
 
 	let newDatePicker: HTMLDialogElement;
 
@@ -81,39 +77,8 @@
 </script>
 
 <div
-	class="flex h-28 w-72 min-w-[18rem] flex-col justify-between rounded-lg bg-white p-4 shadow-md {shadowclr} ring-1 ring-black ring-opacity-10"
+	class="fixed inset-0 top-1/2 left-1/2 h-[500px] w-[375px] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-5 shadow-xl"
 >
-	<div class="flex justify-between">
-		<div class="flex">
-			<a href="/dashboard/h/{habitID}" class="text-xl font-medium hover:underline">{name}</a>
-			<!-- <button
-				class="text-xl font-medium hover:underline"
-				on:click={() => {
-					newDatePicker.showModal();
-				}}
-			>
-				{name}
-			</button> -->
-		</div>
-		<ShareToggle />
-	</div>
-
-	<div class="mx-[-5px]">
-		<div class="flex w-full justify-around font-mono">
-			{#each days as day}
-				<span class="day-label {currentDay == day ? 'current-day' : ''}">{day}</span>
-			{/each}
-		</div>
-
-		<div class="flex justify-around">
-			{#each days as day}
-				<div class="circle {dayValueMap.has(day) ? 'bg-primary' : 'circle-future'}" />
-			{/each}
-		</div>
-	</div>
-</div>
-
-<Dialog bind:dialog={newDatePicker}>
 	<div class="w-auto p-4 text-center">
 		<div class="mb-2 flex flex-row justify-between border-b-2 border-b-primary">
 			<h1 class="text-left align-bottom text-2xl">{name}</h1>
@@ -123,7 +88,8 @@
 					aria-expanded="false"
 					class="group inline-flex
                 items-center rounded-md border-primary px-3 pb-2 pt-1 text-base font-medium text-primary text-opacity-90 hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-					>Options
+				>
+					Options
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
@@ -131,12 +97,13 @@
 						aria-hidden="true"
 						class="ml-2
                   h-5 w-5 text-primary text-opacity-70 transition duration-150 ease-in-out group-hover:text-opacity-80"
-						><path
+					>
+						<path
 							fill-rule="evenodd"
 							d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
 							clip-rule="evenodd"
-						/></svg
-					>
+						/>
+					</svg>
 				</PopoverButton>
 
 				<PopoverPanel style="position: absolute; z-index: 10;">
@@ -156,9 +123,9 @@
 			<span class="text-md"
 				>Mark habit completed on <strong>{selectedDate.toDateString()}</strong></span
 			>
-			<button type="submit" class="text-md hover:text-primary-dark "
-				><iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[-1px]" /></button
-			>
+			<button type="submit" class="text-md hover:text-primary-dark ">
+				<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[-1px]" />
+			</button>
 			<input type="hidden" value={selectedDate.toDateString()} name="date" id="date" />
 			<input type="hidden" value={habitID} name="habit_id" id="habit_id" />
 		</form>
@@ -176,25 +143,4 @@
 			on:datechange={onDateChange}
 		/>
 	</div>
-</Dialog>
-
-<style lang="postcss">
-	.panel-contents {
-		@apply overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5;
-	}
-	.circle {
-		@apply h-5 w-5 rounded-full;
-	}
-
-	.circle-future {
-		@apply border-[1px] border-dashed border-black bg-transparent;
-	}
-
-	.circle-untracked {
-		@apply border-[1px] border-solid border-black bg-transparent;
-	}
-
-	.current-day {
-		@apply font-bold;
-	}
-</style>
+</div>
