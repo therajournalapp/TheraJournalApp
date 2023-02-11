@@ -73,8 +73,10 @@
 		<JournalCard
 			id={entry.id}
 			title={entry.title}
-			body={entry.preview}
+			body={entry.body}
+			date={entry.createdAt}
 			shared_by={entry.user.email}
+			link_to="shared"
 		/>
 	{/each}
 	<div class="right-pad" />

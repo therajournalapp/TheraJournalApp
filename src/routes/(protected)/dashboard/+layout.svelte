@@ -66,7 +66,14 @@
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
 	{#each data.entries as entry}
-		<JournalCard id={entry.id} title={entry.title} body={entry.preview} shared={entry.shared} />
+		<JournalCard
+			id={entry.id}
+			title={entry.title}
+			body={entry.body}
+			date={entry.createdAt}
+			shared_to={entry.shared}
+			link_to="dashboard"
+		/>
 	{/each}
 	<div class="right-pad" />
 </div>

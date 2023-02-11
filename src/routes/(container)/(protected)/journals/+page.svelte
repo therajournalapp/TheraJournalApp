@@ -30,8 +30,14 @@
 		/>
 	</div>
 	<div class="mb-2 flex flex-row flex-wrap justify-start gap-4 self-center ">
-		{#each $searchStore.filtered as journal}
-			<JournalCard id={journal.id} title={journal.title} body={journal.preview} />
+		{#each $searchStore.filtered as entry}
+			<JournalCard
+				id={entry.id}
+				title={entry.title}
+				body={entry.body}
+				date={entry.createdAt}
+				link_to="journals"
+			/>
 		{/each}
 	</div>
 {/if}

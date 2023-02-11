@@ -67,6 +67,8 @@ export const load = (async ({ locals }) => {
             }
         });
 
+        console.log(journal_entries)
+
         return {
             entries: journal_entries,
             habits: habits

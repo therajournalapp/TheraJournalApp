@@ -19,6 +19,7 @@ export const POST = (async ({ locals }) => {
 
         const newEntry = await prisma.journalEntry.create({
             data: {
+                createdAt: today,
                 title: todayString,
                 body: "<p>Type here...</p>",
                 user_id: user.userId,

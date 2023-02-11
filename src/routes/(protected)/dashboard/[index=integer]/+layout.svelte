@@ -5,7 +5,7 @@
 <div class="pointer-events-none fixed inset-0 flex h-screen w-screen justify-center ">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="scroll pointer-events-auto z-[1] mx-auto w-full cursor-pointer overflow-y-scroll bg-black bg-opacity-20"
+		class="scroll pointer-events-auto z-[1] mx-auto w-full cursor-pointer overflow-y-auto bg-black bg-opacity-20"
 		on:click={(e) => {
 			if (e.target !== e.currentTarget) {
 				return;
