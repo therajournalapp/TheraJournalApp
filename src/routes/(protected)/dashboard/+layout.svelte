@@ -100,9 +100,9 @@
 			</div> -->
 
 			<div class="mt-4 flex flex-row justify-end space-x-2">
-				<button type="button" class="btn-gray" on:click={() => newHabitDialog.close()}
-					>Cancel</button
-				>
+				<button type="button" class="btn-gray" on:click={() => newHabitDialog.close()}>
+					Cancel
+				</button>
 				<button type="submit" class="btn">Save</button>
 			</div>
 		</form>
