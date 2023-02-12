@@ -77,7 +77,7 @@
 </script>
 
 <div
-	class="fixed inset-0 top-1/2 left-1/2 h-[500px] w-[375px] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-5 shadow-xl"
+	class="fixed inset-0 top-1/2 left-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-2 shadow-xl"
 >
 	<div class="w-auto p-4 text-center">
 		<div class="mb-2 flex flex-row justify-between border-b-2 border-b-primary">
