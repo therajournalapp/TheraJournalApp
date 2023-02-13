@@ -13,6 +13,7 @@
 	// import { CalendarView } from 'fluent-svelte';
 	import CalendarView from '$lib/components/fluent-svelte/CalendarView/CalendarView.svelte';
 	import ShareSelector from './ShareSelector.svelte';
+	import HabitOptionMenu from './HabitOptionMenu.svelte';
 
 	// ID of the habit, used to load entries
 	export let habitID: number;
@@ -106,9 +107,15 @@
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
 							<DialogTitle class="text-2xl">{name}</DialogTitle>
-							<div class="mt-1 mr-1 mb-2">
+							<div class="mt-1 mr-1 mb-2 flex gap-3">
 								<!-- TODO: write share and unshare callback functions -->
 								<ShareSelector title={name} {shared_to} bind:isOpen={shareOpen} />
+								<!-- TODO: implement the delete callback! -->
+								<HabitOptionMenu
+									deleteCallBack={() => {
+										console.log('TODO: implement delete callback!');
+									}}
+								/>
 							</div>
 						</div>
 
