@@ -50,6 +50,10 @@
 			: firstValue < min
 			? new Date(min.getFullYear(), min.getMonth(), 1)
 			: new Date(max.getFullYear(), max.getMonth(), 1);
+	// added
+	export let month = page;
+	$: month = page;
+	// end added
 	$: firstValue = Array.isArray(value) ? value[0] : value;
 	$: view, updatePage(0);
 	$: nextPage = getPageByOffset(1, page, view);

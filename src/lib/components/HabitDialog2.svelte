@@ -43,14 +43,12 @@
 	// to hide popup while it is open
 	let shareOpen = false;
 
-	// Used to track the current view of the calendar
-	// TODO: use this + exported month from calendar to load entries
-	// as you scroll through the calendar
-	// should only be loading entries while view is 'days'
-	let view: 'days' | 'months' | 'years' | undefined = 'days';
-
-	// TODO: for testing, remove later
-	$: console.log('view is now: ' + view);
+	// Used to track the currently shown month of the calendar
+	// TODO: use this to load entries as the user scrolls through the calendar
+	// TODO: possibily create a loading variable on the CalendarView component,
+	// to show a loading spinner while the entries are loading for the month
+	let month: Date;
+	$: console.log('month is now: ' + month);
 
 	// Used to see if two date objects are the same day
 	function sameDayMonthYear(date1: Date, date2: Date) {
@@ -147,7 +145,7 @@
 						<CalendarView
 							multiple
 							bind:value
-							bind:view
+							bind:month
 							on:change={() => {
 								console.log(value);
 							}}
