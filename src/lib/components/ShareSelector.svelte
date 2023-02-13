@@ -30,7 +30,7 @@
 	};
 
 	// Used to track if the dialog is open or not
-	let isOpen = false;
+	export let isOpen = false;
 	// Used to show an error for the add user form
 	let error: string = '';
 	// Used for styling button

@@ -33,7 +33,7 @@
 		getEntriesForSelectedMonth();
 	});
 
-	const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+	const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 	function getCurrentDay() {
 		const today = new Date().getDay();
 		return days[today];
