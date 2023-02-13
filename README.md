@@ -20,6 +20,15 @@ This is a rewrite of the original react version of the app using [SvelteKit](htt
 
 ----
 
+## Running Playwright Tests
+
+[Playwright Documentation](https://playwright.dev/docs/intro)
+
+1. Run `pnpm playwright install` to install the test browsers
+2. Find the test task and run it to run all the tests, or use the Tests pane on VSCode to run individual tests or debug them as usual. 
+
+----
+
 ## TODO
 
 - [x] Routing - Using SvelteKit filebased routing with +layout.svelte.
