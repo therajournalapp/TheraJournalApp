@@ -14,28 +14,44 @@
 	import CalendarView from '$lib/components/fluent-svelte/CalendarView/CalendarView.svelte';
 	import ShareSelector from './ShareSelector.svelte';
 
+	// ID of the habit, used to load entries
 	export let habitID: number;
+	// Title of the habit, used to set the title of the dialog
 	export let name: string;
+	// TODO: load entries from backend
 	// export let entries: any[];
+	// list of emails that the entry is shared with
+	// TODO: load from backend
+	export let shared_to: any | undefined = [];
 
+	// Date of today, used for Add/Remove Today button
 	let today = new Date();
 	today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
+	// Date of tomorrow, used to set the max date of the calendar
 	let tomorrow: Date = new Date();
 	tomorrow.setDate(tomorrow.getDate() + 1);
 
-	// let value = [today, tomorrow];
-	let value = [new Date(2023, 1, 10)];
+	// Array of dates that are selected
+	// TODO: change to be loaded from backend
+	let value: Date[] = [];
 
 	// Used to track if the dialog is open or not
 	let isOpen = false;
-
+	// Tracks if the share selector is open or not,
+	// to hide popup while it is open
 	let shareOpen = false;
 
+	// Used to track the current view of the calendar
+	// TODO: use this + exported month from calendar to load entries
+	// as you scroll through the calendar
+	// should only be loading entries while view is 'days'
 	let view: 'days' | 'months' | 'years' | undefined = 'days';
 
+	// TODO: for testing, remove later
 	$: console.log('view is now: ' + view);
 
+	// Used to see if two date objects are the same day
 	function sameDayMonthYear(date1: Date, date2: Date) {
 		return (
 			date1.getDate() === date2.getDate() &&
@@ -44,6 +60,7 @@
 		);
 	}
 
+	// Open the dialog when the component is mounted (page is loaded)
 	onMount(() => {
 		isOpen = true;
 	});
@@ -90,12 +107,14 @@
 						<div class="flex justify-between align-middle">
 							<DialogTitle class="text-2xl">{name}</DialogTitle>
 							<div class="mt-1 mr-1 mb-2">
-								<ShareSelector title={name} shared_to={[]} bind:isOpen={shareOpen} />
+								<!-- TODO: write share and unshare callback functions -->
+								<ShareSelector title={name} {shared_to} bind:isOpen={shareOpen} />
 							</div>
 						</div>
 
-						<div class="my-2 hover:text-neutral-400 active:text-primary-dark">
+						<div class="my-2 ">
 							<button
+								class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
 								on:click={() => {
 									if (value.some((date) => sameDayMonthYear(date, today) == true)) {
 										console.log('remove');
@@ -109,12 +128,13 @@
 							>
 								{#if !value.some((date) => sameDayMonthYear(date, today))}
 									Add Today
+									<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[1px]" />
 								{:else}
 									Remove Today
+									<iconify-icon inline icon="ph:minus-circle" class="text-md translate-y-[1px]" />
 								{/if}
-
-								<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[1px]" />
 							</button>
+							<span> or click to toggle a date below.</span>
 						</div>
 
 						<CalendarView
@@ -146,21 +166,3 @@
 		</div>
 	</Dialog>
 </Transition>
-
-<!-- <style lang="postcss">
-	:global(.calendar-view) {
-		border: none !important;
-	}
-	:global(.calendar-view-item.type-day.out-of-range) {
-		@apply !hidden;
-	}
-	/* :global(.calendar-view-item.type-day) {
-		@apply !border-black;
-	} */
-	:global(.calendar-view-item.type-day.selected) {
-		@apply !border-none !bg-primary !text-white;
-	}
-	:global(.calendar-view-item.type-day.disabled) {
-		@apply !border-dashed !border-black;
-	}
-</style> -->

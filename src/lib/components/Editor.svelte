@@ -196,7 +196,6 @@
 							shareCallback={onShare}
 							unshareCallback={onUnshare}
 						/>
-						<!-- <ShareToggle > -->
 						<EditorOptionMenu
 							deleteCallBack={() => {
 								deleting = true;
