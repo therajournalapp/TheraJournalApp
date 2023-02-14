@@ -2,16 +2,13 @@
 	import { onMount } from 'svelte';
 	import HabitCard from '$lib/components/HabitCard.svelte';
 	import JournalCard from '$lib/components/JournalCard.svelte';
-	import Dialog from '$lib/components/Dialog.svelte';
-	import StandardToggle from '$lib/components/StandardToggle.svelte';
 	import 'iconify-icon';
+	import { fade, fly } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 
-	let newMedication = false;
 	let habit: any;
 	let journal: any;
-	
-	let newHabitDialog: HTMLDialogElement;
-	
+
 	// Lets desktop users scroll horizontal sections with scroll wheel
 	onMount(() => {
 		habit.addEventListener('wheel', (ev: any) => {
@@ -36,21 +33,23 @@
 
 <div class="app-container mb-2 flex items-baseline">
 	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline">Habits</a>
-	<button
+	<a
+		href="/dashboard/h/new"
 		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700"
-		on:click={() => {
-			newHabitDialog.showModal();
-		}}
 	>
 		add new <iconify-icon inline icon="ph:plus-circle" class="translate-y-[1px]" />
-	</button>
+	</a>
 </div>
 
 <div class="card-scroll" bind:this={habit}>
 	<div class="left-pad" />
-	{#each data.habits as habit}
-		<HabitCard habitID={habit.id} name={habit.name} entries={habit.HabitEntry} />
+	<!-- TODO: undeletable mood tracker here? -->
+	{#each data.habits as habit (habit.id)}
+		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
+			<HabitCard habitID={habit.id} name={habit.name} entries={habit.HabitEntry} />
+		</div>
 	{/each}
+	<div class="right-pad" />
 </div>
 
 <div class="app-container mt-10 mb-2 flex items-baseline" data-sveltekit-preload-data="off">
@@ -65,49 +64,22 @@
 
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
-	{#each data.entries as entry}
-		<JournalCard
-			id={entry.id}
-			title={entry.title}
-			body={entry.body}
-			date={entry.createdAt}
-			shared_to={entry.shared}
-			link_to="dashboard"
-		/>
+	{#each data.entries as entry (entry.id)}
+		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
+			<JournalCard
+				id={entry.id}
+				title={entry.title}
+				body={entry.body}
+				date={entry.createdAt}
+				shared_to={entry.shared}
+				link_to="dashboard"
+			/>
+		</div>
 	{/each}
 	<div class="right-pad" />
 </div>
 
 <slot />
-
-<Dialog bind:dialog={newHabitDialog}>
-	<div class=" p-2">
-		<form action="?/newHabit" method="post" class="form">
-			<h1 class="mb-4 text-xl text-primary-dark">Add New Habit Tracker</h1>
-			<label for="name" class="label">Habit name: </label>
-			<input
-				class="input"
-				type="text"
-				placeholder="Give your habit a name"
-				name="name"
-				id="name"
-				maxlength="255"
-			/>
-			<!-- Debatable if this needs a 'type', let this be 'custom' for now-->
-			<!-- <div class="mt-2 flex items-center justify-center space-x-2">
-				<label for="type">Is this for tracking a medication?</label>
-				<StandardToggle id="type" value="Medication" name="type" />
-			</div> -->
-
-			<div class="mt-4 flex flex-row justify-end space-x-2">
-				<button type="button" class="btn-gray" on:click={() => newHabitDialog.close()}>
-					Cancel
-				</button>
-				<button type="submit" class="btn">Save</button>
-			</div>
-		</form>
-	</div>
-</Dialog>
 
 <style lang="postcss">
 	.card-scroll {

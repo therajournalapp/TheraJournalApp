@@ -3,10 +3,13 @@
 	// import HabitDialog from '$lib/components/HabitDialog.svelte';
 	import HabitDialog2 from '$lib/components/HabitDialog2.svelte';
 	export let data: any;
+
+	console.log('ayoooo?????!');
+	console.log(data.habit.HabitEntry);
 </script>
 
 {#if data.habit}
-	<HabitDialog2 habitID={data.habit.id} name={data.habit.name} />
+	<HabitDialog2 habitID={data.habit.id} name={data.habit.name} entries={data.habit.HabitEntry} />
 {:else}
 	<EditorWrapper back_link="/dashboard">
 		<div

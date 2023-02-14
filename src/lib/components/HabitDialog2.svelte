@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import {
 		Dialog,
 		DialogOverlay,
@@ -14,6 +14,7 @@
 	import CalendarView from '$lib/components/fluent-svelte/CalendarView/CalendarView.svelte';
 	import ShareSelector from './ShareSelector.svelte';
 	import HabitOptionMenu from './HabitOptionMenu.svelte';
+	import debounce from 'lodash/debounce';
 
 	// ID of the habit, used to load entries
 	export let habitID: number;
@@ -25,6 +26,8 @@
 	// TODO: load from backend
 	export let shared_to: any | undefined = [];
 
+	export let entries: Date[];
+
 	// Date of today, used for Add/Remove Today button
 	let today = new Date();
 	today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -35,13 +38,31 @@
 
 	// Array of dates that are selected
 	// TODO: change to be loaded from backend
-	let value: Date[] = [];
+	let value: Date[] = entries;
 
 	// Used to track if the dialog is open or not
 	let isOpen = false;
 	// Tracks if the share selector is open or not,
 	// to hide popup while it is open
 	let shareOpen = false;
+
+	let title = name;
+
+	async function updateTitle() {
+		console.log('updating title to: ' + title);
+		const result = await fetch('/api/habit', {
+			method: 'PATCH',
+			body: JSON.stringify({ id: habitID, name: title }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		// const ok = result.ok;
+		// console.log('result: ' + ok);
+		invalidateAll();
+	}
+
+	const saveTitle = debounce(updateTitle, 1000);
 
 	// Used to track the currently shown month of the calendar
 	// TODO: use this to load entries as the user scrolls through the calendar
@@ -63,6 +84,25 @@
 	onMount(() => {
 		isOpen = true;
 	});
+
+	async function deleteHabit() {
+		const response = await fetch('/api/habit', {
+			method: 'DELETE',
+			body: JSON.stringify({ id: habitID }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const ok = response.ok;
+		isOpen = false;
+		setTimeout(() => {
+			invalidateAll();
+			// This stops invalidateAll from keeping the user on the same page
+			setTimeout(() => {
+				goto('/dashboard');
+			}, 1);
+		}, 300);
+	}
 </script>
 
 <Transition show={isOpen}>
@@ -104,16 +144,19 @@
 				>
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
-							<DialogTitle class="text-2xl">{name}</DialogTitle>
+							<!-- <DialogTitle class="text-2xl">{name}</DialogTitle> -->
+							<input
+								type="text"
+								id="entry-title"
+								on:input={saveTitle}
+								bind:value={title}
+								class="rounded-md text-2xl outline-none hover:underline"
+							/>
 							<div class="mt-1 mr-1 mb-2 flex gap-3">
 								<!-- TODO: write share and unshare callback functions -->
 								<ShareSelector title={name} {shared_to} bind:isOpen={shareOpen} />
 								<!-- TODO: implement the delete callback! -->
-								<HabitOptionMenu
-									deleteCallBack={() => {
-										console.log('TODO: implement delete callback!');
-									}}
-								/>
+								<HabitOptionMenu deleteCallBack={deleteHabit} />
 							</div>
 						</div>
 

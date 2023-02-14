@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, type Habit } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export const load = (async ({ params, locals }) => {
@@ -7,7 +7,14 @@ export const load = (async ({ params, locals }) => {
     if (!session) return null;
     if (!user) return null;
 
-    const habit = await prisma.habit.findUnique({
+    const first_day_of_month = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+    interface HabitWithHabitEntry extends Habit {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        HabitEntry: any[],
+    }
+
+    const habit: HabitWithHabitEntry | null = await prisma.habit.findUnique({
         where: {
             id: parseInt(params.index)
         },
@@ -15,13 +22,22 @@ export const load = (async ({ params, locals }) => {
             HabitEntry: {
                 where: {
                     date: {
+                        gte: first_day_of_month,
                         lte: new Date(),
-                        gte: new Date(new Date().setDate(new Date().getDate() - 7))
                     }
+                },
+                select: {
+                    date: true,
                 }
             }
         }
     });
+
+    if (!habit) {
+        return null;
+    }
+
+    habit.HabitEntry = habit.HabitEntry.map(entry => (entry.date));
 
     console.log(habit);
 

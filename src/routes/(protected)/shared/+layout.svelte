@@ -3,6 +3,8 @@
 	import HabitCard from '$lib/components/HabitCard.svelte';
 	import JournalCard from '$lib/components/JournalCard.svelte';
 	import 'iconify-icon';
+	import { flip } from 'svelte/animate';
+	import { fade, fly } from 'svelte/transition';
 
 	// Lets desktop users scroll horizontal sections with scroll wheel
 	let habit: any;
@@ -50,6 +52,7 @@
 
 <div class="app-container mt-10 mb-2 flex items-baseline">
 	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
+	<!-- TODO add shared entires + same keyed each block w/ animation from dashboard -->
 </div>
 
 <div class="card-scroll" bind:this={journal}>
@@ -69,15 +72,17 @@
 		</div>
 	{/if}
 
-	{#each data.entries as entry}
-		<JournalCard
-			id={entry.id}
-			title={entry.title}
-			body={entry.body}
-			date={entry.createdAt}
-			shared_by={entry.user.email}
-			link_to="shared"
-		/>
+	{#each data.entries as entry (entry.id)}
+		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
+			<JournalCard
+				id={entry.id}
+				title={entry.title}
+				body={entry.body}
+				date={entry.createdAt}
+				shared_by={entry.user.email}
+				link_to="shared"
+			/>
+		</div>
 	{/each}
 	<div class="right-pad" />
 </div>
