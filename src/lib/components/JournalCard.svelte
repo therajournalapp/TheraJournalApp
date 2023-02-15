@@ -31,6 +31,7 @@
 	// change if not putting card over default background.
 	export let shadowclr: string = 'shadow-offwhite-light';
 
+	// Formatted date used for /shared
 	function getFormattedDate(date: Date) {
 		let year = date.getFullYear().toString().substring(2);
 		let month = (1 + date.getMonth()).toString().padStart(2, '0');

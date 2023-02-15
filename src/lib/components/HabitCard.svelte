@@ -2,9 +2,17 @@
 	import { invalidateAll } from '$app/navigation';
 	import ShareSelector from './ShareSelector.svelte';
 
+	// The entries id. Used for linking to habit dialog
 	export let id: number;
-	export let entries: any[];
+
+	// The entries title
 	export let name: string;
+
+	// The habit entires for this month from load function
+	export let entries: any[];
+
+	// Sets the shadow color of the card,
+	// change if not putting card over default background.
 	export let shadowclr: String = 'shadow-offwhite-light';
 
 	// The entry's shared users. Used for the share selector.
@@ -23,6 +31,7 @@
 	// then the link will be '/dashboard/h/1'
 	export let link_to: string = 'dashboard';
 
+	// Formatted date used for /shared
 	function getFormattedDate(date: Date) {
 		console.log(date);
 		let year = date.getFullYear().toString().substring(2);
@@ -99,9 +108,11 @@
 >
 	<div class="flex justify-between">
 		<div class="flex">
-			<a href="/{link_to}/h/{id}" class="text-xl font-medium hover:underline">
-				{name}
-			</a>
+			<div class="relative max-w-[220px] overflow-hidden text-ellipsis whitespace-nowrap">
+				<a href="/{link_to}/h/{id}" class="text-xl font-medium hover:underline">
+					{name}
+				</a>
+			</div>
 		</div>
 		{#if shared_by == ''}
 			<ShareSelector title={name} {shared_to} shareCallback={onShare} unshareCallback={onUnshare} />
