@@ -10,13 +10,17 @@
 	export let shared_to: any | undefined = [];
 
 	const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	const todayNum = new Date().getDay();
 	function getCurrentDay() {
-		const today = new Date().getDay();
-		return days[today];
+		return days[todayNum];
 	}
 
 	let currentDay = getCurrentDay();
-	let dayValueMap = new Map();
+	let previewEntries = new Set();
+
+	entries.forEach(function (entry: any) {
+		previewEntries.add(days[entry.date.getDay()]);
+	});
 
 	//TODO: load this weeks entries from backend for circle display
 </script>
@@ -40,8 +44,13 @@
 		</div>
 
 		<div class="flex justify-around">
-			{#each days as day}
-				<div class="circle {dayValueMap.has(day) ? 'bg-primary' : 'circle-future'}" />
+			{#each days as day, dayNum}
+				<div
+					class="circle"
+					class:bg-primary={previewEntries.has(day)}
+					class:circle-untracked={dayNum < todayNum && !previewEntries.has(day)}
+					class:circle-future={dayNum >= todayNum}
+				/>
 			{/each}
 		</div>
 	</div>
