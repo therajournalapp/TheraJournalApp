@@ -1,3 +1,5 @@
+//TODO: delete this file once api routes are moved
+
 import type { Actions } from './$types';
 import { PrismaClient } from '@prisma/client';
 import { fail } from '@sveltejs/kit';

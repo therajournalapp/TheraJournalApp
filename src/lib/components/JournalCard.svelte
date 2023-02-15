@@ -2,14 +2,46 @@
 	import ShareSelector from './ShareSelector.svelte';
 	import { invalidateAll } from '$app/navigation';
 
+	// The entries id. Used for linking to editor
 	export let id: number;
-	export let title: string;
-	export let body: string;
-	export let shared: any | undefined = undefined;
-	export let shadowclr: string = 'shadow-offwhite-light';
 
+	// The entries title
+	export let title: string;
+
+	// The entries body. Used for preview.
+	export let body: string;
+
+	// Date entry was created at.
+	// Used for the date footer.
+	export let date: Date;
+
+	// The entry's shared users. Used for the share selector.
+	export let shared_to: any | undefined = [];
+
+	// The path to link to the journal editor.
+	// Ex: if link_to is 'dashboard' and id is '1',
+	// then the link will be '/dashboard/1'
+	export let link_to: string = 'dashboard';
+
+	// This is the email of the user who shared the entry with you.
+	// Only used on the shared page.
 	export let shared_by: string = '';
 
+	// Sets the shadow color of the card,
+	// change if not putting card over default background.
+	export let shadowclr: string = 'shadow-offwhite-light';
+
+	// Formatted date used for /shared
+	function getFormattedDate(date: Date) {
+		let year = date.getFullYear().toString().substring(2);
+		let month = (1 + date.getMonth()).toString().padStart(2, '0');
+		let day = date.getDate().toString().padStart(2, '0');
+
+		return month + '/' + day + '/' + year;
+	}
+	let formatted_date = getFormattedDate(date);
+
+	// The share selector will call this function when a entry is shared
 	let onShare: Function = async (email: string): Promise<string | Error> => {
 		const response = await fetch('/api/shareEntry', {
 			method: 'POST',
@@ -31,6 +63,7 @@
 		}
 	};
 
+	// The share selector will call this function when a entry is unshared
 	let onUnshare: Function = async (email: string): Promise<string | Error> => {
 		const response = await fetch('/api/shareEntry', {
 			method: 'DELETE',
@@ -48,28 +81,6 @@
 			return Error('Error deleting share.');
 		}
 	};
-
-	// Colors used to generate the background for shared user icons
-	const colors = ['e9f5db', 'dcebca', 'cfe1b9', 'c2d5aa', 'b5c99a', 'a6b98b', '97a97c', '849669'];
-	// Colors used to generate the text for shared user icons
-	const tx_col = ['606f49', '5D6746', '595D41', '3D5D3C', '425535', '3C4828', '2A3B1C', '1F2513'];
-	// Hash function string to positive int
-	// used to pick a random color for the user icon
-	const hash = function (input: string) {
-		var hash = 0,
-			i,
-			chr;
-		if (input.length === 0) return hash;
-		for (i = 0; i < input.length; i++) {
-			chr = input.charCodeAt(i);
-			hash = (hash << 5) - hash + chr;
-			hash |= 0; // Convert to 32bit integer
-		}
-		if (hash < 0) {
-			hash = hash * -1;
-		}
-		return hash;
-	};
 </script>
 
 <div
@@ -77,44 +88,51 @@
 >
 	<div class="flex justify-between">
 		<div class="flex">
-			{#if shared}
-				<div class="relative max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap">
-					<a href="/dashboard/{id}" class="text-xl font-medium hover:underline">
-						{title}
-					</a>
-				</div>
-			{:else}
-				<div class="relative max-w-[225px] overflow-hidden text-ellipsis whitespace-nowrap">
-					<a href="/shared/{id}" class="text-xl font-medium hover:underline">
-						{title}
-					</a>
-				</div>
-			{/if}
+			<div class="relative max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap">
+				<a href="/{link_to}/{id}" class="text-xl font-medium hover:underline">
+					{title}
+				</a>
+			</div>
 		</div>
-		{#if shared}
-			<ShareSelector
-				{title}
-				shareCallback={onShare}
-				unshareCallback={onUnshare}
-				shared_to={shared}
-			/>
+		{#if shared_to}
+			<ShareSelector {title} shareCallback={onShare} unshareCallback={onUnshare} {shared_to} />
 		{/if}
 	</div>
 
 	<div class="w-full break-words">
-		<p class="pt-3">
-			{body}
-		</p>
+		<div class="prose prose-sm prose-neutral pt-3">
+			{@html body.substring(1, body.length - 1)}
+		</div>
 	</div>
 
 	<div
-		class="absolute left-0 bottom-0 flex h-1/4 w-64 items-center bg-gradient-to-b from-transparent to-white pl-4 text-xs font-bold text-primary-dark"
+		class="fade-out absolute left-0 bottom-0 flex h-1/3 w-64 items-end justify-between px-4 pb-1.5 text-xs font-bold"
 	>
 		{#if shared_by !== ''}
-			<span>{shared_by}</span>
+			<span
+				class="w-[170px] overflow-hidden text-ellipsis tracking-tight text-primary-dark"
+				title="Shared by: {shared_by}"
+			>
+				{shared_by}
+			</span>
+		{:else}
+			<span />
 		{/if}
+
+		<span class="font-semibold tabular-nums tracking-tighter text-neutral-500 text-opacity-90">
+			{formatted_date}
+		</span>
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
+	.fade-out {
+		background-image: linear-gradient(
+			0deg,
+			rgba(255, 255, 255, 1) 0%,
+			rgba(255, 255, 255, 1) 30%,
+			rgba(255, 255, 255, 0.75) 50%,
+			rgba(255, 255, 255, 0) 100%
+		);
+	}
 </style>

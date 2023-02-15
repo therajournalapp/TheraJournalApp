@@ -20,7 +20,7 @@ export const load = (async ({ params, locals }) => {
 
     let entry: JournalEntryWithShared | null = await prisma.journalEntry.findUnique({
         where: {
-            id: parseInt(params.index),
+            id: parseInt(params.index)
         },
         select: {
             id: true,

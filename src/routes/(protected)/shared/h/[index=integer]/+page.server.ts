@@ -12,8 +12,6 @@ export const load = (async ({ params, locals }) => {
     interface HabitWithHabitEntry extends Habit {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         HabitEntry: any[],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        SharedHabit: any[],
     }
 
     const habit: HabitWithHabitEntry | null = await prisma.habit.findUnique({
@@ -32,17 +30,6 @@ export const load = (async ({ params, locals }) => {
                     date: true,
                 }
             },
-            SharedHabit: {
-                include:
-                {
-                    user: {
-                        select: {
-                            email: true,
-                        }
-                    }
-
-                }
-            }
         }
     });
 
@@ -51,7 +38,6 @@ export const load = (async ({ params, locals }) => {
     }
 
     habit.HabitEntry = habit.HabitEntry.map(entry => (entry.date));
-    habit.SharedHabit = habit.SharedHabit.map(share => (share.user));
 
     return {
         habit: habit

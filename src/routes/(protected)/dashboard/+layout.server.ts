@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import { PrismaClient, type JournalEntry } from '@prisma/client';
+import { PrismaClient, type Habit, type JournalEntry } from '@prisma/client';
 const prisma = new PrismaClient()
 
 
@@ -51,20 +51,57 @@ export const load = (async ({ locals }) => {
             return rest
         });
 
-        const habits = await prisma.habit.findMany({
+        interface HabitWithHabitEntry extends Habit {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            HabitEntry: any[],
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            SharedHabit?: any[],
+            shared_to?: Shared[],
+        }
+
+        const first_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - new Date().getDay());
+        const last_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay()));
+
+        let habits: HabitWithHabitEntry[] | null = await prisma.habit.findMany({
             orderBy: {
                 id: 'desc'
             },
             include: {
                 HabitEntry: {
+                    select: {
+                        date: true,
+                    },
                     where: {
                         date: {
-                            lte: new Date(),
-                            gte: new Date(new Date().setDate(new Date().getDate() - 7))
+                            gte: first_day_of_week,
+                            lte: last_day_of_week,
                         }
+                    }
+                },
+                SharedHabit: {
+                    include:
+                    {
+                        user: {
+                            select: {
+                                email: true,
+                            }
+                        }
+
                     }
                 }
             }
+        });
+
+        habits = habits.map(habit => {
+            const { SharedHabit, ...rest } = habit;
+            if (SharedHabit && SharedHabit.length > 0) {
+                rest.shared_to = SharedHabit.map(entry => (entry.user));
+            }
+            else {
+                rest.shared_to = [];
+            }
+
+            return rest;
         });
 
         return {

@@ -3,6 +3,8 @@
 	import HabitCard from '$lib/components/HabitCard.svelte';
 	import JournalCard from '$lib/components/JournalCard.svelte';
 	import 'iconify-icon';
+	import { flip } from 'svelte/animate';
+	import { fade, fly } from 'svelte/transition';
 
 	// Lets desktop users scroll horizontal sections with scroll wheel
 	let habit: any;
@@ -29,22 +31,38 @@
 </svelte:head>
 
 <div class="app-container mb-2">
-	<a href="/shared#" class="text-3xl font-medium hover:underline">Habits</a>
+	<a href="/shared#" class="text-3xl font-medium hover:underline">Shared Habits</a>
 </div>
 
 <div class="card-scroll" bind:this={habit}>
 	<div class="left-pad" />
-	<!-- <HabitCard
-		name="Mood"
-		sun="bg-accent-yellow"
-		mon="bg-accent-purple"
-		tue="bg-accent-blue"
-		wed="bg-accent-red"
-		thu="circle-future"
-		fri="circle-future"
-		sat="circle-future"
-	/> -->
-	<!-- <HabitCard name="Medication 10mg" mon="circle-untracked" /> -->
+	{#if data.habits && data.habits.length === 0}
+		<div
+			class="relative flex h-[124px] w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
+		>
+			<div class="flex h-full w-full items-center justify-center">
+				<iconify-icon icon="ph:x-circle" width="100" class="mr-2 opacity-60" />
+				<div class="w-fit max-w-[250px]">
+					<p class="text-xl font-medium hover:underline">No Shared Habits</p>
+
+					<p>If anyone shares any habit trackers with you in the future they will show up here.</p>
+				</div>
+			</div>
+		</div>
+	{/if}
+	<!-- TODO: undeletable mood tracker here? -->
+	{#each data.habits as habit (habit.id)}
+		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
+			<HabitCard
+				id={habit.id}
+				name={habit.name}
+				entries={habit.HabitEntry}
+				shared_by={habit.user.email}
+				date={habit.createdAt}
+				link_to="shared"
+			/>
+		</div>
+	{/each}
 	<div class="right-pad" />
 </div>
 
@@ -69,13 +87,17 @@
 		</div>
 	{/if}
 
-	{#each data.entries as entry}
-		<JournalCard
-			id={entry.id}
-			title={entry.title}
-			body={entry.preview}
-			shared_by={entry.user.email}
-		/>
+	{#each data.entries as entry (entry.id)}
+		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
+			<JournalCard
+				id={entry.id}
+				title={entry.title}
+				body={entry.body}
+				date={entry.createdAt}
+				shared_by={entry.user.email}
+				link_to="shared"
+			/>
+		</div>
 	{/each}
 	<div class="right-pad" />
 </div>
