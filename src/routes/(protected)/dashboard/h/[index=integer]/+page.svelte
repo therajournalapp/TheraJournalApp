@@ -3,9 +3,6 @@
 	// import HabitDialog from '$lib/components/HabitDialog.svelte';
 	import HabitDialog2 from '$lib/components/HabitDialog2.svelte';
 	export let data: any;
-
-	console.log('ayoooo?????!');
-	console.log(data.habit.HabitEntry);
 </script>
 
 {#if data.habit}

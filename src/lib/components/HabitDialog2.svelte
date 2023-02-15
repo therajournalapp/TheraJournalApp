@@ -37,7 +37,6 @@
 	tomorrow.setDate(tomorrow.getDate() + 1);
 
 	// Array of dates that are selected
-	// TODO: change to be loaded from backend
 	let value: Date[] = entries;
 
 	// Used to track if the dialog is open or not
@@ -69,7 +68,46 @@
 	// TODO: possibily create a loading variable on the CalendarView component,
 	// to show a loading spinner while the entries are loading for the month
 	let month: Date;
-	$: console.log('month is now: ' + month);
+
+	let loading = false;
+
+	async function getEntriesForMonth(month: Date) {
+		loading = true;
+		const url = new URL('/api/habitEntry', window.location.origin);
+		const params = [
+			['id', habitID.toString()],
+			['month', month.toDateString()]
+		];
+		url.search = new URLSearchParams(params).toString();
+
+		console.log('url: ' + url.toString());
+
+		const result = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const ok = result.ok;
+
+		if (!ok) {
+			loading = false;
+			return;
+		}
+
+		const json = await result.json();
+		const dates: Date[] = json.map((d: string) => new Date(d));
+		value = dates;
+
+		loading = false;
+	}
+
+	$: {
+		if (month) {
+			getEntriesForMonth(month);
+		}
+	}
 
 	// Used to see if two date objects are the same day
 	function sameDayMonthYear(date1: Date, date2: Date) {
@@ -78,6 +116,43 @@
 			date1.getMonth() === date2.getMonth() &&
 			date1.getFullYear() === date2.getFullYear()
 		);
+	}
+
+	let first_day_of_month: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+	let last_day_of_month: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+	$: {
+		if (month) {
+			first_day_of_month = month;
+			last_day_of_month = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+		}
+	}
+	function getDaysInMonth(days: Date[]) {
+		let days_in_month = [];
+		for (let i = 0; i < days.length; i++) {
+			if (
+				days[i].getTime() >= first_day_of_month.getTime() &&
+				days[i].getTime() <= last_day_of_month.getTime()
+			) {
+				days_in_month.push(days[i]);
+			}
+		}
+		return days_in_month;
+	}
+
+	async function updateEntries() {
+		if (loading) {
+			return;
+		}
+
+		let days_in_month = getDaysInMonth(value);
+		const result = await fetch('/api/habitEntry', {
+			method: 'PATCH',
+			body: JSON.stringify({ id: habitID, month: month, entries: days_in_month }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		console.log('result: ' + result.ok);
 	}
 
 	// Open the dialog when the component is mounted (page is loaded)
@@ -185,15 +260,22 @@
 							<span> or click to toggle a date below.</span>
 						</div>
 
-						<CalendarView
-							multiple
-							bind:value
-							bind:month
-							on:change={() => {
-								console.log(value);
-							}}
-							max={new Date()}
-						/>
+						<div class:cursor-wait={loading}>
+							<div class:pointer-events-none={loading}>
+								<CalendarView
+									multiple
+									bind:value
+									bind:month
+									on:change={async () => {
+										updateEntries();
+										setTimeout(() => {
+											invalidateAll();
+										}, 300);
+									}}
+									max={new Date()}
+								/>
+							</div>
+						</div>
 
 						<div class="mt-0.5 flex justify-end">
 							<button

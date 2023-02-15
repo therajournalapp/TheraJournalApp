@@ -17,7 +17,6 @@
 	// Open the dialog when the component is mounted (page is loaded)
 	onMount(() => {
 		isOpen = true;
-		console.log($page.route.id);
 	});
 </script>
 

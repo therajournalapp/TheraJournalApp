@@ -51,23 +51,30 @@ export const load = (async ({ locals }) => {
             return rest
         });
 
+        const first_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - new Date().getDay());
+        const last_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay()));
+
         const habits = await prisma.habit.findMany({
             orderBy: {
                 id: 'desc'
             },
             include: {
                 HabitEntry: {
+                    select: {
+                        date: true,
+                    },
                     where: {
                         date: {
-                            lte: new Date(),
-                            gte: new Date(new Date().setDate(new Date().getDate() - 7))
+                            gte: first_day_of_week,
+                            lte: last_day_of_week,
                         }
                     }
                 }
             }
         });
 
-        console.log(journal_entries)
+        console.log("bingus")
+        console.log(habits)
 
         return {
             entries: journal_entries,

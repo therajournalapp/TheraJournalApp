@@ -11,6 +11,7 @@
 
 	const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 	const todayNum = new Date().getDay();
+
 	function getCurrentDay() {
 		return days[todayNum];
 	}
@@ -18,11 +19,15 @@
 	let currentDay = getCurrentDay();
 	let previewEntries = new Set();
 
-	entries.forEach(function (entry: any) {
-		previewEntries.add(days[entry.date.getDay()]);
-	});
-
-	//TODO: load this weeks entries from backend for circle display
+	$: {
+		previewEntries.clear();
+		entries.forEach(function (entry: any) {
+			previewEntries.add(days[entry.date.getDay()]);
+		});
+		// array method above does not trigger an update
+		// so we assign to trigger update
+		previewEntries = previewEntries;
+	}
 </script>
 
 <div
@@ -48,8 +53,8 @@
 				<div
 					class="circle"
 					class:bg-primary={previewEntries.has(day)}
-					class:circle-untracked={dayNum < todayNum && !previewEntries.has(day)}
-					class:circle-future={dayNum >= todayNum}
+					class:circle-untracked={dayNum <= todayNum && !previewEntries.has(day)}
+					class:circle-future={dayNum > todayNum}
 				/>
 			{/each}
 		</div>
