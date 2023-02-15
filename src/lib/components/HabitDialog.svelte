@@ -1,146 +1,385 @@
 <script lang="ts">
-	import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
+	import { goto, invalidateAll } from '$app/navigation';
+	import {
+		Dialog,
+		DialogOverlay,
+		DialogTitle,
+		Transition,
+		TransitionChild
+	} from '@rgossiaux/svelte-headlessui';
 	import { onMount } from 'svelte';
-	import Calender from './Calender.svelte';
-	import { getMonthName } from './date-time.js';
+	// import 'fluent-svelte/theme.css';
+	import '$lib/components/fluent-svelte/theme.css';
+	// import { CalendarView } from 'fluent-svelte';
+	import CalendarView from '$lib/components/fluent-svelte/CalendarView/CalendarView.svelte';
+	import ShareSelector from './ShareSelector.svelte';
+	import HabitOptionMenu from './HabitOptionMenu.svelte';
+	import debounce from 'lodash/debounce';
 
-	export let habitID: number;
-	export let entries: any[];
-	export let name: String;
+	// ID of the habit, used to load entries
+	export let id: number;
 
-	let newDatePicker: HTMLDialogElement;
+	// Title of the habit, used to set the title of the dialog
+	export let name: string;
 
-	let monthlyEntries = new Set();
+	// list of emails that the entry is shared with
+	export let shared_to: any | undefined = [];
 
-	async function getEntriesForSelectedMonth() {
-		const response = await fetch(`/api/habitEntry/${habitID}/${selectedDate.toDateString()}`, {
-			method: 'GET'
+	// list of entries for the habit from load function
+	export let entries: Date[];
+
+	// view only mode, used for viewing shared entries
+	export let view_only: boolean = false;
+
+	// back link, used for exiting the dialog
+	export let back_link: string = '/dashboard';
+
+	// Date of today, used for Add/Remove Today button
+	let today = new Date();
+	today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+	// Date of tomorrow, used to set the max date of the calendar
+	let tomorrow: Date = new Date();
+	tomorrow.setDate(tomorrow.getDate() + 1);
+
+	// Array of dates that are selected
+	let value: Date[] = entries;
+
+	// Used to track if the dialog is open or not
+	let isOpen = false;
+
+	// Tracks if the share selector is open or not,
+	// to hide popup while it is open
+	let shareOpen = false;
+
+	// Bound to the title input, used to update the name of the habit
+	let title = name;
+
+	// Updates the title of the habit
+	async function updateTitle() {
+		if (view_only) {
+			return;
+		}
+		console.log('updating title to: ' + title);
+		const result = await fetch('/api/habit', {
+			method: 'PATCH',
+			body: JSON.stringify({ id: id, name: title }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		// Invalidate the load function to display on the dashboard
+		invalidateAll();
+	}
+
+	// Debounce the updateTitle function, so it is only called once every second
+	const saveTitle = debounce(updateTitle, 1000);
+
+	// Used to track the currently shown month of the calendar
+	let month: Date;
+
+	// Stops user input while the calendar is loading a month's entries
+	let loading = false;
+
+	// Gets the entries for a month, replaces the value array
+	async function getEntriesForMonth(month: Date) {
+		loading = true;
+		const url = new URL('/api/habitEntry', window.location.origin);
+		const params = [
+			['id', id.toString()],
+			['month', month.toDateString()]
+		];
+		url.search = new URLSearchParams(params).toString();
+
+		console.log('url: ' + url.toString());
+
+		const result = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json'
+			}
 		});
 
-		const json = await response.json();
+		const ok = result.ok;
 
-		for (let i = 0; i < json.entries.length; i++) {
-			monthlyEntries.add(new Date(json.entries[i].date).getDay());
+		if (!ok) {
+			loading = false;
+			return;
 		}
+
+		const json = await result.json();
+		const dates: Date[] = json.map((d: string) => new Date(d));
+		value = dates;
+
+		loading = false;
 	}
 
-	onMount(async () => {
-		monthlyEntries.clear();
-		getEntriesForSelectedMonth();
-	});
-
-	const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-	function getCurrentDay() {
-		const today = new Date().getDay();
-		return days[today];
-	}
-
-	let currentDay = getCurrentDay();
-	let dayValueMap = new Map();
-
-	//for each entry, create a map entry of day to value
-	entries.forEach(function (entry: any) {
-		dayValueMap.set(days[entry.date.getDay()], entry.value);
-	});
-
-	let selectedDate: Date = new Date();
-	let date: number, month: number, year: number;
-	let isAllowed = () => true;
-	// These variables change with the props
+	// When the currently shown month changes, get the entries for that month
 	$: {
-		date = selectedDate.getDate();
-		month = selectedDate.getMonth();
-		year = selectedDate.getFullYear();
+		if (month) {
+			getEntriesForMonth(month);
+		}
 	}
 
-	const onDateChange = (d: any) => {
-		selectedDate = d.detail;
-	};
+	// Used to see if two date objects are the same day
+	function sameDayMonthYear(date1: Date, date2: Date) {
+		return (
+			date1.getDate() === date2.getDate() &&
+			date1.getMonth() === date2.getMonth() &&
+			date1.getFullYear() === date2.getFullYear()
+		);
+	}
 
-	const next = () => {
-		if (month == 11) {
-			month = 0;
-			year = year + 1;
+	// Only send the entries for the currently shown month to the server
+	let first_day_of_month: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+	let last_day_of_month: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+	$: {
+		if (month) {
+			first_day_of_month = month;
+			last_day_of_month = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+		}
+	}
+	function getDaysInMonth(days: Date[]) {
+		let days_in_month = [];
+		for (let i = 0; i < days.length; i++) {
+			if (
+				days[i].getTime() >= first_day_of_month.getTime() &&
+				days[i].getTime() <= last_day_of_month.getTime()
+			) {
+				days_in_month.push(days[i]);
+			}
+		}
+		return days_in_month;
+	}
+
+	// Updates the entries for the currently shown month
+	async function updateEntries() {
+		if (loading || view_only) {
 			return;
 		}
-		month = month + 1;
-	};
 
-	const prev = () => {
-		if (month === 0) {
-			month = 11;
-			year -= 1;
+		let days_in_month = getDaysInMonth(value);
+		const result = await fetch('/api/habitEntry', {
+			method: 'PATCH',
+			body: JSON.stringify({ id: id, month: month, entries: days_in_month }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		console.log('result: ' + result.ok);
+	}
+
+	async function deleteHabit() {
+		if (view_only) {
 			return;
 		}
-		month -= 1;
+
+		const response = await fetch('/api/habit', {
+			method: 'DELETE',
+			body: JSON.stringify({ id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const ok = response.ok;
+		isOpen = false;
+		setTimeout(() => {
+			invalidateAll();
+			// This stops invalidateAll from keeping the user on the same page
+			setTimeout(() => {
+				goto(back_link);
+			}, 1);
+		}, 300);
+	}
+
+	// Shares the habit with the given email
+	let onShare: Function = async (email: string): Promise<string | Error> => {
+		if (view_only) {
+			return Error('');
+		}
+
+		const response = await fetch('/api/shareHabit', {
+			method: 'POST',
+			body: JSON.stringify({ email: email, habit_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			if (response.status == 409) {
+				return Error('Habit is already shared with this user.');
+			}
+			return Error("Habit couldn't be found.");
+		}
 	};
+
+	// Unshares the habit with the given email
+	let onUnshare: Function = async (email: string): Promise<string | Error> => {
+		if (view_only) {
+			return Error('');
+		}
+
+		const response = await fetch('/api/shareHabit', {
+			method: 'DELETE',
+			body: JSON.stringify({ email: email, habit_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			return Error('Error deleting share.');
+		}
+	};
+
+	// Open the dialog when the component is mounted (page is loaded)
+	onMount(() => {
+		isOpen = true;
+	});
 </script>
 
-<div
-	class="fixed inset-0 top-1/2 left-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-2 shadow-xl"
->
-	<div class="w-auto p-4 text-center">
-		<div class="mb-2 flex flex-row justify-between border-b-2 border-b-primary">
-			<h1 class="text-left align-bottom text-2xl">{name}</h1>
-			<Popover style="position: relative;">
-				<PopoverButton
-					type="button"
-					aria-expanded="false"
-					class="group inline-flex
-                items-center rounded-md border-primary px-3 pb-2 pt-1 text-base font-medium text-primary text-opacity-90 hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-				>
-					Options
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						aria-hidden="true"
-						class="ml-2
-                  h-5 w-5 text-primary text-opacity-70 transition duration-150 ease-in-out group-hover:text-opacity-80"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-				</PopoverButton>
-
-				<PopoverPanel style="position: absolute; z-index: 10;">
-					<div class="panel-contents">
-						<button
-							class="group flex w-full items-start rounded-md border-2 border-gray-400 p-2 text-sm text-gray-900"
-						>
-							Delete habit (wip)
-						</button>
-					</div>
-
-					<!-- <img src="/solutions.jpg" alt="" /> -->
-				</PopoverPanel>
-			</Popover>
-		</div>
-		<form action="?/newHabitEntry" method="POST">
-			<span class="text-md"
-				>Mark habit completed on <strong>{selectedDate.toDateString()}</strong></span
+<Transition show={isOpen}>
+	<Dialog
+		on:close={() => {
+			isOpen = false;
+			setTimeout(() => {
+				goto(back_link);
+			}, 300);
+		}}
+	>
+		<TransitionChild
+			enter="ease-out duration-300"
+			enterFrom="opacity-0"
+			enterTo="opacity-100"
+			leave="ease-in duration-200"
+			leaveFrom="opacity-100"
+			leaveTo="opacity-0"
+		>
+			<DialogOverlay
+				class="fixed inset-0 z-30 flex h-full w-full cursor-pointer items-center justify-center bg-black bg-opacity-20 duration-300
+				{shareOpen ? 'opacity-0' : ''}"
+			/>
+		</TransitionChild>
+		<div
+			class="pointer-events-none fixed inset-0 z-40 flex h-screen w-screen items-center justify-center"
+			class:hidden={shareOpen}
+		>
+			<TransitionChild
+				enter="ease-out duration-300"
+				enterFrom="opacity-0 scale-95"
+				enterTo="opacity-100 scale-100"
+				leave="ease-in duration-200"
+				leaveFrom="opacity-100 scale-100"
+				leaveTo="opacity-0 scale-95"
 			>
-			<button type="submit" class="text-md hover:text-primary-dark ">
-				<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[-1px]" />
-			</button>
-			<input type="hidden" value={selectedDate.toDateString()} name="date" id="date" />
-			<input type="hidden" value={habitID} name="habit_id" id="habit_id" />
-		</form>
-		<div class="mt-4 mb-1 flex flex-row justify-center space-x-2">
-			<button class="" on:click={prev}>Prev</button>
-			<div class="center text-xl underline">{getMonthName(month)} {year}</div>
-			<button class="" on:click={next}>Next</button>
+				<div
+					class="pointer-events-auto h-fit w-fit rounded-lg bg-white p-5 shadow-xl transition-all "
+				>
+					<div class="flex h-full w-[350px] flex-col justify-between">
+						<div class="flex justify-between align-middle">
+							{#if !view_only}
+								<input
+									type="text"
+									id="entry-title"
+									on:input={saveTitle}
+									bind:value={title}
+									class="rounded-md text-2xl outline-none hover:underline"
+								/>
+							{:else}
+								<DialogTitle class="text-2xl">{name}</DialogTitle>
+							{/if}
+
+							<div class="mt-1 mr-1 mb-2 flex gap-3">
+								{#if !view_only}
+									<ShareSelector
+										title={name}
+										{shared_to}
+										bind:isOpen={shareOpen}
+										shareCallback={onShare}
+										unshareCallback={onUnshare}
+									/>
+									<HabitOptionMenu deleteCallBack={deleteHabit} />
+								{/if}
+							</div>
+						</div>
+
+						{#if !view_only}
+							<div class="my-2 ">
+								<button
+									class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
+									on:click={() => {
+										if (value.some((date) => sameDayMonthYear(date, today) == true)) {
+											console.log('remove');
+											value = value.filter((date) => sameDayMonthYear(date, today) == false);
+										} else {
+											console.log('add');
+											value.push(today);
+										}
+										value = value;
+									}}
+								>
+									{#if !value.some((date) => sameDayMonthYear(date, today))}
+										Add Today
+										<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[1px]" />
+									{:else}
+										Remove Today
+										<iconify-icon inline icon="ph:minus-circle" class="text-md translate-y-[1px]" />
+									{/if}
+								</button>
+								<span> or click to toggle a date below.</span>
+							</div>
+						{/if}
+
+						{#if !view_only}
+							<div class:cursor-wait={loading}>
+								<div class:pointer-events-none={loading}>
+									<CalendarView
+										multiple
+										bind:value
+										bind:month
+										on:change={async () => {
+											updateEntries();
+											setTimeout(() => {
+												invalidateAll();
+											}, 300);
+										}}
+										max={new Date()}
+									/>
+								</div>
+							</div>
+						{:else}
+							<div class:cursor-wait={loading}>
+								<div class:pointer-events-none={loading}>
+									<CalendarView view_only multiple bind:value bind:month max={new Date()} />
+								</div>
+							</div>
+						{/if}
+
+						<div class="mt-0.5 flex justify-end">
+							<button
+								class="btn-alt"
+								on:click={() => {
+									isOpen = false;
+									setTimeout(() => {
+										goto(back_link);
+									}, 300);
+								}}
+							>
+								Done
+							</button>
+						</div>
+					</div>
+				</div>
+			</TransitionChild>
 		</div>
-		<Calender
-			{month}
-			{year}
-			date={selectedDate}
-			{isAllowed}
-			entryDays={monthlyEntries}
-			on:datechange={onDateChange}
-		/>
-	</div>
-</div>
+	</Dialog>
+</Transition>

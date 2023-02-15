@@ -1,12 +1,12 @@
 <script lang="ts">
 	import EditorWrapper from '$lib/components/EditorWrapper.svelte';
 	// import HabitDialog from '$lib/components/HabitDialog.svelte';
-	import HabitDialog2 from '$lib/components/HabitDialog2.svelte';
+	import HabitDialog from '$lib/components/HabitDialog.svelte';
 	export let data: any;
 </script>
 
 {#if data.habit}
-	<HabitDialog2
+	<HabitDialog
 		id={data.habit.id}
 		name={data.habit.name}
 		entries={data.habit.HabitEntry}
