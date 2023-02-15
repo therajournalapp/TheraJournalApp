@@ -6,7 +6,12 @@
 </script>
 
 {#if data.habit}
-	<HabitDialog2 habitID={data.habit.id} name={data.habit.name} entries={data.habit.HabitEntry} />
+	<HabitDialog2
+		habitID={data.habit.id}
+		name={data.habit.name}
+		entries={data.habit.HabitEntry}
+		shared_to={data.habit.SharedHabit}
+	/>
 {:else}
 	<EditorWrapper back_link="/dashboard">
 		<div

@@ -36,23 +36,23 @@
 
 <div class="card-scroll" bind:this={habit}>
 	<div class="left-pad" />
-	<!-- <HabitCard
-		name="Mood"
-		sun="bg-accent-yellow"
-		mon="bg-accent-purple"
-		tue="bg-accent-blue"
-		wed="bg-accent-red"
-		thu="circle-future"
-		fri="circle-future"
-		sat="circle-future"
-	/> -->
-	<!-- <HabitCard name="Medication 10mg" mon="circle-untracked" /> -->
+	<!-- TODO: undeletable mood tracker here? -->
+	{#each data.habits as habit (habit.id)}
+		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
+			<HabitCard
+				habitID={habit.id}
+				name={habit.name}
+				entries={habit.HabitEntry}
+				shared_by={habit.user.email}
+				date={habit.createdAt}
+			/>
+		</div>
+	{/each}
 	<div class="right-pad" />
 </div>
 
 <div class="app-container mt-10 mb-2 flex items-baseline">
 	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
-	<!-- TODO add shared entires + same keyed each block w/ animation from dashboard -->
 </div>
 
 <div class="card-scroll" bind:this={journal}>

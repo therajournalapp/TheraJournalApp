@@ -178,6 +178,45 @@
 			}, 1);
 		}, 300);
 	}
+
+	let onShare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareHabit', {
+			method: 'POST',
+			body: JSON.stringify({ email: email, habit_id: habitID }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			if (response.status == 409) {
+				return Error('Habit is already shared with this user.');
+			}
+			return Error("Habit couldn't be found.");
+		}
+	};
+
+	let onUnshare: Function = async (email: string): Promise<string | Error> => {
+		const response = await fetch('/api/shareHabit', {
+			method: 'DELETE',
+			body: JSON.stringify({ email: email, habit_id: habitID }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		if (response.ok) {
+			invalidateAll();
+			return message as string;
+		} else {
+			return Error('Error deleting share.');
+		}
+	};
 </script>
 
 <Transition show={isOpen}>
@@ -229,7 +268,13 @@
 							/>
 							<div class="mt-1 mr-1 mb-2 flex gap-3">
 								<!-- TODO: write share and unshare callback functions -->
-								<ShareSelector title={name} {shared_to} bind:isOpen={shareOpen} />
+								<ShareSelector
+									title={name}
+									{shared_to}
+									bind:isOpen={shareOpen}
+									shareCallback={onShare}
+									unshareCallback={onUnshare}
+								/>
 								<!-- TODO: implement the delete callback! -->
 								<HabitOptionMenu deleteCallBack={deleteHabit} />
 							</div>

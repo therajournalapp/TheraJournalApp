@@ -46,7 +46,13 @@
 	<!-- TODO: undeletable mood tracker here? -->
 	{#each data.habits as habit (habit.id)}
 		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
-			<HabitCard habitID={habit.id} name={habit.name} entries={habit.HabitEntry} />
+			<HabitCard
+				habitID={habit.id}
+				name={habit.name}
+				date={habit.createdAt}
+				entries={habit.HabitEntry}
+				shared_to={habit.shared_to}
+			/>
 		</div>
 	{/each}
 	<div class="right-pad" />
