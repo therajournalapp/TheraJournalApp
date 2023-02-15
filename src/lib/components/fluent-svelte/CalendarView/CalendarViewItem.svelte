@@ -67,11 +67,12 @@
 		color: var(--fds-text-secondary);
 	}
 	.calendar-view-item.out-of-range:active {
-		color: var(--fds-text-tertiary);
+		/* color: var(--fds-text-secondary) !important; */
 	}
 	.calendar-view-item.disabled {
 		background-color: var(--fds-subtle-fill-disabled);
-		color: var(--fds-text-disabled);
+		/* color: var(--fds-text-disabled); */
+		@apply !text-neutral-400;
 	}
 	.calendar-view-item.disabled.blackout:after {
 		content: none;
