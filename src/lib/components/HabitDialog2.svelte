@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { Dialog, DialogOverlay, Transition, TransitionChild } from '@rgossiaux/svelte-headlessui';
+	import {
+		Dialog,
+		DialogOverlay,
+		DialogTitle,
+		Transition,
+		TransitionChild
+	} from '@rgossiaux/svelte-headlessui';
 	import { onMount } from 'svelte';
 	// import 'fluent-svelte/theme.css';
 	import '$lib/components/fluent-svelte/theme.css';
@@ -288,16 +294,10 @@
 									bind:value={title}
 									class="rounded-md text-2xl outline-none hover:underline"
 								/>
-							{:else}{/if}
+							{:else}
+								<DialogTitle class="text-2xl">{name}</DialogTitle>
+							{/if}
 
-							<!-- <DialogTitle class="text-2xl">{name}</DialogTitle> -->
-							<input
-								type="text"
-								id="entry-title"
-								on:input={saveTitle}
-								bind:value={title}
-								class="rounded-md text-2xl outline-none hover:underline"
-							/>
 							<div class="mt-1 mr-1 mb-2 flex gap-3">
 								{#if !view_only}
 									<ShareSelector
@@ -312,30 +312,32 @@
 							</div>
 						</div>
 
-						<div class="my-2 ">
-							<button
-								class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
-								on:click={() => {
-									if (value.some((date) => sameDayMonthYear(date, today) == true)) {
-										console.log('remove');
-										value = value.filter((date) => sameDayMonthYear(date, today) == false);
-									} else {
-										console.log('add');
-										value.push(today);
-									}
-									value = value;
-								}}
-							>
-								{#if !value.some((date) => sameDayMonthYear(date, today))}
-									Add Today
-									<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[1px]" />
-								{:else}
-									Remove Today
-									<iconify-icon inline icon="ph:minus-circle" class="text-md translate-y-[1px]" />
-								{/if}
-							</button>
-							<span> or click to toggle a date below.</span>
-						</div>
+						{#if !view_only}
+							<div class="my-2 ">
+								<button
+									class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
+									on:click={() => {
+										if (value.some((date) => sameDayMonthYear(date, today) == true)) {
+											console.log('remove');
+											value = value.filter((date) => sameDayMonthYear(date, today) == false);
+										} else {
+											console.log('add');
+											value.push(today);
+										}
+										value = value;
+									}}
+								>
+									{#if !value.some((date) => sameDayMonthYear(date, today))}
+										Add Today
+										<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[1px]" />
+									{:else}
+										Remove Today
+										<iconify-icon inline icon="ph:minus-circle" class="text-md translate-y-[1px]" />
+									{/if}
+								</button>
+								<span> or click to toggle a date below.</span>
+							</div>
+						{/if}
 
 						{#if !view_only}
 							<div class:cursor-wait={loading}>
