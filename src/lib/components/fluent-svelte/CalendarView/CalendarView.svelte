@@ -53,6 +53,7 @@
 	// added
 	export let month = page;
 	$: month = page;
+	export let view_only = false;
 	// end added
 	$: firstValue = Array.isArray(value) ? value[0] : value;
 	$: view, updatePage(0);
@@ -414,7 +415,7 @@ A calendar view lets a user view and interact with a calendar that they can navi
 			</button>
 		</div>
 	</header>
-	<div class="calendar-view-table-wrapper">
+	<div class="calendar-view-table-wrapper" class:pointer-events-none={view_only}>
 		{#key view}
 			<table
 				class="calendar-view-table view-{view}"

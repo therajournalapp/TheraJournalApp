@@ -22,7 +22,7 @@
 	export let back_link: string = '/dashboard';
 
 	// view only mode, used for viewing shared entries
-	export let viewOnly: boolean = false;
+	export let view_only: boolean = false;
 
 	let content: string = '';
 	if (body && body.length > 0) {
@@ -64,7 +64,7 @@
 	const saveContent = debounce(saveNow, 2000);
 
 	onMount(() => {
-		if (viewOnly) {
+		if (view_only) {
 			return;
 		}
 
@@ -95,7 +95,7 @@
 	});
 
 	onDestroy(() => {
-		if (viewOnly) {
+		if (view_only) {
 			return;
 		}
 
@@ -180,7 +180,7 @@
 						<span class="pl-2">Back</span>
 					</a>
 				</div>
-				{#if !viewOnly}
+				{#if !view_only}
 					<input
 						type="text"
 						id="entry-title"
@@ -208,7 +208,7 @@
 				{/if}
 			</div>
 
-			{#if !viewOnly}
+			{#if !view_only}
 				<noscript>
 					<p class="mb-3 text-white">Enable javascript to edit journal entries.</p>
 				</noscript>
@@ -351,17 +351,17 @@
 		</div>
 	</div>
 
-	{#if !loaded || viewOnly}
+	{#if !loaded || view_only}
 		<div
 			class="prose prose-sm mx-auto w-full max-w-full break-words rounded-t-lg
 			bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl
-			{viewOnly ? 'mt-[100px] min-h-[calc(100vh-100px)]' : 'mt-[150px] min-h-[calc(100vh-150px)]'}"
+			{view_only ? 'mt-[100px] min-h-[calc(100vh-100px)]' : 'mt-[150px] min-h-[calc(100vh-150px)]'}"
 		>
 			{@html body.substring(1, body.length - 1)}
 		</div>
 	{/if}
 
-	{#if !viewOnly}
+	{#if !view_only}
 		<div bind:this={element} class:hidden={!loaded} />
 	{/if}
 </div>

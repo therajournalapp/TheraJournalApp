@@ -14,7 +14,7 @@
 			id={data.entry.id}
 			title={data.entry.title}
 			body={data.entry.body}
-			viewOnly
+			view_only
 			back_link="/shared"
 		/>
 	</EditorWrapper>

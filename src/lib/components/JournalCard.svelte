@@ -16,7 +16,7 @@
 	export let date: Date;
 
 	// The entry's shared users. Used for the share selector.
-	export let shared_to: any | undefined = undefined;
+	export let shared_to: any | undefined = [];
 
 	// The path to link to the journal editor.
 	// Ex: if link_to is 'dashboard' and id is '1',

@@ -47,7 +47,7 @@
 	{#each data.habits as habit (habit.id)}
 		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
 			<HabitCard
-				habitID={habit.id}
+				id={habit.id}
 				name={habit.name}
 				date={habit.createdAt}
 				entries={habit.HabitEntry}

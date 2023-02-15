@@ -1,12 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import {
-		Dialog,
-		DialogOverlay,
-		DialogTitle,
-		Transition,
-		TransitionChild
-	} from '@rgossiaux/svelte-headlessui';
+	import { Dialog, DialogOverlay, Transition, TransitionChild } from '@rgossiaux/svelte-headlessui';
 	import { onMount } from 'svelte';
 	// import 'fluent-svelte/theme.css';
 	import '$lib/components/fluent-svelte/theme.css';
@@ -17,16 +11,22 @@
 	import debounce from 'lodash/debounce';
 
 	// ID of the habit, used to load entries
-	export let habitID: number;
+	export let id: number;
+
 	// Title of the habit, used to set the title of the dialog
 	export let name: string;
-	// TODO: load entries from backend
-	// export let entries: any[];
+
 	// list of emails that the entry is shared with
-	// TODO: load from backend
 	export let shared_to: any | undefined = [];
 
+	// list of entries for the habit from load function
 	export let entries: Date[];
+
+	// view only mode, used for viewing shared entries
+	export let view_only: boolean = false;
+
+	// back link, used for exiting the dialog
+	export let back_link: string = '/dashboard';
 
 	// Date of today, used for Add/Remove Today button
 	let today = new Date();
@@ -41,41 +41,46 @@
 
 	// Used to track if the dialog is open or not
 	let isOpen = false;
+
 	// Tracks if the share selector is open or not,
 	// to hide popup while it is open
 	let shareOpen = false;
 
+	// Bound to the title input, used to update the name of the habit
 	let title = name;
 
+	// Updates the title of the habit
 	async function updateTitle() {
+		if (view_only) {
+			return;
+		}
 		console.log('updating title to: ' + title);
 		const result = await fetch('/api/habit', {
 			method: 'PATCH',
-			body: JSON.stringify({ id: habitID, name: title }),
+			body: JSON.stringify({ id: id, name: title }),
 			headers: {
 				'content-type': 'application/json'
 			}
 		});
-		// const ok = result.ok;
-		// console.log('result: ' + ok);
+		// Invalidate the load function to display on the dashboard
 		invalidateAll();
 	}
 
+	// Debounce the updateTitle function, so it is only called once every second
 	const saveTitle = debounce(updateTitle, 1000);
 
 	// Used to track the currently shown month of the calendar
-	// TODO: use this to load entries as the user scrolls through the calendar
-	// TODO: possibily create a loading variable on the CalendarView component,
-	// to show a loading spinner while the entries are loading for the month
 	let month: Date;
 
+	// Stops user input while the calendar is loading a month's entries
 	let loading = false;
 
+	// Gets the entries for a month, replaces the value array
 	async function getEntriesForMonth(month: Date) {
 		loading = true;
 		const url = new URL('/api/habitEntry', window.location.origin);
 		const params = [
-			['id', habitID.toString()],
+			['id', id.toString()],
 			['month', month.toDateString()]
 		];
 		url.search = new URLSearchParams(params).toString();
@@ -103,6 +108,7 @@
 		loading = false;
 	}
 
+	// When the currently shown month changes, get the entries for that month
 	$: {
 		if (month) {
 			getEntriesForMonth(month);
@@ -118,6 +124,7 @@
 		);
 	}
 
+	// Only send the entries for the currently shown month to the server
 	let first_day_of_month: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 	let last_day_of_month: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 	$: {
@@ -139,15 +146,16 @@
 		return days_in_month;
 	}
 
+	// Updates the entries for the currently shown month
 	async function updateEntries() {
-		if (loading) {
+		if (loading || view_only) {
 			return;
 		}
 
 		let days_in_month = getDaysInMonth(value);
 		const result = await fetch('/api/habitEntry', {
 			method: 'PATCH',
-			body: JSON.stringify({ id: habitID, month: month, entries: days_in_month }),
+			body: JSON.stringify({ id: id, month: month, entries: days_in_month }),
 			headers: {
 				'content-type': 'application/json'
 			}
@@ -155,15 +163,14 @@
 		console.log('result: ' + result.ok);
 	}
 
-	// Open the dialog when the component is mounted (page is loaded)
-	onMount(() => {
-		isOpen = true;
-	});
-
 	async function deleteHabit() {
+		if (view_only) {
+			return;
+		}
+
 		const response = await fetch('/api/habit', {
 			method: 'DELETE',
-			body: JSON.stringify({ id: habitID }),
+			body: JSON.stringify({ id: id }),
 			headers: {
 				'content-type': 'application/json'
 			}
@@ -174,15 +181,20 @@
 			invalidateAll();
 			// This stops invalidateAll from keeping the user on the same page
 			setTimeout(() => {
-				goto('/dashboard');
+				goto(back_link);
 			}, 1);
 		}, 300);
 	}
 
+	// Shares the habit with the given email
 	let onShare: Function = async (email: string): Promise<string | Error> => {
+		if (view_only) {
+			return Error('');
+		}
+
 		const response = await fetch('/api/shareHabit', {
 			method: 'POST',
-			body: JSON.stringify({ email: email, habit_id: habitID }),
+			body: JSON.stringify({ email: email, habit_id: id }),
 			headers: {
 				'content-type': 'application/json'
 			}
@@ -200,10 +212,15 @@
 		}
 	};
 
+	// Unshares the habit with the given email
 	let onUnshare: Function = async (email: string): Promise<string | Error> => {
+		if (view_only) {
+			return Error('');
+		}
+
 		const response = await fetch('/api/shareHabit', {
 			method: 'DELETE',
-			body: JSON.stringify({ email: email, habit_id: habitID }),
+			body: JSON.stringify({ email: email, habit_id: id }),
 			headers: {
 				'content-type': 'application/json'
 			}
@@ -217,6 +234,11 @@
 			return Error('Error deleting share.');
 		}
 	};
+
+	// Open the dialog when the component is mounted (page is loaded)
+	onMount(() => {
+		isOpen = true;
+	});
 </script>
 
 <Transition show={isOpen}>
@@ -224,7 +246,7 @@
 		on:close={() => {
 			isOpen = false;
 			setTimeout(() => {
-				goto('/dashboard');
+				goto(back_link);
 			}, 300);
 		}}
 	>
@@ -258,6 +280,16 @@
 				>
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
+							{#if !view_only}
+								<input
+									type="text"
+									id="entry-title"
+									on:input={saveTitle}
+									bind:value={title}
+									class="rounded-md text-2xl outline-none hover:underline"
+								/>
+							{:else}{/if}
+
 							<!-- <DialogTitle class="text-2xl">{name}</DialogTitle> -->
 							<input
 								type="text"
@@ -267,16 +299,16 @@
 								class="rounded-md text-2xl outline-none hover:underline"
 							/>
 							<div class="mt-1 mr-1 mb-2 flex gap-3">
-								<!-- TODO: write share and unshare callback functions -->
-								<ShareSelector
-									title={name}
-									{shared_to}
-									bind:isOpen={shareOpen}
-									shareCallback={onShare}
-									unshareCallback={onUnshare}
-								/>
-								<!-- TODO: implement the delete callback! -->
-								<HabitOptionMenu deleteCallBack={deleteHabit} />
+								{#if !view_only}
+									<ShareSelector
+										title={name}
+										{shared_to}
+										bind:isOpen={shareOpen}
+										shareCallback={onShare}
+										unshareCallback={onUnshare}
+									/>
+									<HabitOptionMenu deleteCallBack={deleteHabit} />
+								{/if}
 							</div>
 						</div>
 
@@ -305,22 +337,30 @@
 							<span> or click to toggle a date below.</span>
 						</div>
 
-						<div class:cursor-wait={loading}>
-							<div class:pointer-events-none={loading}>
-								<CalendarView
-									multiple
-									bind:value
-									bind:month
-									on:change={async () => {
-										updateEntries();
-										setTimeout(() => {
-											invalidateAll();
-										}, 300);
-									}}
-									max={new Date()}
-								/>
+						{#if !view_only}
+							<div class:cursor-wait={loading}>
+								<div class:pointer-events-none={loading}>
+									<CalendarView
+										multiple
+										bind:value
+										bind:month
+										on:change={async () => {
+											updateEntries();
+											setTimeout(() => {
+												invalidateAll();
+											}, 300);
+										}}
+										max={new Date()}
+									/>
+								</div>
 							</div>
-						</div>
+						{:else}
+							<div class:cursor-wait={loading}>
+								<div class:pointer-events-none={loading}>
+									<CalendarView view_only multiple bind:value bind:month max={new Date()} />
+								</div>
+							</div>
+						{/if}
 
 						<div class="mt-0.5 flex justify-end">
 							<button
@@ -328,7 +368,7 @@
 								on:click={() => {
 									isOpen = false;
 									setTimeout(() => {
-										goto('/dashboard');
+										goto(back_link);
 									}, 300);
 								}}
 							>
