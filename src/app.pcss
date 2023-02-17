@@ -41,36 +41,8 @@
 }
 
 body {
-	/* min-height: 100vh; */
 	margin: 0;
-	/* background-attachment: fixed; */
 	background-color: var(--almost-white);
-	/* background-color: #fefbf685; */
-
-	/* background: linear-gradient(
-		0deg,
-		hsl(53deg 51% 93%) 0%,
-		hsl(44deg 63% 95.5%) 50%,
-		hsl(37deg 80% 0%) 100%
-	); */
-	/* background: linear-gradient(
-		145deg,
-		hsla(0deg, 100%, 50%, 0.05) 0%,
-		hsla(26deg, 100%, 50%, 0.05) 18%,
-		hsla(39deg, 100%, 50%, 0.05) 26%,
-		hsla(50deg, 100%, 50%, 0.05) 33%,
-		hsla(51deg, 100%, 50%, 0.05) 39%,
-		hsla(52deg, 100%, 50%, 0.05) 44%,
-		hsla(53deg, 100%, 50%, 0.05) 50%,
-		hsla(66deg, 100%, 46%, 0.05) 56%,
-		hsla(83deg, 100%, 48%, 0.05) 61%,
-		hsla(119deg, 100%, 50%, 0.05) 67%,
-		hsla(171deg, 100%, 46%, 0.05) 74%,
-		hsla(193deg, 100%, 50%, 0.05) 82%,
-		hsla(205deg, 100%, 50%, 0.05) 100%
-	);
-	background-size: 400% 400%;
-	animation: GradientSlide 40s linear infinite; */
 }
 
 .link {
@@ -99,13 +71,13 @@ body {
 }
 
 /* Loading animation */
+/* To be used with {#if} and {#await} blocks */
 /* 
 <label class="loading">
 	<progress class="loading" />
 	Loading…
 </label>
 */
-/* To be used with {#if} and {#await} blocks */
 label.loading {
 	height: 100%;
 	display: flex;
@@ -255,3 +227,4 @@ label.loading::before {
 	}
 }
 /* </generated-keyframes> */
+/* /Loading animation */
