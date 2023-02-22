@@ -67,8 +67,10 @@
 							</div>
 
 							<div class="mt-0.5 flex justify-end gap-2.5">
+								<!-- type="button" is required to prevent the form from submitting -->
 								<button
 									class="btn-alt !bg-transparent !text-neutral-500 hover:!bg-neutral-100 active:!bg-neutral-200"
+									type="button"
 									on:click={() => {
 										isOpen = false;
 										setTimeout(() => {
