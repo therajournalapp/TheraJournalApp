@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
-	import Gapcursor from '@tiptap/extension-gapcursor';
 	import Placeholder from '@tiptap/extension-placeholder';
 	import 'iconify-icon';
 	import ShareSelector from './ShareSelector.svelte';
@@ -74,11 +73,7 @@
 
 		editor = new Editor({
 			element: element,
-			extensions: [
-				StarterKit,
-				Gapcursor,
-				Placeholder.configure({ placeholder: 'Start writing here...' })
-			],
+			extensions: [StarterKit, Placeholder.configure({ placeholder: 'Start writing here...' })],
 			autofocus: 'start',
 			content: content,
 			editorProps: {
@@ -190,13 +185,7 @@
 					<input
 						type="text"
 						id="entry-title"
-						placeholder={date.getMonth() +
-							1 +
-							'/' +
-							date.getDate() +
-							'/' +
-							date.getFullYear() +
-							' (click to edit title)'}
+						placeholder={'Untitled Entry (click to edit title)'}
 						on:change={saveContent}
 						bind:value={title}
 						class="title"
@@ -385,7 +374,7 @@
 	}
 
 	.title {
-		@apply h-10 w-full bg-transparent text-3xl text-white ring-0 hover:underline focus-visible:outline-none;
+		@apply h-10 w-full bg-transparent text-3xl text-white placeholder-neutral-200 ring-0 hover:underline focus-visible:outline-none;
 		text-shadow: 1px 1px 5px grey;
 	}
 
