@@ -374,7 +374,7 @@
 	}
 
 	.title {
-		@apply h-10 w-full bg-transparent text-3xl text-white placeholder-neutral-200 ring-0 hover:underline focus-visible:outline-none;
+		@apply h-10 w-full bg-transparent text-3xl text-white placeholder-neutral-200 ring-0 hover:underline focus:!no-underline focus-visible:outline-none;
 		text-shadow: 1px 1px 5px grey;
 	}
 
