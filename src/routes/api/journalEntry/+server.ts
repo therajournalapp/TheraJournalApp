@@ -1,7 +1,6 @@
 import type { RequestHandler } from './$types';
-import { PrismaClient } from '@prisma/client'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
-const prisma = new PrismaClient()
+import prisma from '$lib/prisma';
 
 export const POST = (async ({ locals }) => {
     const user = (await locals.validateUser()).user;

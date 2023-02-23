@@ -1,6 +1,5 @@
 import type { RequestHandler } from './$types';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma from '$lib/prisma';
 import { fb_auth } from "$lib/server/admin";
 import { auth } from '$lib/server/lucia';
 
