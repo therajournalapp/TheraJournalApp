@@ -1,6 +1,5 @@
 import type { RequestHandler } from './$types';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma from '$lib/prisma';
 
 export const PATCH = (async ({ request, locals }) => {
     const user = (await locals.validateUser()).user;

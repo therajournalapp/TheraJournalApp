@@ -1,6 +1,5 @@
 import type { RequestHandler } from './$types';
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma from '$lib/prisma';
 
 export const GET = (async ({ url, locals }) => {
     const user = (await locals.validateUser()).user;
@@ -85,16 +84,27 @@ export const PATCH = (async ({ request, locals }) => {
         }
     })
 
+
+    const entries_to_delete: number[] = [];
     // Delete entries that are no longer in the list
     for (const entry of prev_entries) {
         if (!entries.includes(entry.date)) {
-            await prisma.habitEntry.delete({
-                where: {
-                    id: entry.id
-                }
-            })
+            entries_to_delete.push(entry.id);
+            // TODO test new implementation
+            // await prisma.habitEntry.delete({
+            //     where: {
+            //         id: entry.id
+            //     }
+            // })
         }
     }
+    await prisma.habitEntry.deleteMany({
+        where: {
+            id: {
+                in: entries_to_delete
+            }
+        }
+    })
 
     // Add entries that are not in the list
     for (const entry of entries) {
