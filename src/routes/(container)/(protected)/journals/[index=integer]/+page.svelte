@@ -15,6 +15,7 @@
 		<Editor
 			id={parseInt($page.params.index)}
 			title={data.entry?.title ?? ''}
+			date={data.entry.createdAt}
 			body={data.entry?.body ?? ''}
 			shared_to={data.entry?.shared_to ?? []}
 			back_link="/journals"
