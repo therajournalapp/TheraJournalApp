@@ -47,6 +47,7 @@ export const GET = (async ({ url, locals }) => {
 
     entries = entries.map(e => e.date);
 
+    console.log("api/habitEntry GET: ");
     console.log(entries);
 
     return new Response(JSON.stringify(entries), { status: 200 })

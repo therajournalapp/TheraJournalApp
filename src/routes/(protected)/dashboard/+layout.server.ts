@@ -61,6 +61,12 @@ export const load = (async ({ locals }) => {
     const first_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - new Date().getDay());
     const last_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay()));
 
+    //TODO remove after testing
+    console.log("first day of week: ");
+    console.log(first_day_of_week)
+    console.log("last day of week: ");
+    console.log(last_day_of_week)
+
     let habits: HabitWithHabitEntry[] | null = await prisma.habit.findMany({
         where: {
             user_id: user.userId,
@@ -105,6 +111,14 @@ export const load = (async ({ locals }) => {
 
         return rest;
     });
+
+    if (habits[0]?.HabitEntry) {
+        console.log("habit entries on server: ");
+        for (let i = 0; i < habits[0].HabitEntry.length; i++) {
+            console.log(JSON.stringify(habits[0].HabitEntry[i]));
+        }
+        console.log("---");
+    }
 
     return {
         entries: journal_entries,

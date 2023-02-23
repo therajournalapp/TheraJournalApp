@@ -3,9 +3,13 @@ generator client {
 }
 
 datasource db {
-    provider = "mysql"
+    provider     = "mysql"
     // provider = "sqlite" // use for local test db with DATABASE_URL=file:./dev.db
-    url      = env("DATABASE_URL")
+    url          = env("DATABASE_URL")
+    // Planetscale doesn't support foreign key constraints
+    // But prisma can emulate relations in the client with relationMode = "prisma"
+    // https://www.prisma.io/docs/guides/database/using-prisma-with-planetscale#how-to-emulate-relations-in-prisma-client
+    relationMode = "prisma"
 }
 
 model User {
@@ -58,6 +62,8 @@ model SharedEntry {
     user     User         @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@id([entry_id, user_id])
+    @@index([entry_id])
+    @@index([user_id])
     @@map("shared_entry")
 }
 
@@ -84,6 +90,8 @@ model SharedHabit {
     user     User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
     @@id([habit_id, user_id])
+    @@index([habit_id])
+    @@index([user_id])
     @@map("shared_habit")
 }
 
@@ -95,4 +103,6 @@ model HabitEntry {
     habit     Habit    @relation(references: [id], fields: [habit_id], onDelete: Cascade)
     date      DateTime
     value     Int
+
+    @@index([habit_id])
 }

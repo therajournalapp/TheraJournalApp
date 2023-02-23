@@ -53,6 +53,8 @@
 	let previewEntries = new Set();
 
 	$: {
+		console.log('entries: ' + JSON.stringify(entries));
+
 		previewEntries.clear();
 		entries.forEach(function (entry: any) {
 			previewEntries.add(days[entry.date.getDay()]);
