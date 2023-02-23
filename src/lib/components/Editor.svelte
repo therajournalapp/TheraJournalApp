@@ -94,7 +94,7 @@
 		});
 	});
 
-	onDestroy(() => {
+	onDestroy(async () => {
 		if (view_only) {
 			return;
 		}
@@ -102,11 +102,8 @@
 		if (!deleting) {
 			// update dashboard preview by invalidating it's load function
 			if (browser) {
-				saveNow();
+				await saveContent.flush();
 				invalidateAll();
-				setTimeout(() => {
-					invalidateAll();
-				}, 1000);
 			}
 		}
 
