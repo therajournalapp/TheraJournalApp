@@ -8,7 +8,7 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
 		class="scroll pointer-events-auto z-[1] mx-auto w-full cursor-pointer overflow-y-auto bg-black bg-opacity-20"
-		on:click={(e) => {
+		on:mousedown={(e) => {
 			if (e.target !== e.currentTarget) {
 				return;
 			}
