@@ -337,6 +337,7 @@
 											value.push(today);
 										}
 										value = value;
+										saveEntries();
 									}}
 								>
 									{#if !value.some((date) => sameDayMonthYear(date, today))}
