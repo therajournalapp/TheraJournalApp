@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { map } from 'lodash';
 	import ShareSelector from './ShareSelector.svelte';
 
 	// The entries id. Used for linking to habit dialog
@@ -26,6 +27,8 @@
 	// Used for the date footer.
 	export let date: Date;
 
+	export let type: String;
+
 	// The path to link to the journal editor.
 	// Ex: if link_to is 'dashboard' and id is '1',
 	// then the link will be '/dashboard/h/1'
@@ -50,12 +53,12 @@
 	}
 
 	let currentDay = getCurrentDay();
-	let previewEntries = new Set();
+	let previewEntries = new Map();
 
 	$: {
 		previewEntries.clear();
 		entries.forEach(function (entry: any) {
-			previewEntries.add(days[entry.date.getDay()]);
+			previewEntries.set(days[entry.date.getDay()], entry.value);
 		});
 		// array method above does not trigger an update
 		// so we assign to trigger update
@@ -128,12 +131,25 @@
 
 		<div class="flex justify-around">
 			{#each days as day, dayNum}
-				<div
-					class="circle"
-					class:bg-primary={previewEntries.has(day)}
-					class:circle-untracked={dayNum <= todayNum && !previewEntries.has(day)}
-					class:circle-future={dayNum > todayNum}
-				/>
+				{#if type == 'Custom'}
+					<div
+						class="circle"
+						class:bg-primary={previewEntries.has(day)}
+						class:circle-untracked={dayNum <= todayNum && !previewEntries.has(day)}
+						class:circle-future={dayNum > todayNum}
+					/>
+				{:else if type == 'Mood'}
+					<div
+						class="circle"
+						class:bg-very-sad={previewEntries.has(day) && previewEntries.get(day) == 1}
+						class:bg-sad={previewEntries.has(day) && previewEntries.get(day) == 2}
+						class:bg-neutral={previewEntries.has(day) && previewEntries.get(day) == 3}
+						class:bg-happy={previewEntries.has(day) && previewEntries.get(day) == 4}
+						class:bg-very-happy={previewEntries.has(day) && previewEntries.get(day) == 5}
+						class:circle-untracked={dayNum <= todayNum && !previewEntries.has(day)}
+						class:circle-future={dayNum > todayNum}
+					/>
+				{/if}
 			{/each}
 		</div>
 	</div>
@@ -157,6 +173,21 @@
 </div>
 
 <style lang="postcss">
+	.bg-very-sad {
+		@apply bg-red-500;
+	}
+	.bg-sad {
+		@apply bg-orange-500;
+	}
+	.bg-neutral {
+		@apply bg-yellow-500;
+	}
+	.bg-happy {
+		@apply bg-lime-400;
+	}
+	.bg-very-happy {
+		@apply bg-green-500;
+	}
 	.circle {
 		@apply h-5 w-5 rounded-full;
 	}

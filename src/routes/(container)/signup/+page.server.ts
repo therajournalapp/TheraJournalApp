@@ -90,7 +90,7 @@ export const actions: Actions = {
                 const habit = await prisma.habit.create({
                     data: {
                         name: "Mood",
-                        type: "default",
+                        type: "Mood",
                         user_id: user.userId
                     }
                 });
