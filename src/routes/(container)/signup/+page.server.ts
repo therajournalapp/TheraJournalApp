@@ -6,11 +6,12 @@ import { fb_auth } from "$lib/server/admin";
 import { z, ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 import type { UserRecord } from "firebase-admin/auth";
+import { PrismaClient, type Habit } from '@prisma/client'
 
 export const actions: Actions = {
     default: async ({ request, locals }) => {
         let shouldRedirect = false;
-
+        console.log("signup page server load");
         /* Recieved Signup form */
         const form = await request.formData();
         let email = form.get("email");
@@ -83,10 +84,23 @@ export const actions: Actions = {
                     }
                 });
                 console.log("Created new lucia auth user: " + user.userId)
+
+                // Create default mood habit
+                const prisma = new PrismaClient()
+                const habit = await prisma.habit.create({
+                    data: {
+                        name: "Mood",
+                        type: "default",
+                        user_id: user.userId
+                    }
+                });
+                if (!habit) return fail(500, { message: 'Failed to create habit' });
+
                 // Create Lucia Auth Session
                 // const session = await auth.createSession(user.userId);
                 // Set Lucia Auth Session
                 // locals.setSession(session);
+                
                 shouldRedirect = true;
             } catch (e) {
                 // fb_id already in use
