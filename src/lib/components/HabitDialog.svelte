@@ -302,7 +302,7 @@
 									id="entry-title"
 									on:input={saveTitle}
 									bind:value={title}
-									class="rounded-md text-2xl outline-none hover:underline"
+									class="rounded-md text-2xl outline-none hover:underline focus:!no-underline"
 								/>
 							{:else}
 								<DialogTitle class="text-2xl">{name}</DialogTitle>
