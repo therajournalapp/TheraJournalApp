@@ -1,6 +1,5 @@
 <script lang="ts">
 	import EditorWrapper from '$lib/components/EditorWrapper.svelte';
-	// import HabitDialog from '$lib/components/HabitDialog.svelte';
 	import HabitDialog from '$lib/components/HabitDialog.svelte';
 	export let data: any;
 </script>

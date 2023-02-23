@@ -7,7 +7,7 @@
 		Transition,
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	// import 'fluent-svelte/theme.css';
 	import '$lib/components/fluent-svelte/theme.css';
 	// import { CalendarView } from 'fluent-svelte';
@@ -167,7 +167,11 @@
 			}
 		});
 		console.log('result: ' + result.ok);
+		invalidateAll();
 	}
+
+	// Debounce the updateEntries function, so it is only called once every second
+	const saveEntries = debounce(updateEntries, 1000);
 
 	async function deleteHabit() {
 		if (view_only) {
@@ -244,6 +248,12 @@
 	// Open the dialog when the component is mounted (page is loaded)
 	onMount(() => {
 		isOpen = true;
+	});
+
+	onDestroy(async () => {
+		isOpen = false;
+		await saveTitle.flush();
+		await saveEntries.flush();
 	});
 </script>
 
@@ -347,10 +357,7 @@
 										bind:value
 										bind:month
 										on:change={async () => {
-											updateEntries();
-											setTimeout(() => {
-												invalidateAll();
-											}, 300);
+											saveEntries();
 										}}
 										max={new Date()}
 									/>

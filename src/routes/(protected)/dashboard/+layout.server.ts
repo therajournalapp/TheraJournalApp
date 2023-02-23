@@ -1,6 +1,6 @@
 import type { LayoutServerLoad } from './$types';
-import { PrismaClient, type Habit, type JournalEntry } from '@prisma/client';
-const prisma = new PrismaClient()
+import type { Habit, JournalEntry } from '@prisma/client';
+import prisma from '$lib/prisma';
 
 
 export const load = (async ({ locals }) => {
