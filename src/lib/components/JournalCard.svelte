@@ -92,7 +92,7 @@
 				<a
 					href="/{link_to}/{id}"
 					class="text-xl font-medium hover:underline"
-					class:text-neutral-500={title == ''}
+					class:text-neutral-400={title == ''}
 				>
 					{title == '' ? 'Untitled Entry' : title}
 				</a>

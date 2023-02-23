@@ -206,7 +206,7 @@
 						/>
 					</div>
 				{:else}
-					<h1 class="title hover:!no-underline">{title}</h1>
+					<h1 class="title hover:!no-underline">{title == '' ? 'Untitled Entry' : title}</h1>
 				{/if}
 			</div>
 

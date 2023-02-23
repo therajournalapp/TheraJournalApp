@@ -109,8 +109,12 @@
 	<div class="flex justify-between">
 		<div class="flex">
 			<div class="relative max-w-[220px] overflow-hidden text-ellipsis whitespace-nowrap">
-				<a href="/{link_to}/h/{id}" class="text-xl font-medium hover:underline">
-					{name}
+				<a
+					href="/{link_to}/h/{id}"
+					class="text-xl font-medium hover:underline"
+					class:text-neutral-400={name == ''}
+				>
+					{name == '' ? 'Untitled Habit Tracker' : name}
 				</a>
 			</div>
 		</div>
