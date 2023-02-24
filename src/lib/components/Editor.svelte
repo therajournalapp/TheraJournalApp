@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
+	import Placeholder from '@tiptap/extension-placeholder';
 	import 'iconify-icon';
 	import ShareSelector from './ShareSelector.svelte';
 	import debounce from 'lodash/debounce';
@@ -13,6 +14,8 @@
 	export let id: number;
 	// title of the journal entry
 	export let title: string;
+	// date of the journal entry
+	export let date: Date;
 	// the entry's contents
 	export let body: string;
 	// list of emails that the entry is shared with
@@ -70,7 +73,7 @@
 
 		editor = new Editor({
 			element: element,
-			extensions: [StarterKit],
+			extensions: [StarterKit, Placeholder.configure({ placeholder: 'Start writing here...' })],
 			autofocus: 'start',
 			content: content,
 			editorProps: {
@@ -94,19 +97,17 @@
 		});
 	});
 
-	onDestroy(() => {
+	onDestroy(async () => {
 		if (view_only) {
 			return;
 		}
 
 		if (!deleting) {
-			// update dashboard preview by invalidating it's load function
 			if (browser) {
-				saveNow();
+				// immediately save before unmounting
+				await saveContent.flush();
+				// update dashboard preview by invalidating it's load function
 				invalidateAll();
-				setTimeout(() => {
-					invalidateAll();
-				}, 1000);
 			}
 		}
 
@@ -184,6 +185,7 @@
 					<input
 						type="text"
 						id="entry-title"
+						placeholder={'Untitled Entry (click to edit title)'}
 						on:change={saveContent}
 						bind:value={title}
 						class="title"
@@ -204,7 +206,7 @@
 						/>
 					</div>
 				{:else}
-					<h1 class="title hover:!no-underline">{title}</h1>
+					<h1 class="title hover:!no-underline">{title == '' ? 'Untitled Entry' : title}</h1>
 				{/if}
 			</div>
 
@@ -372,7 +374,7 @@
 	}
 
 	.title {
-		@apply h-10 w-full bg-transparent text-3xl text-white ring-0 hover:underline focus-visible:outline-none;
+		@apply h-10 w-full bg-transparent text-3xl text-white placeholder-neutral-200 ring-0 hover:underline focus:!no-underline focus-visible:outline-none;
 		text-shadow: 1px 1px 5px grey;
 	}
 

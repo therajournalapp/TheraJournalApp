@@ -300,9 +300,11 @@
 								<input
 									type="text"
 									id="entry-title"
+									placeholder="Untitled Habit Tracker"
 									on:input={saveTitle}
 									bind:value={title}
-									class="rounded-md text-2xl outline-none hover:underline"
+									class="rounded-md text-2xl outline-none hover:underline focus:!no-underline"
+									tabindex="-1"
 								/>
 							{:else}
 								<DialogTitle class="text-2xl">{name}</DialogTitle>
@@ -311,7 +313,7 @@
 							<div class="mt-1 mr-1 mb-2 flex gap-3">
 								{#if !view_only}
 									<ShareSelector
-										title={name}
+										title={name == '' ? 'Untitled Habit Tracker' : name}
 										{shared_to}
 										bind:isOpen={shareOpen}
 										shareCallback={onShare}
@@ -335,6 +337,7 @@
 											value.push(today);
 										}
 										value = value;
+										saveEntries();
 									}}
 								>
 									{#if !value.some((date) => sameDayMonthYear(date, today))}

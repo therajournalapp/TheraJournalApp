@@ -25,6 +25,7 @@ export const load = (async ({ params, locals }) => {
             id: true,
             title: true,
             body: true,
+            createdAt: true,
             SharedEntry: {
                 select: {
                     user: {

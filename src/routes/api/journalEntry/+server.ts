@@ -11,16 +11,12 @@ export const POST = (async ({ locals }) => {
     try {
 
         const today = new Date();
-        const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        const yyyy = today.getFullYear();
-        const todayString = mm + '/' + dd + '/' + yyyy;
 
         const newEntry = await prisma.journalEntry.create({
             data: {
                 createdAt: today,
-                title: todayString,
-                body: "<p>Type here...</p>",
+                title: "",
+                body: "",
                 user_id: user.userId,
             }
         });
