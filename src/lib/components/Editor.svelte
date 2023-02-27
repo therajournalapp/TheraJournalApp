@@ -9,6 +9,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import EditorOptionMenu from './EditorOptionMenu.svelte';
+	import TagViewer from './TagViewer.svelte';
 
 	// id of the journal entry, used for saving api call
 	export let id: number;
@@ -191,6 +192,7 @@
 						class="title"
 					/>
 					<div class="flex gap-3">
+						<TagViewer />
 						<ShareSelector
 							{title}
 							shared_to={shared_to ?? []}
