@@ -10,11 +10,20 @@
 
 	// Used to track if the dialog is open or not
 	export let isOpen = false;
+	export let body: string;
 
-	export let tags: string[] = ['a', 'b', 'c'];
+	export let tags: string[] = [];
 
-	onMount(() => {
-		console.log('mounted');
+	onMount(async () => {
+		// const response = await fetch('http://34.16.133.112:80/tags', {
+		// 	method: 'POST',
+		// 	body: JSON.stringify({ text: 'test 123 hello world hello world everyone' }),
+		// 	headers: {
+		// 		'content-type': 'application/json'
+		// 	}
+		// });
+		// const data = await response.json();
+		// console.log(data);
 	});
 </script>
 
@@ -61,6 +70,7 @@
 					>
 						<div class="flex flex-col gap-3">
 							<DialogTitle class="text-xl text-neutral-700">Tags</DialogTitle>
+							<p>{body}</p>
 							{#each tags as tag}
 								<div class="text-neutral-700">{tag}</div>
 							{/each}

@@ -192,7 +192,7 @@
 						class="title"
 					/>
 					<div class="flex gap-3">
-						<TagViewer />
+						<TagViewer {body} />
 						<ShareSelector
 							{title}
 							shared_to={shared_to ?? []}
