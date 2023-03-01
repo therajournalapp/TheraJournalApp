@@ -13,6 +13,7 @@
 		<Editor
 			id={data.entry.id}
 			title={data.entry.title}
+			date={data.entry.createdAt}
 			body={data.entry.body}
 			view_only
 			back_link="/shared"

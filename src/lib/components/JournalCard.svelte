@@ -89,8 +89,12 @@
 	<div class="flex justify-between">
 		<div class="flex">
 			<div class="relative max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap">
-				<a href="/{link_to}/{id}" class="text-xl font-medium hover:underline">
-					{title}
+				<a
+					href="/{link_to}/{id}"
+					class="text-xl font-medium hover:underline"
+					class:text-neutral-400={title == ''}
+				>
+					{title == '' ? 'Untitled Entry' : title}
 				</a>
 			</div>
 		</div>

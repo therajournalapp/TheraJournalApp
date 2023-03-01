@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
-import type { PageServerLoad } from './$types';
+import prisma from '$lib/prisma';
+import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
     const { session, user } = await locals.validateUser();
@@ -19,4 +18,4 @@ export const load = (async ({ locals }) => {
     return {
         entries: journal_entries
     }
-}) satisfies PageServerLoad;
+}) satisfies LayoutServerLoad;

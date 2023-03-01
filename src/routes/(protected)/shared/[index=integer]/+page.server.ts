@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
-import { PrismaClient, type JournalEntry } from '@prisma/client'
-const prisma = new PrismaClient()
+import type { JournalEntry } from '@prisma/client'
+import prisma from '$lib/prisma';
 
 export const load = (async ({ params, locals }) => {
     const { session, user } = await locals.validateUser();
@@ -25,6 +25,7 @@ export const load = (async ({ params, locals }) => {
             id: true,
             title: true,
             body: true,
+            createdAt: true,
             SharedEntry: {
                 select: {
                     user: {

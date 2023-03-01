@@ -1,7 +1,6 @@
 import type { Actions } from './$types';
-import { PrismaClient } from '@prisma/client';
 import { fail, redirect } from '@sveltejs/kit';
-const prisma = new PrismaClient();
+import prisma from '$lib/prisma';
 
 export const actions = {
     default: async ({ locals, request }) => {
@@ -9,8 +8,7 @@ export const actions = {
         if (!user) return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
 
         const body = await request.formData();
-        let habitName = body.get('name')?.toString() ?? 'New Habit';
-        habitName = habitName == "" ? "New Habit" : habitName;
+        const habitName = body.get('name')?.toString() ?? '';
         const habit = await prisma.habit.create({
             data: {
                 name: habitName,

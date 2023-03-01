@@ -228,3 +228,12 @@ label.loading::before {
 }
 /* </generated-keyframes> */
 /* /Loading animation */
+
+/* Placeholder for empty Journal Editor */
+.ProseMirror p.is-editor-empty:first-child::before {
+	color: #adb5bd;
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+}

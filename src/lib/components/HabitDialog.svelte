@@ -7,7 +7,7 @@
 		Transition,
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	// import 'fluent-svelte/theme.css';
 	import '$lib/components/fluent-svelte/theme.css';
 	// import { CalendarView } from 'fluent-svelte';
@@ -167,7 +167,11 @@
 			}
 		});
 		console.log('result: ' + result.ok);
+		invalidateAll();
 	}
+
+	// Debounce the updateEntries function, so it is only called once every second
+	const saveEntries = debounce(updateEntries, 1000);
 
 	async function deleteHabit() {
 		if (view_only) {
@@ -245,6 +249,12 @@
 	onMount(() => {
 		isOpen = true;
 	});
+
+	onDestroy(async () => {
+		isOpen = false;
+		await saveTitle.flush();
+		await saveEntries.flush();
+	});
 </script>
 
 <Transition show={isOpen}>
@@ -290,9 +300,11 @@
 								<input
 									type="text"
 									id="entry-title"
+									placeholder="Untitled Habit Tracker"
 									on:input={saveTitle}
 									bind:value={title}
-									class="rounded-md text-2xl outline-none hover:underline"
+									class="rounded-md text-2xl outline-none hover:underline focus:!no-underline"
+									tabindex="-1"
 								/>
 							{:else}
 								<DialogTitle class="text-2xl">{name}</DialogTitle>
@@ -301,7 +313,7 @@
 							<div class="mt-1 mr-1 mb-2 flex gap-3">
 								{#if !view_only}
 									<ShareSelector
-										title={name}
+										title={name == '' ? 'Untitled Habit Tracker' : name}
 										{shared_to}
 										bind:isOpen={shareOpen}
 										shareCallback={onShare}
@@ -325,6 +337,7 @@
 											value.push(today);
 										}
 										value = value;
+										saveEntries();
 									}}
 								>
 									{#if !value.some((date) => sameDayMonthYear(date, today))}
@@ -347,10 +360,7 @@
 										bind:value
 										bind:month
 										on:change={async () => {
-											updateEntries();
-											setTimeout(() => {
-												invalidateAll();
-											}, 300);
+											saveEntries();
 										}}
 										max={new Date()}
 									/>
