@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { signOut, getUser } from '@lucia-auth/sveltekit/client';
-	import { getAuth, signOut as signOutFirebase, deleteUser } from 'firebase/auth';
+	import {
+		getAuth,
+		signOut as signOutFirebase,
+		deleteUser,
+		EmailAuthProvider,
+		reauthenticateWithCredential
+	} from 'firebase/auth';
 	import { invalidateAll } from '$app/navigation';
 	import Dialog from '$lib/components/Dialog.svelte';
 	import { onMount } from 'svelte';
+	import { redirect } from '@sveltejs/kit';
 	const user = getUser();
 	const auth = getAuth();
 
@@ -11,12 +18,51 @@
 	let disabledConfirmDelete = true;
 	let downloadDialog: HTMLDialogElement;
 	let deleteDialog: HTMLDialogElement;
+	let confirmedPassword = '';
+
 	onMount(async () => {
 		console.log(auth);
 	});
 
 	function onConfirmPwordChange(e: Event) {
+		confirmedPassword = (e.target as HTMLInputElement).value;
+		disabledConfirmDelete = confirmedPassword.length < 6;
+	}
+
+	async function onConfirmDelete() {
 		//TODO
+		// first confirm password, login with firebase
+		const userprovidedPassword = confirmedPassword;
+		let email = '';
+		if ($user && !$user.email_verified) {
+			email = $user.email;
+		}
+		const credential = EmailAuthProvider.credential(email, confirmedPassword);
+		if (auth.currentUser != null) {
+			try {
+				let currentUser = auth.currentUser;
+				await reauthenticateWithCredential(currentUser, credential);
+				// User re-authenticated.
+				// then delete user
+				await deleteUser(currentUser);
+				// User deleted in firebase
+				// then delete user in db and lucia
+				await fetch('/api/deleteAccount', {
+					method: 'DELETE',
+					body: JSON.stringify({
+						userId: $user?.userId
+					})
+				});
+				// User deleted in db
+				// then sign out
+				await signOutFirebase(auth);
+				// Sign-out successful.
+				redirect(302, '/login');
+				invalidateAll();
+			} catch (error) {
+				// An error ocurred
+			}
+		} else invalidateAll(); //bad error if current user can't be retrieved, just boot from page
 	}
 </script>
 
@@ -30,11 +76,6 @@
 	<p>User id: {$user?.userId}</p>
 	<p>Email: {$user?.email}</p>
 </div>
-<div>
-	<p>Display name: {auth.currentUser?.displayName}</p>
-	<p>Email: {auth.currentUser?.email}</p>
-</div>
-
 <!--  Create a row for a button -->
 <div class="mt-2 flex flex-row justify-between">
 	<!--  Create a column for the button -->
@@ -104,7 +145,7 @@
 			id="deleteConfirmPword"
 			class="input"
 			placeholder="Confirm your password"
-			on:change={onConfirmPwordChange}
+			value={confirmedPassword}
 		/>
 		<hr />
 		<div class="mt-4 flex flex-row justify-end space-x-2">
@@ -117,6 +158,7 @@
 					disabled={disabledConfirmDelete}
 					on:click={() => {
 						deleteDialog.close();
+						onConfirmDelete();
 					}}>Yes, delete everything</button
 				>
 			</div>
