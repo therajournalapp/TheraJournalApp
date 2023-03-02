@@ -1,7 +1,9 @@
 <script lang="ts">
 	import EditorWrapper from '$lib/components/EditorWrapper.svelte';
 	import Editor from '$lib/components/Editor.svelte';
-	export let data: any;
+	import { page } from '$app/stores';
+	import type { PageData } from './$types';
+	export let data: PageData;
 </script>
 
 <svelte:head>
@@ -9,17 +11,18 @@
 </svelte:head>
 
 {#if data.entry}
-	<EditorWrapper>
+	<EditorWrapper back_link="/journals">
 		<Editor
-			id={data.entry.id}
-			title={data.entry.title}
+			id={parseInt($page.params.index)}
+			title={data.entry?.title ?? ''}
 			date={data.entry.createdAt}
-			body={data.entry.body}
-			shared_to={data.entry.shared_to ?? []}
+			body={data.entry?.body ?? ''}
+			shared_to={data.entry?.shared_to ?? []}
+			back_link="/journals"
 		/>
 	</EditorWrapper>
 {:else}
-	<EditorWrapper>
+	<EditorWrapper back_link="/journals">
 		<div
 			class="fixed inset-0 top-1/2 left-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-10"
 		>

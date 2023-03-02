@@ -11,9 +11,9 @@ export const POST = (async ({ request, locals }) => {
 
     const body = await request.json()
     const email = body.email;
-    const entry_id = body.entry_id;
+    const habit_id = body.habit_id;
 
-    console.log("trying to create new share for entry: " + entry_id + " with email: " + email);
+    console.log("trying to create new share for habit: " + habit_id + " with email: " + email);
 
     try {
         // try to get lucia auth user by email
@@ -36,10 +36,10 @@ export const POST = (async ({ request, locals }) => {
         }
 
         try {
-            await prisma.sharedEntry.create({
+            await prisma.sharedHabit.create({
                 data: {
                     user_id: la_user.userId,
-                    entry_id: entry_id,
+                    habit_id: habit_id,
                 }
             })
         }
@@ -77,9 +77,9 @@ export const DELETE = (async ({ request, locals }) => {
 
     const body = await request.json()
     const email = body.email;
-    const entry_id = body.entry_id;
+    const habit_id = body.habit_id;
 
-    console.log("trying to delete share for entry: " + entry_id + " with email: " + email);
+    console.log("trying to delete share for habit: " + habit_id + " with email: " + email);
 
     try {
         // try to get lucia auth user by email
@@ -101,10 +101,10 @@ export const DELETE = (async ({ request, locals }) => {
             console.log(la_user);
         }
 
-        await prisma.sharedEntry.delete({
+        await prisma.sharedHabit.delete({
             where: {
-                entry_id_user_id: {
-                    entry_id: entry_id,
+                habit_id_user_id: {
+                    habit_id: habit_id,
                     user_id: la_user.userId
                 }
             }

@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
+	import Placeholder from '@tiptap/extension-placeholder';
 	import 'iconify-icon';
 	import ShareSelector from './ShareSelector.svelte';
 	import debounce from 'lodash/debounce';
@@ -9,12 +10,22 @@
 	import { browser } from '$app/environment';
 	import EditorOptionMenu from './EditorOptionMenu.svelte';
 
+	// id of the journal entry, used for saving api call
 	export let id: number;
+	// title of the journal entry
 	export let title: string;
+	// date of the journal entry
+	export let date: Date;
+	// the entry's contents
 	export let body: string;
-	export let shared: any | undefined = undefined;
+	// list of emails that the entry is shared with
+	export let shared_to: any | undefined = undefined;
 
-	export let viewOnly: boolean = false;
+	// back link, used for the back button
+	export let back_link: string = '/dashboard';
+
+	// view only mode, used for viewing shared entries
+	export let view_only: boolean = false;
 
 	let content: string = '';
 	if (body && body.length > 0) {
@@ -56,13 +67,13 @@
 	const saveContent = debounce(saveNow, 2000);
 
 	onMount(() => {
-		if (viewOnly) {
+		if (view_only) {
 			return;
 		}
 
 		editor = new Editor({
 			element: element,
-			extensions: [StarterKit],
+			extensions: [StarterKit, Placeholder.configure({ placeholder: 'Start writing here...' })],
 			autofocus: 'start',
 			content: content,
 			editorProps: {
@@ -86,19 +97,17 @@
 		});
 	});
 
-	onDestroy(() => {
-		if (viewOnly) {
+	onDestroy(async () => {
+		if (view_only) {
 			return;
 		}
 
 		if (!deleting) {
-			// update dashboard preview by invalidating it's load function
 			if (browser) {
-				saveNow();
+				// immediately save before unmounting
+				await saveContent.flush();
+				// update dashboard preview by invalidating it's load function
 				invalidateAll();
-				setTimeout(() => {
-					invalidateAll();
-				}, 1000);
 			}
 		}
 
@@ -161,10 +170,22 @@
 	<div class="title-bar overflow-clip [scroll-gutter:stable]">
 		<div class="mx-auto max-w-screen-lg">
 			<div class="h-18 flex content-baseline justify-between py-5">
-				{#if !viewOnly}
+				<div class="mr-5 flex items-center">
+					<a
+						href={back_link}
+						class="arrow-link text-white hover:text-neutral-300 active:text-neutral-700"
+					>
+						<div class="block h-[25px] w-[25px]">
+							<iconify-icon inline icon="ph:caret-left-thin" width="25" class="arrow" />
+						</div>
+						<span class="pl-2">Back</span>
+					</a>
+				</div>
+				{#if !view_only}
 					<input
 						type="text"
 						id="entry-title"
+						placeholder={'Untitled Entry (click to edit title)'}
 						on:change={saveContent}
 						bind:value={title}
 						class="title"
@@ -172,12 +193,11 @@
 					<div class="flex gap-3">
 						<ShareSelector
 							{title}
-							shared_to={shared ?? []}
+							shared_to={shared_to ?? []}
 							big
 							shareCallback={onShare}
 							unshareCallback={onUnshare}
 						/>
-						<!-- <ShareToggle > -->
 						<EditorOptionMenu
 							deleteCallBack={() => {
 								deleting = true;
@@ -186,16 +206,16 @@
 						/>
 					</div>
 				{:else}
-					<h1 class="title hover:!no-underline">{title}</h1>
+					<h1 class="title hover:!no-underline">{title == '' ? 'Untitled Entry' : title}</h1>
 				{/if}
 			</div>
 
-			{#if !viewOnly}
+			{#if !view_only}
 				<noscript>
 					<p class="mb-3 text-white">Enable javascript to edit journal entries.</p>
 				</noscript>
 				<div class="jsonly flex flex-wrap items-baseline justify-between">
-					<div class="editor-row flex gap-1">
+					<div class="editor-row mx-[-15px] flex gap-1">
 						<button
 							on:click={() => {
 								if (editor) {
@@ -333,28 +353,28 @@
 		</div>
 	</div>
 
-	{#if !loaded || viewOnly}
+	{#if !loaded || view_only}
 		<div
 			class="prose prose-sm mx-auto w-full max-w-full break-words rounded-t-lg
 			bg-gray-50 p-8 focus:outline-none sm:max-w-full sm:prose lg:prose-lg xl:prose-xl
-			{viewOnly ? 'mt-[100px] min-h-[calc(100vh-100px)]' : 'mt-[150px] min-h-[calc(100vh-150px)]'}"
+			{view_only ? 'mt-[100px] min-h-[calc(100vh-100px)]' : 'mt-[150px] min-h-[calc(100vh-150px)]'}"
 		>
 			{@html body.substring(1, body.length - 1)}
 		</div>
 	{/if}
 
-	{#if !viewOnly}
+	{#if !view_only}
 		<div bind:this={element} class:hidden={!loaded} />
 	{/if}
 </div>
 
 <style lang="postcss">
 	.title-bar {
-		@apply fixed top-0 left-0 z-30 w-full overflow-clip bg-black bg-opacity-60 px-4 sm:bg-opacity-40;
+		@apply fixed top-0 left-0 z-30 w-full overflow-clip bg-black bg-opacity-60 px-4 backdrop-blur-sm sm:bg-opacity-40;
 	}
 
 	.title {
-		@apply h-10 w-full bg-transparent text-3xl text-white ring-0 hover:underline focus-visible:outline-none;
+		@apply h-10 w-full bg-transparent text-3xl text-white placeholder-neutral-200 ring-0 hover:underline focus:!no-underline focus-visible:outline-none;
 		text-shadow: 1px 1px 5px grey;
 	}
 
@@ -374,5 +394,17 @@
 	.editor-row button.active,
 	.editor-row button:active {
 		@apply bg-neutral-700;
+	}
+
+	.arrow {
+		@apply translate-y-1 translate-x-1 duration-150 ease-in-out;
+	}
+
+	.arrow-link {
+		@apply flex -translate-x-[11px] items-baseline text-lg font-normal transition duration-150 hover:underline;
+	}
+
+	a:hover .arrow {
+		transform: translate(0, 0.25rem);
 	}
 </style>

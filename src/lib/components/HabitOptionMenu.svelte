@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@rgossiaux/svelte-headlessui';
 	import 'iconify-icon';
 
@@ -8,9 +9,9 @@
 <Menu class="relative z-10 max-h-[50px] ">
 	<MenuButton>
 		<div
-			class="m-[-5px] flex h-[50px] w-[50px] items-center justify-center rounded-full hover:bg-white hover:bg-opacity-10"
+			class="m-[-5px] flex h-[35px] w-[35px] items-center justify-center rounded-full text-neutral-500 hover:bg-neutral-400 hover:bg-opacity-10 active:text-neutral-800"
 		>
-			<iconify-icon icon="ph:dots-three-circle-vertical" class="text-[32px] text-white " />
+			<iconify-icon icon="ph:dots-three-circle-vertical" class="text-[25px] " />
 		</div>
 	</MenuButton>
 	<Transition
@@ -32,7 +33,8 @@
 								class="group flex w-full items-center rounded-md p-2 text-sm text-gray-900"
 								class:active
 							>
-								<iconify-icon inline icon="ph:trash" class="mr-2 h-5 w-5 text-[20px]" /> Delete Entry
+								<iconify-icon inline icon="ph:trash" class="mr-2 h-5 w-5 text-[20px]" /> Delete Habit
+								Tracker
 							</button>
 						</MenuItem>
 					</div>

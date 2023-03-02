@@ -1,3 +1,3 @@
 <svelte:head>
-	<title>Dashboard</title>
+	<title>Shared</title>
 </svelte:head>
