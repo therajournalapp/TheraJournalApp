@@ -295,7 +295,7 @@
 				leaveTo="opacity-0 scale-95"
 			>
 				<div
-					class="pointer-events-auto h-fit w-fit rounded-lg bg-neutral-200 p-5 shadow-xl transition-all "
+					class="pointer-events-auto h-fit min-h-[562.5px] w-fit rounded-lg bg-white p-5 shadow-xl transition-all "
 				>
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
@@ -327,52 +327,92 @@
 							</div>
 						</div>
 
-						{#if !view_only}
-							<div class="my-2 ">
-								<button
-									class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
-									on:click={() => {
-										if (value.some((date) => sameDayMonthYear(date, today) == true)) {
-											console.log('remove');
-											value = value.filter((date) => sameDayMonthYear(date, today) == false);
-										} else {
-											console.log('add');
-											value.push(today);
-										}
-										value = value;
-										saveEntries();
-									}}
-								>
-									{#if !value.some((date) => sameDayMonthYear(date, today))}
-										Add Today
-										<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[1px]" />
-									{:else}
-										Remove Today
-										<iconify-icon inline icon="ph:minus-circle" class="text-md translate-y-[1px]" />
-									{/if}
-								</button>
-								<span> or click to toggle a date below.</span>
-							</div>
-						{/if}
-
-						{#if !view_only}
-							<div class:cursor-wait={loading}>
-								<div class:pointer-events-none={loading}>
-									<CalendarView
-										multiple
-										bind:value
-										bind:month
-										on:change={async () => {
+						{#if false}
+							{#if !view_only}
+								<div class="my-2 ">
+									<button
+										class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
+										on:click={() => {
+											if (value.some((date) => sameDayMonthYear(date, today) == true)) {
+												console.log('remove');
+												value = value.filter((date) => sameDayMonthYear(date, today) == false);
+											} else {
+												console.log('add');
+												value.push(today);
+											}
+											value = value;
 											saveEntries();
 										}}
-										max={new Date()}
-									/>
+									>
+										{#if !value.some((date) => sameDayMonthYear(date, today))}
+											Add Today
+											<iconify-icon
+												inline
+												icon="ph:plus-circle"
+												class="text-md translate-y-[1px]"
+											/>
+										{:else}
+											Remove Today
+											<iconify-icon
+												inline
+												icon="ph:minus-circle"
+												class="text-md translate-y-[1px]"
+											/>
+										{/if}
+									</button>
+									<span> or click to toggle a date below.</span>
 								</div>
-							</div>
+							{/if}
+
+							{#if !view_only}
+								<div class:cursor-wait={loading}>
+									<div class:pointer-events-none={loading}>
+										<CalendarView
+											multiple
+											bind:value
+											bind:month
+											on:change={async () => {
+												saveEntries();
+											}}
+											max={new Date()}
+										/>
+									</div>
+								</div>
+							{:else}
+								<div class:cursor-wait={loading}>
+									<div class:pointer-events-none={loading}>
+										<CalendarView view_only multiple bind:value bind:month max={new Date()} />
+									</div>
+								</div>
+							{/if}
 						{:else}
-							<div class:cursor-wait={loading}>
-								<div class:pointer-events-none={loading}>
-									<CalendarView view_only multiple bind:value bind:month max={new Date()} />
+							<div class="flex justify-center">
+								<div class="flex gap-2.5 text-white">
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-purple"
+									>
+										<span>awful</span>
+									</div>
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-blue"
+									>
+										<span>bad</span>
+									</div>
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-400"
+									>
+										<span>meh</span>
+									</div>
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-green"
+									>
+										<span>good</span>
+									</div>
+									<div
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-yellow"
+									>
+										<span>great</span>
+									</div>
 								</div>
 							</div>
 						{/if}
