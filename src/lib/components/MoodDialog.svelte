@@ -50,6 +50,9 @@
 	// Used to track if the dialog is open or not
 	let isOpen = false;
 
+	// Whether the mood selector is open or not
+	let mood_select = false;
+
 	// Tracks if the share selector is open or not,
 	// to hide popup while it is open
 	let shareOpen = false;
@@ -248,6 +251,11 @@
 		}
 	};
 
+	function pick_day(day: any) {
+		console.log('yey!!! we have a callback!! :3');
+		console.log(day);
+	}
+
 	// Open the dialog when the component is mounted (page is loaded)
 	onMount(() => {
 		isOpen = true;
@@ -327,7 +335,7 @@
 							</div>
 						</div>
 
-						{#if false}
+						{#if !mood_select}
 							{#if !view_only}
 								<div class="my-2 ">
 									<button
@@ -374,6 +382,7 @@
 											on:change={async () => {
 												saveEntries();
 											}}
+											pick_day_callback={pick_day}
 											max={new Date()}
 										/>
 									</div>

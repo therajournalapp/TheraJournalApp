@@ -31,6 +31,9 @@
 	export { className as class };
 	/** Obtains a bound DOM reference to the calendar's outer container element. */
 	export let element = null;
+	export let pick_day_callback = (day) => {
+		console.log('no callback!');
+	};
 	const dispatch = createEventDispatcher();
 	const forwardEvents = createEventForwarder(get_current_component(), ['change']);
 	const bodyElementBinding = (node) => (bodyElement = node); // bind:this breaks with our page transition for some reason
@@ -517,7 +520,10 @@ A calendar view lets a user view and interact with a calendar that they can navi
 												{#if inMonth}
 													<!-- added -->
 													<CalendarViewItem
-														on:click={() => selectDay(day)}
+														on:click={() => {
+															selectDay(day);
+															pick_day_callback(day);
+														}}
 														on:keydown={(e) => handleKeyDown(e, day)}
 														outOfRange={!inMonth}
 														current={compareDates(day, new Date(), 'day')}
