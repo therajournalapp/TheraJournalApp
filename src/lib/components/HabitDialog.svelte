@@ -55,6 +55,15 @@
 	// Bound to the title input, used to update the name of the habit
 	let title = name;
 
+	// Debounce the updateTitle function, so it is only called once every second
+	const saveTitle = debounce(updateTitle, 1000);
+
+	// Used to track the currently shown month of the calendar
+	let month: Date;
+
+	// Stops user input while the calendar is loading/saving a month's entries
+	let loading = false;
+
 	// Updates the title of the habit
 	async function updateTitle() {
 		if (view_only) {
@@ -72,28 +81,19 @@
 		invalidateAll();
 	}
 
-	// Debounce the updateTitle function, so it is only called once every second
-	const saveTitle = debounce(updateTitle, 1000);
-
-	// Used to track the currently shown month of the calendar
-	let month: Date;
-
-	// Stops user input while the calendar is loading a month's entries
-	let loading = false;
-
 	// Gets the entries for a month, replaces the value array
 	async function getEntriesForMonth(month: Date) {
+		await saveEntries.flush();
+
 		loading = true;
-		const url = new URL('/api/habitEntry', window.location.origin);
+
 		const params = [
 			['id', id.toString()],
 			['month', month.toDateString()]
 		];
-		url.search = new URLSearchParams(params).toString();
+		const search = new URLSearchParams(params);
 
-		console.log('url: ' + url.toString());
-
-		const result = await fetch(url, {
+		const result = await fetch('/api/habitEntry?' + search.toString(), {
 			method: 'GET',
 			headers: {
 				'content-type': 'application/json'
@@ -166,7 +166,8 @@
 				'content-type': 'application/json'
 			}
 		});
-		console.log('result: ' + result.ok);
+
+		// console.log('result: ' + result.ok);
 		invalidateAll();
 	}
 

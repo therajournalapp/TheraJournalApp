@@ -7,7 +7,7 @@
 		Transition,
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	// import 'fluent-svelte/theme.css';
 	import '$lib/components/fluent-svelte/theme.css';
 	// import { CalendarView } from 'fluent-svelte';
@@ -27,6 +27,8 @@
 
 	// list of entries for the habit from load function
 	export let entries: Date[];
+
+	export let entry_values: any[];
 
 	// view only mode, used for viewing shared entries
 	export let view_only: boolean = false;
@@ -55,6 +57,15 @@
 	// Bound to the title input, used to update the name of the habit
 	let title = name;
 
+	// Debounce the updateTitle function, so it is only called once every second
+	const saveTitle = debounce(updateTitle, 1000);
+
+	// Used to track the currently shown month of the calendar
+	let month: Date;
+
+	// Stops user input while the calendar is loading/saving a month's entries
+	let loading = false;
+
 	// Updates the title of the habit
 	async function updateTitle() {
 		if (view_only) {
@@ -72,28 +83,19 @@
 		invalidateAll();
 	}
 
-	// Debounce the updateTitle function, so it is only called once every second
-	const saveTitle = debounce(updateTitle, 1000);
-
-	// Used to track the currently shown month of the calendar
-	let month: Date;
-
-	// Stops user input while the calendar is loading a month's entries
-	let loading = false;
-
 	// Gets the entries for a month, replaces the value array
 	async function getEntriesForMonth(month: Date) {
+		await saveEntries.flush();
+
 		loading = true;
-		const url = new URL('/api/habitEntry', window.location.origin);
+
 		const params = [
 			['id', id.toString()],
 			['month', month.toDateString()]
 		];
-		url.search = new URLSearchParams(params).toString();
+		const search = new URLSearchParams(params);
 
-		console.log('url: ' + url.toString());
-
-		const result = await fetch(url, {
+		const result = await fetch('/api/habitEntry?' + search.toString(), {
 			method: 'GET',
 			headers: {
 				'content-type': 'application/json'
@@ -166,8 +168,13 @@
 				'content-type': 'application/json'
 			}
 		});
-		console.log('result: ' + result.ok);
+
+		// console.log('result: ' + result.ok);
+		invalidateAll();
 	}
+
+	// Debounce the updateEntries function, so it is only called once every second
+	const saveEntries = debounce(updateEntries, 1000);
 
 	async function deleteHabit() {
 		if (view_only) {
@@ -245,6 +252,12 @@
 	onMount(() => {
 		isOpen = true;
 	});
+
+	onDestroy(async () => {
+		isOpen = false;
+		await saveTitle.flush();
+		await saveEntries.flush();
+	});
 </script>
 
 <Transition show={isOpen}>
@@ -282,7 +295,7 @@
 				leaveTo="opacity-0 scale-95"
 			>
 				<div
-					class="pointer-events-auto h-fit w-fit rounded-lg bg-white p-5 shadow-xl transition-all "
+					class="pointer-events-auto h-fit w-fit rounded-lg bg-neutral-200 p-5 shadow-xl transition-all "
 				>
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
@@ -290,9 +303,11 @@
 								<input
 									type="text"
 									id="entry-title"
+									placeholder="Untitled Habit Tracker"
 									on:input={saveTitle}
 									bind:value={title}
-									class="rounded-md text-2xl outline-none hover:underline"
+									class="rounded-md text-2xl outline-none hover:underline focus:!no-underline"
+									tabindex="-1"
 								/>
 							{:else}
 								<DialogTitle class="text-2xl">{name}</DialogTitle>
@@ -301,7 +316,7 @@
 							<div class="mt-1 mr-1 mb-2 flex gap-3">
 								{#if !view_only}
 									<ShareSelector
-										title={name}
+										title={name == '' ? 'Untitled Habit Tracker' : name}
 										{shared_to}
 										bind:isOpen={shareOpen}
 										shareCallback={onShare}
@@ -325,6 +340,7 @@
 											value.push(today);
 										}
 										value = value;
+										saveEntries();
 									}}
 								>
 									{#if !value.some((date) => sameDayMonthYear(date, today))}
@@ -347,10 +363,7 @@
 										bind:value
 										bind:month
 										on:change={async () => {
-											updateEntries();
-											setTimeout(() => {
-												invalidateAll();
-											}, 300);
+											saveEntries();
 										}}
 										max={new Date()}
 									/>

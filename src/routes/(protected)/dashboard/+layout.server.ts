@@ -62,6 +62,9 @@ export const load = (async ({ locals }) => {
     const last_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay()));
 
         let habits: HabitWithHabitEntry[] | null = await prisma.habit.findMany({
+            where: {
+                user_id: user.userId,
+            },
             orderBy: {
                 id: 'desc'
             },
@@ -69,6 +72,7 @@ export const load = (async ({ locals }) => {
                 HabitEntry: {
                     select: {
                         date: true,
+                        value: true,
                     },
                     where: {
                         date: {
