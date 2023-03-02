@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { Editor } from '@tiptap/core';
+	import { Editor, getText } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import Placeholder from '@tiptap/extension-placeholder';
 	import 'iconify-icon';
@@ -19,6 +19,8 @@
 	export let date: Date;
 	// the entry's contents
 	export let body: string;
+	// editor text used for passing to the tag viewer
+	let text: string;
 	// list of emails that the entry is shared with
 	export let shared_to: any | undefined = undefined;
 
@@ -56,7 +58,7 @@
 					'content-type': 'application/json'
 				}
 			});
-
+			text = editor.getText();
 			//TODO: read response to see if post succeded or not
 
 			save = 'Saved';
@@ -96,6 +98,7 @@
 				loaded = true;
 			}
 		});
+		text = editor.getText();
 	});
 
 	onDestroy(async () => {
@@ -192,7 +195,7 @@
 						class="title"
 					/>
 					<div class="flex gap-3">
-						<TagViewer {body} />
+						<TagViewer body={text} />
 						<ShareSelector
 							{title}
 							shared_to={shared_to ?? []}

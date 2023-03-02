@@ -12,18 +12,30 @@
 	export let isOpen = false;
 	export let body: string;
 
-	export let tags: string[] = [];
+	export let tags = new Set<string>();
+	// set with initial values like this: new set<string>(['tag1', 'tag2', 'tag3'])
 
+	// TODO - get proper text from journal entry
+	body =
+		"Last of us on HBO is awesome! Just watched episode 3. So sad and cute :( Cute is not something you usually say about a TV show about the zombie apocalypse! I hope Joel doesn't get eaten by the zombies. change";
 	onMount(async () => {
-		// const response = await fetch('http://34.16.133.112:80/tags', {
-		// 	method: 'POST',
-		// 	body: JSON.stringify({ text: 'test 123 hello world hello world everyone' }),
-		// 	headers: {
-		// 		'content-type': 'application/json'
-		// 	}
-		// });
-		// const data = await response.json();
-		// console.log(data);
+		const response = await fetch('http://34.16.133.112:8080/tags', {
+			method: 'POST',
+			body: JSON.stringify({ text: body }),
+			headers: {
+				'Content-type': 'application/json'
+			}
+		});
+		const data = await response.json();
+		console.log(data);
+		data.keywords.forEach((element: string) => {
+			tags.add(element);
+		});
+		// filter out cardinal(?) tags, should probably do this on server but whatever
+		data.tags.forEach((element: any) => {
+			if (element[1] !== 'CARDINAL') tags.add(element[0]);
+		});
+		console.log(tags);
 	});
 </script>
 
@@ -71,7 +83,7 @@
 						<div class="flex flex-col gap-3">
 							<DialogTitle class="text-xl text-neutral-700">Tags</DialogTitle>
 							<p>{body}</p>
-							{#each tags as tag}
+							{#each [...tags] as tag}
 								<div class="text-neutral-700">{tag}</div>
 							{/each}
 						</div>
