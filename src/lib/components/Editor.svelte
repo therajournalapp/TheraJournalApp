@@ -59,6 +59,7 @@
 				}
 			});
 			text = editor.getText();
+			console.log('text: ' + text); // TODO: remove
 			//TODO: read response to see if post succeded or not
 
 			save = 'Saved';
@@ -195,7 +196,10 @@
 						class="title"
 					/>
 					<div class="flex gap-3">
-						<TagViewer body={text} />
+						{#if text}
+							<TagViewer body={text} />
+						{/if}
+
 						<ShareSelector
 							{title}
 							shared_to={shared_to ?? []}

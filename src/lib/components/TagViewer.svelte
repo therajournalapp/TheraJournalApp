@@ -15,9 +15,6 @@
 	export let tags = new Set<string>();
 	// set with initial values like this: new set<string>(['tag1', 'tag2', 'tag3'])
 
-	// TODO - get proper text from journal entry
-	body =
-		"Last of us on HBO is awesome! Just watched episode 3. So sad and cute :( Cute is not something you usually say about a TV show about the zombie apocalypse! I hope Joel doesn't get eaten by the zombies. change";
 	onMount(async () => {
 		const response = await fetch('http://34.16.133.112:8080/tags', {
 			method: 'POST',
@@ -82,7 +79,7 @@
 					>
 						<div class="flex flex-col gap-3">
 							<DialogTitle class="text-xl text-neutral-700">Tags</DialogTitle>
-							<p>{body}</p>
+							<!-- <p>{body}</p> -->
 							{#each [...tags] as tag}
 								<div class="text-neutral-700">{tag}</div>
 							{/each}
