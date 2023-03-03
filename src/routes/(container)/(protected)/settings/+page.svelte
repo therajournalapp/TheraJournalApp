@@ -30,35 +30,6 @@
 		confirmedPassword = (e.target as HTMLInputElement).value;
 		disabledConfirmDelete = confirmedPassword == '';
 	}
-
-	async function onConfirmDelete() {
-		// const credential = EmailAuthProvider.credential(email, confirmedPassword);
-		// if (auth.currentUser != null) {
-		// 	try {
-		// 		let currentUser = auth.currentUser;
-		// 		await reauthenticateWithCredential(currentUser, credential);
-		// 		// User re-authenticated.
-		// 		// then delete user
-		// 		await deleteUser(currentUser);
-		// 		// User deleted in firebase
-		// 		// then delete user in db and lucia
-		// 		await fetch('/api/deleteAccount', {
-		// 			method: 'DELETE',
-		// 			body: JSON.stringify({
-		// 				userId: $user?.userId
-		// 			})
-		// 		});
-		// 		// User deleted in db
-		// 		// then sign out
-		// 		await signOutFirebase(auth);
-		// 		// Sign-out successful.
-		// 		redirect(302, '/login');
-		// 		invalidateAll();
-		// 	} catch (error) {
-		// 		// An error ocurred
-		// 	}
-		// } else invalidateAll(); //bad error if current user can't be retrieved, just boot from page
-	}
 </script>
 
 <svelte:head>
@@ -71,15 +42,10 @@
 	<p>User id: {$user?.userId}</p>
 	<p>Email: {$user?.email}</p>
 </div>
-<!--  Create a row for a button -->
-<div class="mt-2 flex flex-row justify-between">
-	<!--  Create a column for the button -->
+<!--<div class="mt-2 flex flex-row justify-between">
 	<div class="flex flex-col">
-		<!--  Create a button -->
-		<!-- Download User data button -->
 		<button class="btn" on:click={() => downloadDialog.showModal()}>
 			<i />
-			<!-- Insert icon for download -->
 			Download a copy of my data</button
 		>
 	</div>
@@ -114,7 +80,7 @@
 			</div>
 		</div>
 	</Dialog>
-</div>
+</div> -->
 <div class="mt-2 flex flex-row">
 	<div class="flex flex-col">
 		<button
