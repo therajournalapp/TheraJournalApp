@@ -18,6 +18,7 @@
 			date={data.entry.createdAt}
 			body={data.entry?.body ?? ''}
 			shared_to={data.entry?.shared_to ?? []}
+			tags={data.entry?.tags.split(',') ?? []}
 			back_link="/journals"
 		/>
 	</EditorWrapper>
