@@ -43,7 +43,7 @@
 			<div class="flex h-full w-full items-center justify-center">
 				<iconify-icon icon="ph:x-circle" width="100" class="mr-2 opacity-60" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium hover:underline">No Shared Habits</p>
+					<p class="text-xl font-medium">No Shared Habits</p>
 
 					<p>If anyone shares any habit trackers with you in the future they will show up here.</p>
 				</div>
@@ -79,7 +79,7 @@
 			<div class="flex h-full w-full items-center justify-center">
 				<iconify-icon icon="ph:x-circle" width="125" class="mr-2 opacity-60" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium hover:underline">No Shared Entries</p>
+					<p class="text-xl font-medium">No Shared Entries</p>
 
 					<p>If anyone shares entries with you in the future they will show up here.</p>
 				</div>
