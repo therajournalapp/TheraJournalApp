@@ -46,6 +46,7 @@ model JournalEntry {
     preview     String        @default("") @db.VarChar(1000)
     user        User          @relation(references: [id], fields: [user_id], onDelete: Cascade)
     SharedEntry SharedEntry[]
+    tags        String        @default("") @db.VarChar(255) // list of string separated by comma
 
     @@index([user_id])
     @@map("journal_entry")

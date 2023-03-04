@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { Editor } from '@tiptap/core';
+	import { Editor, getText } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import Placeholder from '@tiptap/extension-placeholder';
 	import 'iconify-icon';
@@ -9,6 +9,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import EditorOptionMenu from './EditorOptionMenu.svelte';
+	import TagViewer from './TagViewer.svelte';
 
 	// id of the journal entry, used for saving api call
 	export let id: number;
@@ -18,6 +19,11 @@
 	export let date: Date;
 	// the entry's contents
 	export let body: string;
+	// existing tags for the entry
+	export let tags: string[];
+	console.log('Editor tags: ' + tags); // TODO: remove
+	// editor text used for passing to the tag viewer
+	let text: string;
 	// list of emails that the entry is shared with
 	export let shared_to: any | undefined = undefined;
 
@@ -55,7 +61,8 @@
 					'content-type': 'application/json'
 				}
 			});
-
+			text = editor.getText();
+			console.log('text: ' + text); // TODO: remove
 			//TODO: read response to see if post succeded or not
 
 			save = 'Saved';
@@ -95,6 +102,7 @@
 				loaded = true;
 			}
 		});
+		text = editor.getText();
 	});
 
 	onDestroy(async () => {
@@ -191,6 +199,10 @@
 						class="title"
 					/>
 					<div class="flex gap-3">
+						{#if text}
+							<TagViewer body={text} existingTags={tags} {id} />
+						{/if}
+
 						<ShareSelector
 							{title}
 							shared_to={shared_to ?? []}
