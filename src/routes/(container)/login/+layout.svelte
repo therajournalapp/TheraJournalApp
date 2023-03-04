@@ -90,11 +90,11 @@
 					/>
 				</div>
 
-				<div class="flex items-center justify-end">
-					{#if error != ''}
-						<p class="mr-3 text-red-500">{error}</p>
-					{/if}
+				{#if error != ''}
+					<p class="my-3 text-red-500">{error}</p>
+				{/if}
 
+				<div class="flex items-center justify-end">
 					<button type="submit" class="btn">Log in</button>
 				</div>
 			</form>
