@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { getEmailVerifiedStatus, sendVerificationEmail } from '$lib/firebase/client';
 	import { getUser } from '@lucia-auth/sveltekit/client';
 	import 'iconify-icon';
-	import { onMount } from 'svelte';
 	import { z } from 'zod';
 	import type { ActionData } from './$types';
 
@@ -121,7 +117,7 @@
 				/>
 			</div>
 
-			<div class="mb-2">
+			<div class="relative mb-2">
 				<input
 					required
 					{type}
@@ -133,16 +129,21 @@
 					on:input={onInput}
 					class:!border-red-500={passwordVal == 'false'}
 				/>
+				<button
+					type="button"
+					class="absolute right-0 h-full rounded-md  px-2 hover:text-primary active:text-primary-dark"
+					on:click={() => (show_password = !show_password)}
+				>
+					<iconify-icon
+						inline
+						icon={show_password ? 'ph:eye-closed' : 'ph:eye'}
+						class="mr-0.5 translate-y-[1px]"
+					/>
+					{show_password ? 'Hide Password' : 'Show Password'}
+				</button>
 			</div>
 
-			<button
-				type="button"
-				class="mb-2 hover:text-neutral-400 active:text-primary-dark"
-				on:click={() => (show_password = !show_password)}
-				>{show_password ? 'Hide Password' : 'Show Password'}</button
-			>
-
-			<ul class="mb-3 ml-6">
+			<ul class="mb-3 mt-1 ml-6">
 				<li>
 					<iconify-icon
 						icon={icon1}
@@ -169,20 +170,10 @@
 				</li>
 			</ul>
 
-			<!-- <div class="mb-3 flex items-center">
-				<input
-					id="terms"
-					aria-describedby="terms"
-					type="checkbox"
-					class="focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800"
-					required
-				/>
-				<div class="ml-3">
-					<label for="terms" class="">
-						I agree to recieve emails from TheraJournal for non-marketing purposes. (Required)
-					</label>
-				</div>
-			</div> -->
+			{#if form?.error}
+				<p class="my-4 text-red-500">{form.error}</p>
+			{/if}
+
 			<div class="flex justify-end">
 				<button
 					{disabled}
@@ -192,9 +183,6 @@
 					Sign up
 				</button>
 			</div>
-			{#if form?.error}
-				<p class="mt-4 text-red-500">{form.error}</p>
-			{/if}
 		</form>
 		<div class="mt-4 text-center">
 			<p>Already have an account? <a href="/login" class="link">Log in here</a></p>
