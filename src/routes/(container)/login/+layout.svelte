@@ -17,6 +17,7 @@
 		const password = formData.get('password') as string;
 
 		try {
+			loading = true;
 			const isEmail = z.string().email();
 			if (!isEmail.safeParse(email).success) {
 				throw error;
@@ -45,9 +46,11 @@
 					goto('/dashboard', { invalidateAll: true });
 				}, 500);
 			} else {
+				loading = false;
 				error = 'Error signing in please check your email and password are correct.';
 			}
 		} catch (err) {
+			loading = false;
 			error = 'Error signing in. Please check that your email and password are correct.';
 		}
 	}
