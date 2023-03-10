@@ -208,7 +208,7 @@
 
 		{#if $user}
 			<NavPopover />
-		{:else if $page.url.pathname === '/'}
+		{:else if $page.url.pathname === '/' || $page.url.pathname === '/login'}
 			<!-- hide on root page -->
 		{:else}
 			<div class="hover: flex h-[48px] content-center hover:text-primary active:text-primary-dark">
