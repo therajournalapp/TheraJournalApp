@@ -98,7 +98,7 @@
 				</a>
 			</div>
 		</div>
-		{#if shared_to}
+		{#if shared_by == ''}
 			<ShareSelector {title} shareCallback={onShare} unshareCallback={onUnshare} {shared_to} />
 		{/if}
 	</div>
