@@ -195,18 +195,14 @@
 					</a>
 				</div>
 
-				<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
-					<a href="/dashboard">Dashboard</a>
-				</li>
-				<li aria-current={$page.url.pathname === '/shared' ? 'page' : undefined}>
-					<a href="/shared">Shared</a>
-				</li>
-				<!-- <li
-					aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}
-					class="hidden md:block"
-				>
-					<a href="/sverdle">Sverdle</a>
-				</li> -->
+				{#if $user}
+					<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
+						<a href="/dashboard">Dashboard</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/shared' ? 'page' : undefined}>
+						<a href="/shared">Shared</a>
+					</li>
+				{/if}
 			</ul>
 		</nav>
 
