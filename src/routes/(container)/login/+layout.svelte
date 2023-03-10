@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { sendVerificationEmailWithUser, signIn } from '$lib/firebase/client';
 	import { z } from 'zod';
-	import 'iconify-icon';
+	import PhCaretLeftThin from '~icons/ph/caret-left-thin';
 
 	// Is used after login api returns
 	// and waiting to navigate to dashboard
@@ -68,8 +68,8 @@
 		<div class="mx-auto mt-12 block w-full max-w-md rounded-l text-gray-700 ">
 			<div class="mb-6">
 				<a href="/" class="arrow-link">
-					<div class="block h-[25px] w-[25px]">
-						<iconify-icon inline icon="ph:caret-left-thin" width="25" class="arrow" />
+					<div class="arrow">
+						<PhCaretLeftThin class="inline text-[22px]" />
 					</div>
 					<span class="pl-2">Back</span>
 				</a>
@@ -108,7 +108,7 @@
 
 <style lang="postcss">
 	.arrow {
-		@apply translate-y-1 translate-x-1 duration-150 ease-in-out;
+		@apply translate-y-[-1.5px] translate-x-1 duration-150 ease-in-out;
 	}
 
 	.arrow-link {
@@ -116,6 +116,6 @@
 	}
 
 	a:hover .arrow {
-		transform: translate(0, 0.25rem);
+		transform: translate(0, -1.5px);
 	}
 </style>

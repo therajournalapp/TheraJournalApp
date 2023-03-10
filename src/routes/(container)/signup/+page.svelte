@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { getUser } from '@lucia-auth/sveltekit/client';
-	import 'iconify-icon';
 	import { z } from 'zod';
 	import type { ActionData } from './$types';
+	import PhCaretLeftThin from '~icons/ph/caret-left-thin';
+	import PhEye from '~icons/ph/eye';
+	import PhEyeClosed from '~icons/ph/eye-closed';
+	import PhCircleDashed from '~icons/ph/circle-dashed';
+	import PhXCircle from '~icons/ph/x-circle';
+	import PhCheckCircle from '~icons/ph/check-circle';
 
 	// Holds the current state of the email and password fields
 	// Used for validation
@@ -15,10 +20,15 @@
 	let emailVal = 'inital';
 	let passwordVal = 'inital';
 
-	// Set the icon string to a valid iconify-icon to change the icon
-	let icon1 = 'ph:circle-dashed';
-	let icon2 = 'ph:circle-dashed';
-	let icon3 = 'ph:circle-dashed';
+	// Set the icon variables with the enum
+	enum Icon {
+		circle_dashed,
+		check_circle,
+		x_circle
+	}
+	let icon1: Icon = Icon.circle_dashed;
+	let icon2: Icon = Icon.circle_dashed;
+	let icon3: Icon = Icon.circle_dashed;
 
 	// Used to hide and show the password field
 	let show_password = false;
@@ -50,36 +60,36 @@
 		}
 
 		if (password == '') {
-			icon1 = 'ph:circle-dashed';
-			icon2 = 'ph:circle-dashed';
-			icon3 = 'ph:circle-dashed';
+			icon1 = Icon.circle_dashed;
+			icon2 = Icon.circle_dashed;
+			icon3 = Icon.circle_dashed;
 			passwordVal = 'inital';
 			return;
 		}
 
 		const lengthReq = password.length > 11;
 		if (lengthReq) {
-			icon1 = 'ph:check-circle';
+			icon1 = Icon.check_circle;
 		} else {
-			icon1 = 'ph:x-circle';
+			icon1 = Icon.x_circle;
 			passwordVal = 'false';
 		}
 
 		const lettersAndNumbersRegex = /^(?=.*[A-Za-z])(?=.*[0-9])/;
 		const lettersAndNumbersReq = lettersAndNumbersRegex.test(password);
 		if (lettersAndNumbersReq) {
-			icon2 = 'ph:check-circle';
+			icon2 = Icon.check_circle;
 		} else {
-			icon2 = 'ph:x-circle';
+			icon2 = Icon.x_circle;
 			passwordVal = 'false';
 		}
 
 		const specialCharacterRegex = /[!-\/:-@[-`{-~]/;
 		const specialCharacterReq = specialCharacterRegex.test(password);
 		if (specialCharacterReq) {
-			icon3 = 'ph:check-circle';
+			icon3 = Icon.check_circle;
 		} else {
-			icon3 = 'ph:x-circle';
+			icon3 = Icon.x_circle;
 			passwordVal = 'false';
 		}
 
@@ -97,8 +107,8 @@
 	<div class="mx-auto block w-full max-w-md rounded-l text-gray-700 ">
 		<div class="mb-6">
 			<a href="/" class="arrow-link">
-				<div class="block h-[25px] w-[25px]">
-					<iconify-icon inline icon="ph:caret-left-thin" width="25" class="arrow" />
+				<div class="arrow">
+					<PhCaretLeftThin class="inline text-[22px]" />
 				</div>
 				<span class="pl-2">Back</span>
 			</a>
@@ -131,42 +141,48 @@
 				/>
 				<button
 					type="button"
-					class="absolute right-0 h-full rounded-md  px-2 hover:text-primary active:text-primary-dark"
+					class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark"
 					on:click={() => (show_password = !show_password)}
 				>
-					<iconify-icon
-						inline
-						icon={show_password ? 'ph:eye-closed' : 'ph:eye'}
-						class="mr-0.5 translate-y-[1px]"
-					/>
+					{#if show_password}
+						<PhEyeClosed class="mr-0.5 inline translate-y-[-1px] text-[14px]" />
+					{:else}
+						<PhEye class="mr-0.5 inline translate-y-[-1px] text-[14px]" />
+					{/if}
 					{show_password ? 'Hide Password' : 'Show Password'}
 				</button>
 			</div>
 
 			<ul class="mb-3 mt-1 ml-6">
 				<li>
-					<iconify-icon
-						icon={icon1}
-						class:text-red-500={icon1 == 'ph:x-circle'}
-						class:text-green-500={icon1 == 'ph:check-circle'}
-						class="translate-y-[3px] text-[20px]"
-					/> At least 12 characters
+					{#if icon1 == Icon.circle_dashed}
+						<PhCircleDashed class="inline translate-y-[-1px] text-[18px]" />
+					{:else if icon1 == Icon.x_circle}
+						<PhXCircle class="inline translate-y-[-1px] text-[18px] text-red-500" />
+					{:else if icon1 == Icon.check_circle}
+						<PhCheckCircle class="inline translate-y-[-1px] text-[18px] text-green-500" />
+					{/if}
+					At least 12 characters
 				</li>
 				<li>
-					<iconify-icon
-						icon={icon2}
-						class:text-red-500={icon2 == 'ph:x-circle'}
-						class:text-green-500={icon2 == 'ph:check-circle'}
-						class="translate-y-[3px] text-[20px]"
-					/> Uses both letters and numbers
+					{#if icon2 == Icon.circle_dashed}
+						<PhCircleDashed class="inline translate-y-[-1px] text-[18px]" />
+					{:else if icon2 == Icon.x_circle}
+						<PhXCircle class="inline translate-y-[-1px] text-[18px] text-red-500" />
+					{:else if icon2 == Icon.check_circle}
+						<PhCheckCircle class="inline translate-y-[-1px] text-[18px] text-green-500" />
+					{/if}
+					Uses both letters and numbers
 				</li>
 				<li>
-					<iconify-icon
-						icon={icon3}
-						class:text-red-500={icon3 == 'ph:x-circle'}
-						class:text-green-500={icon3 == 'ph:check-circle'}
-						class="translate-y-[3px] text-[20px]"
-					/> Uses at least one special character
+					{#if icon3 == Icon.circle_dashed}
+						<PhCircleDashed class="inline translate-y-[-1px] text-[18px]" />
+					{:else if icon3 == Icon.x_circle}
+						<PhXCircle class="inline translate-y-[-1px] text-[18px] text-red-500" />
+					{:else if icon3 == Icon.check_circle}
+						<PhCheckCircle class="inline translate-y-[-1px] text-[18px] text-green-500" />
+					{/if}
+					Uses at least one special character
 				</li>
 			</ul>
 
@@ -192,7 +208,7 @@
 
 <style lang="postcss">
 	.arrow {
-		@apply translate-y-1 translate-x-1 duration-150 ease-in-out;
+		@apply translate-y-[-1.5px] translate-x-1 duration-150 ease-in-out;
 	}
 
 	.arrow-link {
@@ -200,6 +216,6 @@
 	}
 
 	a:hover .arrow {
-		transform: translate(0, 0.25rem);
+		transform: translate(0, -1.5px);
 	}
 </style>
