@@ -5,6 +5,8 @@
 /// <reference types="@sveltejs/kit" />
 /// <reference types="unplugin-icons/types/svelte" />
 
+declare module "svelte-tags-input";
+
 declare namespace App {
 	// interface Error {}
 	// interface Locals {}

@@ -8,8 +8,6 @@
 	} from '@rgossiaux/svelte-headlessui';
 	import Tags from 'svelte-tags-input'; // no types for package unfortunately :(
 	import { onMount } from 'svelte';
-	import Page from '../../routes/(container)/+page.svelte';
-	import { add } from 'lodash';
 
 	// Used to track if the dialog is open or not
 	export let id: number;
