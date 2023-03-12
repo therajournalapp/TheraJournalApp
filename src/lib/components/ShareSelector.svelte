@@ -234,10 +234,6 @@
 </div>
 
 <style lang="postcss">
-	.toggle {
-		@apply relative m-[-5px] flex h-[35px] w-[35px] cursor-pointer items-center justify-center rounded-full hover:bg-[#73924440];
-	}
-
 	.ppl-scroll::-webkit-scrollbar {
 		height: 20px;
 	}
