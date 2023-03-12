@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 	import HabitCard from '$lib/components/HabitCard.svelte';
 	import JournalCard from '$lib/components/JournalCard.svelte';
-	import 'iconify-icon';
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
+	import PhPlusCircle from '~icons/ph/plus-circle';
 
 	let habit: any;
 	let journal: any;
@@ -37,7 +37,7 @@
 		href="/dashboard/h/new"
 		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700"
 	>
-		add new <iconify-icon inline icon="ph:plus-circle" class="translate-y-[1px]" />
+		create new <PhPlusCircle class="inline text-[17px]" />
 	</a>
 </div>
 
@@ -64,7 +64,7 @@
 		href="/dashboard/new"
 		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700"
 	>
-		create new <iconify-icon inline icon="ph:plus-circle" class="translate-y-[1px]" />
+		create new <PhPlusCircle class="inline text-[17px]" />
 	</a>
 </div>
 

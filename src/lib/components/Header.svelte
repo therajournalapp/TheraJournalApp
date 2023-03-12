@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	// import logo from '$lib/images/logo-no-background.svg';
-	// import logo from '$lib/images/logov2.svg';
-	// import logo_small from '$lib/images/logo-no-text.svg';
-	import 'iconify-icon';
 	import NavPopover from '$lib/components/NavPopover.svelte';
-
 	import { getUser } from '@lucia-auth/sveltekit/client';
 	import { onMount } from 'svelte';
+	import PhX from '~icons/ph/x';
+
 	const user = getUser();
 
 	let verified = true;
@@ -43,12 +40,11 @@
 			</div>
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<button
-				class=" h-[30px] w-[30px] translate-y-[1.5px] rounded-full hover:bg-black hover:bg-opacity-5"
+				class="flex h-[30px] w-[30px] translate-y-[1.5px] items-center justify-center rounded-full hover:bg-black hover:bg-opacity-5"
 				on:click={handleClick}
 			>
-				<iconify-icon icon="ph:x" style="font-size: 30px;" />
+				<PhX class="inline text-[20px]" />
 			</button>
-			<div class="hidden" />
 		</div>
 	{/if}
 
@@ -195,24 +191,20 @@
 					</a>
 				</div>
 
-				<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
-					<a href="/dashboard">Dashboard</a>
-				</li>
-				<li aria-current={$page.url.pathname === '/shared' ? 'page' : undefined}>
-					<a href="/shared">Shared</a>
-				</li>
-				<!-- <li
-					aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}
-					class="hidden md:block"
-				>
-					<a href="/sverdle">Sverdle</a>
-				</li> -->
+				{#if $user}
+					<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
+						<a href="/dashboard">Dashboard</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/shared' ? 'page' : undefined}>
+						<a href="/shared">Shared</a>
+					</li>
+				{/if}
 			</ul>
 		</nav>
 
 		{#if $user}
 			<NavPopover />
-		{:else if $page.url.pathname === '/'}
+		{:else if $page.url.pathname === '/' || $page.url.pathname === '/login'}
 			<!-- hide on root page -->
 		{:else}
 			<div class="hover: flex h-[48px] content-center hover:text-primary active:text-primary-dark">

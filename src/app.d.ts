@@ -2,6 +2,11 @@
 // for information about these interfaces
 // and what to do when importing types
 
+/// <reference types="@sveltejs/kit" />
+/// <reference types="unplugin-icons/types/svelte" />
+
+declare module "svelte-tags-input";
+
 declare namespace App {
 	// interface Error {}
 	// interface Locals {}

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@rgossiaux/svelte-headlessui';
-	import 'iconify-icon';
+	import PhDotsThreeCircleVertical from '~icons/ph/dots-three-circle-vertical';
+	import PhTrash from '~icons/ph/trash';
 
 	export let deleteCallBack: () => void;
 </script>
@@ -9,9 +9,9 @@
 <Menu class="relative z-10 max-h-[50px] ">
 	<MenuButton>
 		<div
-			class="m-[-5px] flex h-[35px] w-[35px] items-center justify-center rounded-full text-neutral-500 hover:bg-neutral-400 hover:bg-opacity-10 active:text-neutral-800"
+			class="-m-1.5 flex items-center justify-center rounded-full p-1.5 text-neutral-500 hover:bg-green-900/10 hover:text-primary-dark active:bg-green-900/20"
 		>
-			<iconify-icon icon="ph:dots-three-circle-vertical" class="text-[25px] " />
+			<PhDotsThreeCircleVertical class="inline text-[23px]" />
 		</div>
 	</MenuButton>
 	<Transition
@@ -33,23 +33,11 @@
 								class="group flex w-full items-center rounded-md p-2 text-sm text-gray-900"
 								class:active
 							>
-								<iconify-icon inline icon="ph:trash" class="mr-2 h-5 w-5 text-[20px]" /> Delete Habit
-								Tracker
+								<PhTrash class="mr-2 inline text-[17px]" />
+								Delete Habit Tracker
 							</button>
 						</MenuItem>
 					</div>
-					<!-- div is item group -->
-					<!-- MenuItem is a menu item -->
-					<!-- <div class="px-1 py-1">
-						<MenuItem let:active>
-							<button
-								class:active
-								class="group flex w-full items-center rounded-md p-2 text-sm text-gray-900"
-							>
-								<iconify-icon inline icon="ph:trash" class="mr-2 h-5 w-5 text-[20px]" /> Delete Entry
-							</button>
-						</MenuItem>
-					</div> -->
 				</div>
 			</div>
 		</MenuItems>

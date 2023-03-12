@@ -3,13 +3,22 @@
 	import { Editor, getText } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import Placeholder from '@tiptap/extension-placeholder';
-	import 'iconify-icon';
 	import ShareSelector from './ShareSelector.svelte';
 	import debounce from 'lodash/debounce';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import EditorOptionMenu from './EditorOptionMenu.svelte';
 	import TagViewer from './TagViewer.svelte';
+	import PhCaretLeftThin from '~icons/ph/caret-left-thin';
+	import PhTextBolderBold from '~icons/ph/text-bolder-bold';
+	import PhTextItalic from '~icons/ph/text-italic';
+	import PhTextStrikethrough from '~icons/ph/text-strikethrough';
+	import PhListBullets from '~icons/ph/list-bullets';
+	import PhListNumbers from '~icons/ph/list-numbers';
+	import PhQuotes from '~icons/ph/quotes';
+	import PhDotsThreeOutline from '~icons/ph/dots-three-outline';
+	import PhArrowUUpLeft from '~icons/ph/arrow-u-up-left';
+	import PhArrowUUpRight from '~icons/ph/arrow-u-up-right';
 
 	// id of the journal entry, used for saving api call
 	export let id: number;
@@ -183,8 +192,8 @@
 						href={back_link}
 						class="arrow-link text-white hover:text-neutral-300 active:text-neutral-700"
 					>
-						<div class="block h-[25px] w-[25px]">
-							<iconify-icon inline icon="ph:caret-left-thin" width="25" class="arrow" />
+						<div class="arrow">
+							<PhCaretLeftThin class="inline text-[22px]" />
 						</div>
 						<span class="pl-2">Back</span>
 					</a>
@@ -234,9 +243,10 @@
 									editor.chain().focus().toggleBold().run();
 								}
 							}}
+							class="flex items-center justify-center"
 							class:active={editor && editor.isActive('bold')}
 						>
-							<iconify-icon icon="ph:text-bolder-bold" width="20" />
+							<PhTextBolderBold class="inline text-[17px]" />
 						</button>
 						<button
 							on:click={() => {
@@ -244,9 +254,10 @@
 									editor.chain().focus().toggleItalic().run();
 								}
 							}}
+							class="flex items-center justify-center"
 							class:active={editor && editor.isActive('italic')}
 						>
-							<iconify-icon icon="ph:text-italic" width="20" />
+							<PhTextItalic class="inline text-[17px]" />
 						</button>
 						<button
 							on:click={() => {
@@ -254,34 +265,16 @@
 									editor.chain().focus().toggleStrike().run();
 								}
 							}}
+							class="flex items-center justify-center"
 							class:active={editor && editor.isActive('strike')}
 						>
-							<iconify-icon icon="ph:text-strikethrough" width="20" />
+							<PhTextStrikethrough class="inline text-[17px]" />
 						</button>
 
 						<!-- TODO: add color extension -->
-						<!-- <button> <iconify-icon icon="ph:palette" width="20" /> </button> -->
+						<!-- <button> <PhPalette class="inline text-[17px]" /> </button> -->
 
 						<div class="divider" />
-
-						<!-- <button
-							on:click={() => {if (editor) {editor.chain().focus().toggleHeading({ level: 1 }).run()}}}
-							class:active={editor && editor.isActive('heading', { level: 1 })}
-						>
-							<iconify-icon icon="ph:text-h-one" width="20" />
-						</button>
-						<button
-							on:click={() => {if (editor) {editor.chain().focus().toggleHeading({ level: 2 }).run()}}}
-							class:active={editor && editor.isActive('heading', { level: 2 })}
-						>
-							<iconify-icon icon="ph:text-h-two" width="20" />
-						</button>
-						<button
-							on:click={() => {if (editor) {editor.chain().focus().setParagraph().run()}}}
-							class:active={editor && editor.isActive('paragraph')}
-						>
-							<iconify-icon icon="ph:text-aa" width="20" />
-						</button> -->
 
 						<button
 							on:click={() => {
@@ -289,9 +282,10 @@
 									editor.chain().focus().toggleBulletList().run();
 								}
 							}}
+							class="flex items-center justify-center"
 							class:active={editor && editor.isActive('bulletList')}
 						>
-							<iconify-icon icon="ph:list-bullets" width="20" />
+							<PhListBullets class="inline text-[17px]" />
 						</button>
 						<button
 							on:click={() => {
@@ -299,9 +293,10 @@
 									editor.chain().focus().toggleOrderedList().run();
 								}
 							}}
+							class="flex items-center justify-center"
 							class:active={editor && editor.isActive('orderedList')}
 						>
-							<iconify-icon icon="ph:list-numbers" width="20" />
+							<PhListNumbers class="inline text-[17px]" />
 						</button>
 
 						<div class="divider hidden sm:block" />
@@ -312,10 +307,10 @@
 									editor.chain().focus().toggleBlockquote().run();
 								}
 							}}
+							class="hidden items-center justify-center sm:flex"
 							class:active={editor && editor.isActive('blockquote')}
-							class="hidden sm:block"
 						>
-							<iconify-icon icon="ph:quotes" width="20" />
+							<PhQuotes class="inline text-[17px]" />
 						</button>
 						<button
 							on:click={() => {
@@ -323,9 +318,9 @@
 									editor.chain().focus().setHorizontalRule().run();
 								}
 							}}
-							class="hidden sm:block"
+							class="hidden items-center justify-center sm:flex"
 						>
-							<iconify-icon icon="ph:dots-three-outline" width="20" />
+							<PhDotsThreeOutline class="inline text-[17px]" />
 						</button>
 
 						<div class="divider" />
@@ -338,8 +333,9 @@
 									editor.commands.undo();
 								}
 							}}
+							class="flex items-center justify-center"
 						>
-							<iconify-icon icon="ph:arrow-u-up-left" width="20" />
+							<PhArrowUUpLeft class="inline text-[17px]" />
 						</button>
 						<button
 							on:click={() => {
@@ -347,12 +343,11 @@
 									editor.commands.redo();
 								}
 							}}
+							class="flex items-center justify-center"
 						>
-							<iconify-icon icon="ph:arrow-u-up-right" width="20" />
+							<PhArrowUUpRight class="inline text-[17px]" />
 						</button>
 					</div>
-
-					<!-- <button on:click={saveContent} class="btn block">Save</button> -->
 
 					<button
 						on:click={saveNow}
@@ -409,7 +404,7 @@
 	}
 
 	.arrow {
-		@apply translate-y-1 translate-x-1 duration-150 ease-in-out;
+		@apply translate-y-[-1.5px] translate-x-1 duration-150 ease-in-out;
 	}
 
 	.arrow-link {
@@ -417,6 +412,6 @@
 	}
 
 	a:hover .arrow {
-		transform: translate(0, 0.25rem);
+		transform: translate(0, -1.5px);
 	}
 </style>
