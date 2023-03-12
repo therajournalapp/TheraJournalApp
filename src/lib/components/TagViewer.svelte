@@ -8,6 +8,7 @@
 	} from '@rgossiaux/svelte-headlessui';
 	import Tags from 'svelte-tags-input'; // no types for package unfortunately :(
 	import { onMount } from 'svelte';
+	import PhTag from '~icons/ph/tag';
 
 	// Used to track if the dialog is open or not
 	export let id: number;
@@ -76,9 +77,7 @@
 			isOpen = true;
 		}}
 	>
-		<div class="mr-1 h-[20px] w-[20px]">
-			<iconify-icon inline icon="ph:tag" class="text-[20px]" />
-		</div>
+		<PhTag class="mr-1 inline text-[17px]" />
 		Tags
 	</button>
 
