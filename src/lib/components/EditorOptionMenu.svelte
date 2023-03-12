@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@rgossiaux/svelte-headlessui';
-	import 'iconify-icon';
+	import PhDotsThreeCircleVertical from '~icons/ph/dots-three-circle-vertical';
+	import PhTrash from '~icons/ph/trash';
 
 	export let deleteCallBack: () => void;
 </script>
@@ -10,7 +11,7 @@
 		<div
 			class="m-[-5px] flex h-[50px] w-[50px] items-center justify-center rounded-full hover:bg-white hover:bg-opacity-10"
 		>
-			<iconify-icon icon="ph:dots-three-circle-vertical" class="text-[32px] text-white " />
+			<PhDotsThreeCircleVertical class="inline text-[27px] text-white" />
 		</div>
 	</MenuButton>
 	<Transition
@@ -32,22 +33,11 @@
 								class="group flex w-full items-center rounded-md p-2 text-sm text-gray-900"
 								class:active
 							>
-								<iconify-icon inline icon="ph:trash" class="mr-2 h-5 w-5 text-[20px]" /> Delete Entry
+								<PhTrash class="mr-2 inline text-[17px]" />
+								Delete Entry
 							</button>
 						</MenuItem>
 					</div>
-					<!-- div is item group -->
-					<!-- MenuItem is a menu item -->
-					<!-- <div class="px-1 py-1">
-						<MenuItem let:active>
-							<button
-								class:active
-								class="group flex w-full items-center rounded-md p-2 text-sm text-gray-900"
-							>
-								<iconify-icon inline icon="ph:trash" class="mr-2 h-5 w-5 text-[20px]" /> Delete Entry
-							</button>
-						</MenuItem>
-					</div> -->
 				</div>
 			</div>
 		</MenuItems>

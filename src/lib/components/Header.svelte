@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	// import logo from '$lib/images/logo-no-background.svg';
-	// import logo from '$lib/images/logov2.svg';
-	// import logo_small from '$lib/images/logo-no-text.svg';
-	import 'iconify-icon';
 	import NavPopover from '$lib/components/NavPopover.svelte';
-
 	import { getUser } from '@lucia-auth/sveltekit/client';
 	import { onMount } from 'svelte';
+	import PhX from '~icons/ph/x';
+
 	const user = getUser();
 
 	let verified = true;
@@ -43,12 +40,11 @@
 			</div>
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<button
-				class=" h-[30px] w-[30px] translate-y-[1.5px] rounded-full hover:bg-black hover:bg-opacity-5"
+				class="flex h-[30px] w-[30px] translate-y-[1.5px] items-center justify-center rounded-full hover:bg-black hover:bg-opacity-5"
 				on:click={handleClick}
 			>
-				<iconify-icon icon="ph:x" style="font-size: 30px;" />
+				<PhX class="inline text-[20px]" />
 			</button>
-			<div class="hidden" />
 		</div>
 	{/if}
 

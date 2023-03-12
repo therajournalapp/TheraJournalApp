@@ -15,6 +15,8 @@
 	import ShareSelector from './ShareSelector.svelte';
 	import HabitOptionMenu from './HabitOptionMenu.svelte';
 	import debounce from 'lodash/debounce';
+	import PhPlusCircle from '~icons/ph/plus-circle';
+	import PhMinusCircle from '~icons/ph/minus-circle';
 
 	// ID of the habit, used to load entries
 	export let id: number;
@@ -343,10 +345,10 @@
 								>
 									{#if !value.some((date) => sameDayMonthYear(date, today))}
 										Add Today
-										<iconify-icon inline icon="ph:plus-circle" class="text-md translate-y-[1px]" />
+										<PhPlusCircle class="inline translate-y-[-1px] text-[13px]" />
 									{:else}
 										Remove Today
-										<iconify-icon inline icon="ph:minus-circle" class="text-md translate-y-[1px]" />
+										<PhMinusCircle class="inline translate-y-[-1px] text-[13px]" />
 									{/if}
 								</button>
 								<span> or click to toggle a date below.</span>
