@@ -14,3 +14,4 @@ vite.config.ts.timestamp-*
 # Additional Ignores
 db.cmd
 *.db
+src/tests-out/

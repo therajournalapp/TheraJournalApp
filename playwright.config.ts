@@ -6,7 +6,7 @@ const config: PlaywrightTestConfig = {
 		port: 5173,
 		reuseExistingServer: true
 	},
-	testDir: 'tests'
+	testDir: 'src/tests'
 };
 
 export default config;
