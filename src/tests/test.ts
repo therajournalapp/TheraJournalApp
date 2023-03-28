@@ -16,7 +16,7 @@ const handleSetupError = (errorMessage: string) => {
 	console.log(errorMessage);
 };
 
-test.beforeAll(async () => {
+const loginTestUser = async () => {
 	const loginFormData = new FormData();
 	loginFormData.append('email', 'abc@def.com');
 	loginFormData.append('password', 'test');
@@ -37,11 +37,7 @@ test.beforeAll(async () => {
 	}
 	const email = 'autotest@test.com';
 	const password = 'test';
-});
-
-test.afterAll(async () => {
-	console.log('After all');
-});
+};
 
 test('about page has expected h1', async ({ page }) => {
 	await page.goto('/about');
@@ -51,4 +47,10 @@ test('about page has expected h1', async ({ page }) => {
 test('Accessing dashboard unauthenticated kicks to homepage', async ({ page }) => {
 	await page.goto('/dashboard');
 	expect(page.url()).toBe(`${baseUrl}/`);
+});
+
+test('Accessing dashboard authenticated works', async ({ page }) => {
+	await loginTestUser();
+	await page.goto('/dashboard');
+	expect(page.url()).toBe(`${baseUrl}/dashboard`);
 });
