@@ -1,5 +1,5 @@
 // auth.setup.ts
-import { test as setup, expect } from '@playwright/test';
+import { test as setup } from '@playwright/test';
 
 const authFile = 'playwright/.auth/user.json';
 
