@@ -1,7 +1,10 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { defineConfig, devices } from '@playwright/test';
 
+// Any file inside src/tests that contains '[auth]' will be run in an authenticated browser state.
 const authTestPattern = /.*\[auth\].*\.spec\.ts/;
+
+// Any file inside src/tests that contains '[noauth]' will be run in an unauthenticated browser state.
 const noAuthTestPattern = /.*\[noauth\].*\.spec\.ts/;
 
 export default defineConfig({
