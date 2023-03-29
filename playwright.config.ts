@@ -1,6 +1,9 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { defineConfig, devices } from '@playwright/test';
 
+const authTestPattern = /.*\[auth\].*\.spec\.ts/;
+const noAuthTestPattern = /.*\[noauth\].*\.spec\.ts/;
+
 export default defineConfig({
 	webServer: {
 		command: 'npm run build && npm run preview',
@@ -13,23 +16,24 @@ export default defineConfig({
 	},
 	projects: [
 		// Setup project
-		{ name: 'setup', testMatch: /.*\.setup\.ts/ },
-
-		// {
-		// 	name: 'chromium unauthenticated',
-		// 	use: {
-		// 		...devices['Desktop Chrome'],
-		// 	},
-		// },
-
-		// {
-		// 	name: 'firefox unauthenticated',
-		// 	use: {
-		// 		...devices['Desktop Firefox'],
-		// 	},
-		// },
-
-		// authenticated tests
+		{
+			name: 'setup',
+			testMatch: /.*\.setup\.ts/
+		},
+		{
+			name: 'chromium unauthenticated',
+			use: {
+				...devices['Desktop Chrome']
+			},
+			testMatch: noAuthTestPattern
+		},
+		{
+			name: 'firefox unauthenticated',
+			use: {
+				...devices['Desktop Firefox']
+			},
+			testMatch: noAuthTestPattern
+		},
 		{
 			name: 'chromium authenticated',
 			use: {
@@ -37,7 +41,8 @@ export default defineConfig({
 				// Use prepared auth state.
 				storageState: 'playwright/.auth/user.json'
 			},
-			dependencies: ['setup']
+			dependencies: ['setup'],
+			testMatch: authTestPattern
 		},
 
 		{
@@ -47,7 +52,8 @@ export default defineConfig({
 				// Use prepared auth state.
 				storageState: 'playwright/.auth/user.json'
 			},
-			dependencies: ['setup']
+			dependencies: ['setup'],
+			testMatch: authTestPattern
 		}
 	]
 });
