@@ -1,4 +1,3 @@
-import type { PlaywrightTestConfig } from '@playwright/test';
 import { defineConfig, devices } from '@playwright/test';
 
 // Any file inside src/tests that contains '[auth]' will be run in an authenticated browser state.
