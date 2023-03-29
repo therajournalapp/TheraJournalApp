@@ -1,42 +1,19 @@
 import { expect, test } from '@playwright/test';
-import config from '../../playwright.config.js';
-import FormData from 'form-data';
-let baseUrl = 'http://127.0.0.1:5173';
-if (config.webServer) {
-	// baseUrl = `http://localhost:${config.webServer.port}`;
-}
-
-// Request context is reused by all tests in the file.
-let apiContext;
-
-let testUserFbId: string;
+import { Page } from '@playwright/test';
 
 const handleSetupError = (errorMessage: string) => {
 	console.log('Error occurred during test setup. Test results may be unreliable.');
 	console.log(errorMessage);
 };
 
-const loginTestUser = async () => {
-	const loginFormData = new FormData();
-	loginFormData.append('email', 'abc@def.com');
-	loginFormData.append('password', 'test');
-	const request = new Request(`${baseUrl}/api/signIn`, {
-		method: 'POST',
-		body: JSON.stringify(loginFormData)
-	});
+const loginTestUser = async (page: Page) => {
+	await page.goto('/signup');
+	await page.getByPlaceholder('Email').fill('autotest@test.com');
+	await page.getByPlaceholder('Password').fill('test1234567%');
+	await page.getByRole('button', { name: 'Sign up' }).click();
 
-	try {
-		console.log(`POSTing to ${baseUrl}/api/signIn`);
-		const response = await fetch(request);
-		loginFormData.submit(`${baseUrl}/api/signIn`, function (err, res) {
-			// res – response object (http.IncomingMessage)  //
-			res.resume();
-		});
-	} catch (err: any) {
-		console.log('Error while POSTing to /api/signIn: ', err);
-	}
-	const email = 'autotest@test.com';
-	const password = 'test';
+	// wait for the redirect to the login page
+	// await page.waitForURL('/login');
 };
 
 test('about page has expected h1', async ({ page }) => {
@@ -46,11 +23,21 @@ test('about page has expected h1', async ({ page }) => {
 
 test('Accessing dashboard unauthenticated kicks to homepage', async ({ page }) => {
 	await page.goto('/dashboard');
-	expect(page.url()).toBe(`${baseUrl}/`);
+	await expect(page).toHaveURL('/');
 });
 
 test('Accessing dashboard authenticated works', async ({ page }) => {
-	await loginTestUser();
+	await page.goto('/login');
+	await page.getByPlaceholder('Email').click();
+	await page.getByPlaceholder('Email').fill('autotest@test.com');
+	await page.getByPlaceholder('Email').press('Tab');
+	await page.getByPlaceholder('Password').click();
+	await page.getByPlaceholder('Password').fill('test1234567%');
+	await page.getByRole('button', { name: 'Log in' }).click();
+
+	// Wait for the final URL to ensure auth cookies are set.
+	await page.waitForURL('/dashboard');
+
 	await page.goto('/dashboard');
-	expect(page.url()).toBe(`${baseUrl}/dashboard`);
+	await expect(page).toHaveURL('/dashboard');
 });
