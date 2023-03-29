@@ -23,6 +23,6 @@ export const createSearchStore = <T extends Record<PropertyKey, any>>(data : T[]
 export const searchHandler = <T extends Record<PropertyKey, any>>(store : SearchStoreModel<T>) => {
     const search = store.search.toLowerCase() || '';
     store.filtered = store.data.filter((entry : T) => {
-        return entry.title.toLowerCase().includes(search);
+        return entry.terms.toLowerCase().includes(search);
     });
 }

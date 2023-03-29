@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 	import HabitCard from '$lib/components/HabitCard.svelte';
 	import JournalCard from '$lib/components/JournalCard.svelte';
-	import 'iconify-icon';
 	import { flip } from 'svelte/animate';
 	import { fade, fly } from 'svelte/transition';
+	import PhXCircle from '~icons/ph/x-circle';
 
 	// Lets desktop users scroll horizontal sections with scroll wheel
 	let habit: any;
@@ -41,9 +41,9 @@
 			class="relative flex h-[124px] w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
 		>
 			<div class="flex h-full w-full items-center justify-center">
-				<iconify-icon icon="ph:x-circle" width="100" class="mr-2 opacity-60" />
+				<PhXCircle class="mr-2 text-[160px] opacity-60" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium hover:underline">No Shared Habits</p>
+					<p class="text-xl font-medium">No Shared Habits</p>
 
 					<p>If anyone shares any habit trackers with you in the future they will show up here.</p>
 				</div>
@@ -77,9 +77,9 @@
 			class="relative flex h-56 w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
 		>
 			<div class="flex h-full w-full items-center justify-center">
-				<iconify-icon icon="ph:x-circle" width="125" class="mr-2 opacity-60" />
+				<PhXCircle class="mr-2 text-[160px] opacity-60" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium hover:underline">No Shared Entries</p>
+					<p class="text-xl font-medium">No Shared Entries</p>
 
 					<p>If anyone shares entries with you in the future they will show up here.</p>
 				</div>

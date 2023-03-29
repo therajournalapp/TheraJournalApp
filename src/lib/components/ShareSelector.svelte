@@ -6,10 +6,16 @@
 		Transition,
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
-	import 'iconify-icon';
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { invalidateAll } from '$app/navigation';
+	import UserInitial from './UserInitial.svelte';
+	import PhLockKey from '~icons/ph/lock-key';
+	import PhUsers from '~icons/ph/users';
+	import PhShareNetwork from '~icons/ph/share-network';
+	import PhUserPlus from '~icons/ph/user-plus';
+	import PhUserCircle from '~icons/ph/user-circle';
+	import PhX from '~icons/ph/x';
 
 	// Used to set the title of the dialog, should be the same as the entry or habit title
 	export let title: string;
@@ -70,28 +76,6 @@
 			return;
 		}
 	}
-
-	// Colors used to generate the background for shared user icons
-	const colors = ['e9f5db', 'dcebca', 'cfe1b9', 'c2d5aa', 'b5c99a', 'a6b98b', '97a97c', '849669'];
-	// Colors used to generate the text for shared user icons
-	const tx_col = ['606f49', '5D6746', '595D41', '3D5D3C', '425535', '3C4828', '2A3B1C', '1F2513'];
-	// Hash function string to positive int
-	// used to pick a random color for the user icon
-	const hash = function (input: string) {
-		var hash = 0,
-			i,
-			chr;
-		if (input.length === 0) return hash;
-		for (i = 0; i < input.length; i++) {
-			chr = input.charCodeAt(i);
-			hash = (hash << 5) - hash + chr;
-			hash |= 0; // Convert to 32bit integer
-		}
-		if (hash < 0) {
-			hash = hash * -1;
-		}
-		return hash;
-	};
 </script>
 
 <div>
@@ -115,37 +99,25 @@
 				hover = false;
 			}}
 		>
-			<div class="mr-1 h-[20px] w-[20px]">
-				<iconify-icon
-					inline
-					icon={share ? 'ph-users' : 'ph-lock-key'}
-					class="text-[20px]"
-					class:big-i={big}
-				/>
-			</div>
-			{share ? 'Shared' : 'Share'}
+			{#if share}
+				<PhUsers class="mr-1 inline text-[17px]" /> Shared
+			{:else}
+				<PhLockKey class="mr-1 inline text-[17px]" /> Share
+			{/if}
 		</button>
 	{:else}
 		<button
-			class="toggle"
 			on:click={() => {
 				isOpen = true;
 				invalidateAll();
 			}}
-			on:mouseover={() => {
-				hover = true;
-			}}
-			on:mouseleave={() => {
-				hover = false;
-			}}
-			on:focus={() => {
-				// hover = true;
-			}}
-			on:blur={() => {
-				// hover = false;
-			}}
+			class="-m-1.5 rounded-full p-1.5 text-neutral-500 hover:bg-green-900/10 hover:text-primary-dark active:bg-green-900/20"
 		>
-			<iconify-icon inline {icon} class="text-[23px]" class:big-i={big} style="color: {color}" />
+			{#if share}
+				<UserInitial email={shared_to[0].email} />
+			{:else}
+				<PhShareNetwork class="mr-1 inline text-[20px]" />
+			{/if}
 		</button>
 	{/if}
 
@@ -191,11 +163,11 @@
 										/>
 
 										<button
-											class=" flex h-[50px] w-[50px] flex-shrink-0 items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10 active:bg-black active:bg-opacity-20"
+											class="flex h-[50px] w-[50px] flex-shrink-0 items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10 active:bg-black active:bg-opacity-20"
 											type="submit"
 											value="Submit"
 										>
-											<iconify-icon icon="ph:user-plus" width="30" />
+											<PhUserPlus class="text-[25px]" />
 										</button>
 									</div>
 								</form>
@@ -208,7 +180,7 @@
 								<div class="ppl-scroll scrollba h-64 min-h-[75px] w-full overflow-y-scroll">
 									<div class="flex h-12 w-full items-center rounded-md pl-1 hover:bg-neutral-200">
 										<div class="h-[40px] w-[40px]">
-											<iconify-icon icon="ph:user-circle" width="40" class="text-neutral-800" />
+											<PhUserCircle class="text-[34px] text-neutral-800" />
 										</div>
 										<span class="p-2 text-sm font-medium">
 											{shared_to ? (shared_to.length > 0 ? 'You' : 'Only you') : 'Only you'}
@@ -222,18 +194,8 @@
 												out:fly|local={{ x: 100 }}
 												class="flex h-12 w-full items-center justify-between rounded-md pl-1 hover:bg-neutral-200"
 											>
-												<div class="flex items-center">
-													<div
-														class="ml-1 flex h-[33px] w-[33px] items-center justify-center rounded-full border-2 border-black border-opacity-10"
-														style="background-color: #{colors[hash(user.email) % colors.length]};
-                                                       color: #{tx_col[
-															hash(user.email) % tx_col.length
-														]};"
-													>
-														<span class="select-none font-medium">
-															{user.email.charAt(0).toUpperCase()}
-														</span>
-													</div>
+												<div class="ml-1 flex items-center">
+													<UserInitial email={user.email} />
 													<div class="max-w-[240px] overflow-hidden text-ellipsis">
 														<span class="p-3 text-sm font-medium" title={user.email}>
 															{user.email}
@@ -246,7 +208,7 @@
 														unshareCallback(user.email);
 													}}
 												>
-													<iconify-icon icon="ph:x" size="16" class="max-h-[16px] max-w-[16px]" />
+													<PhX class="inline text-[13px]" />
 												</button>
 											</div>
 										{/each}
@@ -272,10 +234,6 @@
 </div>
 
 <style lang="postcss">
-	.toggle {
-		@apply relative m-[-5px] flex h-[35px] w-[35px] cursor-pointer items-center justify-center rounded-full hover:bg-[#73924440];
-	}
-
 	.ppl-scroll::-webkit-scrollbar {
 		height: 20px;
 	}

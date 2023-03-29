@@ -6,7 +6,27 @@
 	import { onDestroy } from 'svelte';
 
 	export let data: PageData;
-	const searchStore = createSearchStore(data.entries || ([] as JournalEntry[]));
+
+	// bundle entries title and tags into easy to search string
+	type SearchTerms = JournalEntry & {
+		terms: string;
+	};
+	const searchTerms = data.entries?.map((entry) => {
+		console.log(entry.tags);
+		if (entry.tags) {
+			return {
+				...entry,
+				terms: `${entry.title} ${entry.tags.split(',').join(' ')}`
+			};
+		} else {
+			return {
+				...entry,
+				terms: `${entry.title}`
+			};
+		}
+	});
+
+	const searchStore = createSearchStore(searchTerms || ([] as SearchTerms[]));
 
 	const unsubscribe = searchStore.subscribe((model) => searchHandler(model));
 	onDestroy(() => {
@@ -42,4 +62,4 @@
 	</div>
 {/if}
 
-<slot></slot>
+<slot />

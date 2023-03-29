@@ -36,7 +36,8 @@ export const load = (async ({ params, locals }) => {
                         }
                     }
                 }
-            }
+            },
+            tags: true
         }
     });
 
