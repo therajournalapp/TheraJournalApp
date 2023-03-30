@@ -14,3 +14,5 @@ vite.config.ts.timestamp-*
 # Additional Ignores
 db.cmd
 *.db
+tests-out
+playwright/.auth
