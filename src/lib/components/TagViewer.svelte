@@ -15,7 +15,7 @@
 	export let isOpen = false;
 	export let body: string;
 	export let existingTags: string[] = [];
-
+	let summary: string = '';
 	// handle bug with tiny zero space tag in input
 	if (existingTags[0] == '') existingTags = [];
 
@@ -23,9 +23,16 @@
 	// set with initial values like this: new set<string>(['tag1', 'tag2', 'tag3'])
 
 	let TagsInput: any;
-
 	onMount(async () => {
-		const response = await fetch('http://34.16.133.112:8080/tags', {
+		const summaryResponse = fetch('http://34.125.206.237:8080/summary', {
+			method: 'POST',
+			body: JSON.stringify({ text: body }),
+			headers: {
+				'Content-type': 'application/json'
+			}
+		});
+
+		const response = await fetch('http://34.125.206.237:8080/tags', {
 			method: 'POST',
 			body: JSON.stringify({ text: body }),
 			headers: {
@@ -39,11 +46,18 @@
 		});
 		// filter out cardinal(?) tags, should probably do this on server but whatever
 		data.tags.forEach((element: any) => {
-			if (!existingTags.includes(element[0]) && element[1] !== 'CARDINAL') {
+			if (
+				!existingTags.includes(element[0]) &&
+				element[1] !== 'CARDINAL' &&
+				element[1] !== 'ORDINAL'
+			) {
 				suggestedTags.add(element[0]);
 			}
 		});
 		console.log(suggestedTags);
+
+		const summaryData = await (await summaryResponse).json();
+		if (summaryData.summary != body) summary = summaryData.summary;
 	});
 
 	async function saveTags() {
@@ -107,7 +121,7 @@
 					leaveTo="opacity-0 scale-95"
 				>
 					<div
-						class="pointer-events-auto flex h-[500px] w-[375px] flex-col justify-between rounded-lg bg-white p-5 shadow-xl transition-all"
+						class="pointer-events-auto flex h-[650px] w-[400px] flex-col justify-between rounded-lg bg-white p-5 shadow-xl transition-all"
 					>
 						<div class="flex flex-col gap-3">
 							<DialogTitle class="text-xl text-neutral-700">Tags</DialogTitle>
@@ -121,19 +135,24 @@
 								placeholder={'Type a new tag'}
 							/>
 							<h5>Suggested Tags:</h5>
-							<!-- TODO: I can't get it to remove things when deleting this suggestion from suggestedTags list. Maybe because it is a set? -->
-							{#each [...suggestedTags] as tag (tag)}
-								<a
-									href="#"
-									class="text-neutral-700 underline hover:text-neutral-900"
-									on:click={() => {
-										console.log(tag);
-										addTag(tag);
-									}}
-								>
-									{tag}
-								</a>
-							{/each}
+							<div class="overflow-scroll whitespace-normal">
+								<!-- TODO: I can't get it to remove things when deleting this suggestion from suggestedTags list. Maybe because it is a set? -->
+								{#each [...suggestedTags] as tag (tag)}
+									<!-- svelte-ignore a11y-invalid-attribute -->
+									<a
+										href="#"
+										class="ml-1 whitespace-normal rounded-sm border-2 border-solid border-neutral-700 text-neutral-700 hover:border-primary hover:text-neutral-900"
+										on:click={() => {
+											console.log(tag);
+											addTag(tag);
+										}}
+									>
+										{tag}
+									</a>
+								{/each}
+							</div>
+							<h5>Auto Summary</h5>
+							<p>{summary}</p>
 						</div>
 
 						<div class="mt-5 flex justify-end">
