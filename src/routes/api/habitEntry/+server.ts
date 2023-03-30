@@ -33,7 +33,8 @@ export const GET = (async ({ url, locals }) => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let entries: any[] | null = await prisma.habitEntry.findMany({
 		select: {
-			date: true
+			date: true,
+			value: true
 		},
 		where: {
 			habit_id: id,
@@ -44,14 +45,10 @@ export const GET = (async ({ url, locals }) => {
 		}
 	});
 
-	// // If not retrieivng mood entries, only return dates since we don't need the values
-	// if (habit.type != 'Mood') {
-	entries = entries.map((e) => e.date);
-	//}
+	const entryVals = entries.map((entry) => entry.value);
+	entries = entries.map((e) => e.date.toString());
 
-	//console.log(entries);
-
-	return new Response(JSON.stringify(entries), { status: 200 });
+	return new Response(JSON.stringify({ entries: entries, values: entryVals }), { status: 200 });
 }) satisfies RequestHandler;
 
 export const PATCH = (async ({ request, locals }) => {
@@ -64,7 +61,7 @@ export const PATCH = (async ({ request, locals }) => {
 	const id = parseInt(body.id);
 	const month: Date = body.month;
 	const entries: Date[] = body.entries;
-
+	const values: number[] = body.values;
 	const habit = await prisma.habit.findUnique({
 		where: {
 			id: id
@@ -108,13 +105,13 @@ export const PATCH = (async ({ request, locals }) => {
 	});
 
 	// Add entries that are not in the list
-	for (const entry of entries) {
+	for (const {entry, index} of entries.map((entry, index) => ({entry, index}))) {
 		if (!prev_entries.map((e) => e.date).includes(entry)) {
 			await prisma.habitEntry.create({
 				data: {
 					date: entry,
 					habit_id: id,
-					value: 1
+					value: (values ? values[index] : 1)
 				}
 			});
 		}

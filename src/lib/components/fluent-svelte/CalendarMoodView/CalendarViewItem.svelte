@@ -1,4 +1,5 @@
 <script>
+	// @ts-nocheck
 	export let selected = false;
 	export let disabled = false;
 	export let blackout = false;
@@ -6,6 +7,28 @@
 	export let outOfRange = false;
 	export let variant = 'day';
 	export let header = '';
+	export let value;
+	if (value) {
+		console.log('Cal Item');
+		console.log(value);
+	}
+
+	function getBgColor(value) {
+		switch (value) {
+			case 1:
+				return 'bg-accent-purple';
+			case 2:
+				return 'bg-accent-blue';
+			case 3:
+				return 'bg-neutral-400';
+			case 4:
+				return 'bg-accent-green';
+			case 5:
+				return 'bg-accent-yellow';
+			default:
+				return 'bg-white';
+		}
+	}
 </script>
 
 <button
@@ -28,6 +51,10 @@
 	<slot />
 </button>
 
+<!-- {#if value} -->
+<p>{value}</p>
+
+<!-- {/if} -->
 <style lang="postcss">
 	.calendar-view-item {
 		align-items: center;
@@ -114,6 +141,11 @@
 		/* color: var(--fds-accent-text-primary); */
 	}
 	.calendar-view-item.type-day.selected {
+		/* border: 1px solid var(--fds-accent-default); */
+		/* color: var(--fds-accent-text-primary); */
+		@apply bg-primary text-white;
+	}
+	.calendar-view-item.type-day.sad {
 		/* border: 1px solid var(--fds-accent-default); */
 		/* color: var(--fds-accent-text-primary); */
 		@apply bg-primary text-white;

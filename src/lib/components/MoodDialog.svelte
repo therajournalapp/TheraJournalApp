@@ -28,7 +28,7 @@
 	// list of entries for the habit from load function
 	export let entries: Date[];
 
-	export let entry_values: any[];
+	export let entry_values: Map<string, number>;
 
 	// view only mode, used for viewing shared entries
 	export let view_only: boolean = false;
@@ -69,6 +69,8 @@
 	// Stops user input while the calendar is loading/saving a month's entries
 	let loading = false;
 
+	let mood_select_day: number;
+
 	// Updates the title of the habit
 	async function updateTitle() {
 		if (view_only) {
@@ -89,7 +91,7 @@
 	// Gets the entries for a month, replaces the value array
 	async function getEntriesForMonth(month: Date) {
 		await saveEntries.flush();
-
+		console.log('YES');
 		loading = true;
 
 		const params = [
@@ -113,8 +115,21 @@
 		}
 
 		const json = await result.json();
-		const dates: Date[] = json.map((d: string) => new Date(d));
+		const entries = json.entries;
+		const dates: Date[] = entries.map((d: string) => new Date(d));
 		value = dates;
+
+		const values = json.values;
+		// entry_values = values;
+
+		const new_entry_values = new Map();
+		for (let i = 0; i < entries.length; i++) {
+			new_entry_values.set(entries[i].toString(), values[i]);
+		}
+
+		entry_values = new_entry_values;
+		// console.log('values: ');
+		// console.log(entry_values);
 
 		loading = false;
 	}
@@ -159,14 +174,23 @@
 
 	// Updates the entries for the currently shown month
 	async function updateEntries() {
+		console.log('updating entries');
 		if (loading || view_only) {
 			return;
 		}
 
 		let days_in_month = getDaysInMonth(value);
+
+		let entryValueArr = Array.from(entry_values.values());
+
+		console.log('days_in_month:');
+		console.log(days_in_month);
+		console.log('entry values: ');
+		console.log(entryValueArr);
+
 		const result = await fetch('/api/habitEntry', {
 			method: 'PATCH',
-			body: JSON.stringify({ id: id, month: month, entries: days_in_month }),
+			body: JSON.stringify({ id: id, month: month, entries: days_in_month, values: entryValueArr }),
 			headers: {
 				'content-type': 'application/json'
 			}
@@ -252,8 +276,19 @@
 	};
 
 	function pick_day(day: any) {
-		console.log('yey!!! we have a callback!! :3');
-		console.log(day);
+		mood_select_day = day;
+		mood_select = !mood_select;
+	}
+
+	function setMood(value: number) {
+		console.log('mood_select_day');
+		console.log(mood_select_day);
+		console.log('^That was the day');
+		console.log('Entry Values');
+		console.log(entry_values);
+		entry_values.set(mood_select_day, value);
+		mood_select = false;
+		saveEntries();
 	}
 
 	// Open the dialog when the component is mounted (page is loaded)
@@ -380,10 +415,12 @@
 											bind:value
 											bind:month
 											on:change={async () => {
-												saveEntries();
+												// saveEntries();
+												// TODO: Fix this
 											}}
 											pick_day_callback={pick_day}
 											max={new Date()}
+											bind:entry_values
 										/>
 									</div>
 								</div>
@@ -397,47 +434,73 @@
 						{:else}
 							<div class="flex justify-center">
 								<div class="flex gap-2.5 text-white">
-									<div
+									<button
 										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-purple"
+										on:click={() => {
+											setMood(1);
+										}}
 									>
-										<span>awful</span>
-									</div>
-									<div
+										<span> awful </span>
+									</button>
+									<button
 										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-blue"
+										on:click={() => {
+											setMood(2);
+										}}
 									>
 										<span>bad</span>
-									</div>
-									<div
+									</button>
+									<button
 										class="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-400"
+										on:click={() => {
+											setMood(3);
+										}}
 									>
 										<span>meh</span>
-									</div>
-									<div
+									</button>
+									<button
 										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-green"
+										on:click={() => {
+											setMood(4);
+										}}
 									>
 										<span>good</span>
-									</div>
-									<div
+									</button>
+									<button
 										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-yellow"
+										on:click={() => {
+											setMood(5);
+										}}
 									>
 										<span>great</span>
-									</div>
+									</button>
 								</div>
 							</div>
 						{/if}
 
 						<div class="mt-0.5 flex justify-end">
-							<button
-								class="btn-alt"
-								on:click={() => {
-									isOpen = false;
-									setTimeout(() => {
-										goto(back_link);
-									}, 300);
-								}}
-							>
-								Done
-							</button>
+							{#if mood_select}
+								<button
+									class="btn-alt"
+									on:click={() => {
+										mood_select = false;
+									}}
+								>
+									Cancel
+								</button>
+							{:else}
+								<button
+									class="btn-alt"
+									on:click={() => {
+										isOpen = false;
+										setTimeout(() => {
+											goto(back_link);
+										}, 300);
+									}}
+								>
+									Done
+								</button>
+							{/if}
 						</div>
 					</div>
 				</div>

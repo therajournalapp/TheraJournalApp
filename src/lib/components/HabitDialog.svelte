@@ -108,7 +108,8 @@
 		}
 
 		const json = await result.json();
-		const dates: Date[] = json.map((d: string) => new Date(d));
+		console.log(json);
+		const dates: Date[] = json.entries.map((d: string) => new Date(d));
 		value = dates;
 
 		loading = false;
