@@ -8,25 +8,21 @@
 	export let variant = 'day';
 	export let header = '';
 	export let value;
-	if (value) {
-		console.log('Cal Item');
-		console.log(value);
-	}
 
 	function getBgColor(value) {
 		switch (value) {
 			case 1:
-				return 'bg-accent-purple';
+				return 'purple';
 			case 2:
-				return 'bg-accent-blue';
+				return 'blue';
 			case 3:
-				return 'bg-neutral-400';
+				return 'grey';
 			case 4:
-				return 'bg-accent-green';
+				return 'green';
 			case 5:
-				return 'bg-accent-yellow';
+				return 'yellow';
 			default:
-				return 'bg-white';
+				return 'white';
 		}
 	}
 </script>
@@ -35,7 +31,7 @@
 	on:click
 	on:keydown
 	type="button"
-	class="calendar-view-item type-{variant === 'day' ? 'day' : 'month-year'}"
+	class="calendar-view-item type-{variant === 'day' ? 'day' : 'month-year'} {getBgColor(value)}"
 	class:selected
 	class:current
 	class:blackout
@@ -136,15 +132,32 @@
 		inset-block-start: 9.58px;
 	}
 	.calendar-view-item.selected {
-		/* border: 1px solid var(--fds-accent-default); */
 		@apply border-primary;
-		/* color: var(--fds-accent-text-primary); */
 	}
 	.calendar-view-item.type-day.selected {
 		/* border: 1px solid var(--fds-accent-default); */
 		/* color: var(--fds-accent-text-primary); */
-		@apply bg-primary text-white;
+		@apply border-none bg-primary text-white;
 	}
+
+	/* Day Colors */
+	.calendar-view-item.type-day.selected.purple {
+		@apply bg-accent-purple;
+	}
+	.calendar-view-item.type-day.selected.blue {
+		@apply bg-accent-blue;
+	}
+	.calendar-view-item.type-day.selected.grey {
+		@apply bg-neutral-400;
+	}
+	.calendar-view-item.type-day.selected.green {
+		@apply bg-accent-green;
+	}
+	.calendar-view-item.type-day.selected.yellow {
+		@apply bg-accent-yellow;
+	}
+	/* End Day Colors */
+
 	.calendar-view-item.type-day.sad {
 		/* border: 1px solid var(--fds-accent-default); */
 		/* color: var(--fds-accent-text-primary); */
