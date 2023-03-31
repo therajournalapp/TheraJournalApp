@@ -88,6 +88,10 @@ export async function sendVerificationEmailWithUser(redirect: string, user: User
     return sendEmailVerification(user, actionCodeSettings)
 }
 
+export async function sendResetPasswordEmail(email: string) {
+    return sendPasswordResetEmail(fb_auth, email)
+}
+
 export async function getCurrentUserEmail() {
 
     const user = await getCurrentUser()

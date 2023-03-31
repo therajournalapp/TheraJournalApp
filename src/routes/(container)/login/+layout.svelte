@@ -102,6 +102,10 @@
 			<div class="mt-4 text-center">
 				<p>Don't have an account? <a href="/signup" class="link">Register here</a></p>
 			</div>
+
+			<div class="mt-4 text-center">
+				<p>Forgot your password? <a href="/resetpassword" class="link">Reset password</a></p>
+			</div>
 		</div>
 	</div>
 {/if}
