@@ -26,9 +26,17 @@ test('Settings page contaings expected information', async ({ page }) => {
 test('Settings page data download', async ({ page }) => {
 	await page.goto('/settings');
 
+	await page.getByRole('button', { name: 'Download a copy of my data' }).waitFor();
 	await page.getByRole('button', { name: 'Download a copy of my data' }).click();
 	await page.getByLabel('Please confirm your password.').fill('test1234567%');
+
+	// Click some text to take focus off the password field
+	await page
+		.getByText('This will download a zip file containing all of the data you have on TheraJourna')
+		.click();
 	await page.getByRole('button', { name: 'Confirm Download' }).click();
+
+	// This test does not confirm that the download occurs.
 });
 
 test('Settings page nav to dashboard', async ({ page }) => {
