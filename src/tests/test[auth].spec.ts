@@ -51,8 +51,6 @@ test('Settings page nav to dashboard', async ({ page }) => {
 test('Settings page signout', async ({ page }) => {
 	await page.goto('/settings');
 
-	// had to add a wait bc sometime the button was getting clicked too quickly
-	await page.getByRole('button', { name: 'Sign out' }).waitFor();
 	await page.getByRole('button', { name: 'Sign out' }).click();
 
 	await expect(page).toHaveURL('/');
