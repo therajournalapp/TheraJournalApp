@@ -7,6 +7,7 @@ const authTestPattern = /.*\[auth\].*\.spec\.ts/;
 const noAuthTestPattern = /.*\[noauth\].*\.spec\.ts/;
 
 export default defineConfig({
+	retries: 3, // failed tests get 3 additional tries to pass. Flaky tests are reported separately from passed tests.
 	webServer: {
 		command: 'npm run build && npm run preview',
 		port: 5173,
