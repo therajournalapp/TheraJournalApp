@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll, invalidate } from '$app/navigation';
 	import {
 		Dialog,
 		DialogOverlay,
@@ -28,7 +28,8 @@
 	// list of entries for the habit from load function
 	export let entries: Date[];
 
-	export let entry_values: Map<string, number>;
+	// Map of entry dates to entry values from load function
+	export let load_entry_values: Map<string, number>;
 
 	// view only mode, used for viewing shared entries
 	export let view_only: boolean = false;
@@ -46,6 +47,9 @@
 
 	// Array of dates that are selected
 	let value: Date[] = entries;
+
+	// Working map of entry dates to entry values
+	let entry_values: Map<string, number> = load_entry_values;
 
 	// Used to track if the dialog is open or not
 	let isOpen = false;
@@ -91,7 +95,6 @@
 	// Gets the entries for a month, replaces the value array
 	async function getEntriesForMonth(month: Date) {
 		await saveEntries.flush();
-		console.log('YES');
 		loading = true;
 
 		const params = [
@@ -128,8 +131,6 @@
 		}
 
 		entry_values = new_entry_values;
-		// console.log('values: ');
-		// console.log(entry_values);
 
 		loading = false;
 	}
@@ -174,7 +175,6 @@
 
 	// Updates the entries for the currently shown month
 	async function updateEntries() {
-		console.log('updating entries');
 		if (loading || view_only) {
 			return;
 		}
@@ -182,11 +182,6 @@
 		let days_in_month = getDaysInMonth(value);
 
 		let entryValueArr = Array.from(entry_values.values());
-
-		console.log('days_in_month:');
-		console.log(days_in_month);
-		console.log('entry values: ');
-		console.log(entryValueArr);
 
 		const result = await fetch('/api/habitEntry', {
 			method: 'PATCH',
@@ -196,7 +191,6 @@
 			}
 		});
 
-		// console.log('result: ' + result.ok);
 		invalidateAll();
 	}
 
@@ -275,18 +269,23 @@
 		}
 	};
 
-	function pick_day(day: any) {
-		mood_select_day = day;
-		mood_select = !mood_select;
+	function select_day(day: any) {
+		// If the day has a habit entry, delete it
+		if (entry_values.has(day.toString())) {
+			entry_values.delete(day.toString());
+			updateEntries();
+		}
+		// If the day doesn't have a habit entry, create one
+		else {
+			mood_select_day = day;
+			mood_select = !mood_select;
+		}
 	}
 
+	const selectDay = debounce(select_day, 1000);
+
 	function setMood(value: number) {
-		console.log('mood_select_day');
-		console.log(mood_select_day);
-		console.log('^That was the day');
-		console.log('Entry Values');
-		console.log(entry_values);
-		entry_values.set(mood_select_day, value);
+		entry_values.set(mood_select_day.toString(), value);
 		mood_select = false;
 		saveEntries();
 	}
@@ -384,7 +383,7 @@
 												value.push(today);
 											}
 											value = value;
-											saveEntries();
+											select_day(today);
 										}}
 									>
 										{#if !value.some((date) => sameDayMonthYear(date, today))}
@@ -415,10 +414,9 @@
 											bind:value
 											bind:month
 											on:change={async () => {
-												// saveEntries();
-												// TODO: Fix this
+												//saveEntries();
 											}}
-											pick_day_callback={pick_day}
+											pick_day_callback={select_day}
 											max={new Date()}
 											bind:entry_values
 										/>

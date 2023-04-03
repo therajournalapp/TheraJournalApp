@@ -32,8 +32,9 @@
 	/** Obtains a bound DOM reference to the calendar's outer container element. */
 	export let element = null;
 	export let pick_day_callback = (day) => {
-		console.log('no callback!');
+		console.log('no pick day callback!');
 	};
+
 	const dispatch = createEventDispatcher();
 	const forwardEvents = createEventForwarder(get_current_component(), ['change']);
 	const bodyElementBinding = (node) => (bodyElement = node); // bind:this breaks with our page transition for some reason
@@ -58,15 +59,9 @@
 	$: month = page;
 	export let view_only = false;
 
-	// Map of dates to values
-	let entryVals;
+	// map of dates to mood values
 	export let entry_values;
-	$: {
-		entryVals = entry_values;
-	}
-	// $: console.log('entry_values changed: ', entry_values);
 
-	// end added
 	$: firstValue = Array.isArray(value) ? value[0] : value;
 	$: view, updatePage(0);
 	$: nextPage = getPageByOffset(1, page, view);
@@ -338,11 +333,6 @@
 		}
 	}
 	function selectDay(day) {
-		// console.log('Select Day');
-		// console.log(day.toString());
-		// console.log(entry_values);
-		// console.log(entry_values.has(day.toString()));
-		// console.log('End select day');
 		if (multiple) {
 			if (!Array.isArray(value)) {
 				if (value !== null) {
@@ -392,9 +382,6 @@
 	}
 
 	function getValue(day) {
-		// console.log('Get Value');
-		// console.log(day.toString());
-		// console.log(entry_values);
 		if (entry_values.has(day.toString())) {
 			return entry_values.get(day.toString());
 		}

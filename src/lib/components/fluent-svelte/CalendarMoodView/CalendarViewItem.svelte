@@ -47,9 +47,6 @@
 	<slot />
 </button>
 
-<!-- {#if value} -->
-<p>{value}</p>
-
 <!-- {/if} -->
 <style lang="postcss">
 	.calendar-view-item {

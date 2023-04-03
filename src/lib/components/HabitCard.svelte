@@ -178,19 +178,19 @@
 
 <style lang="postcss">
 	.bg-very-sad {
-		@apply bg-red-500;
+		@apply bg-accent-purple;
 	}
 	.bg-sad {
-		@apply bg-orange-500;
+		@apply bg-accent-blue;
 	}
 	.bg-neutral {
-		@apply bg-yellow-500;
+		@apply bg-neutral-400;
 	}
 	.bg-happy {
-		@apply bg-lime-400;
+		@apply bg-accent-green;
 	}
 	.bg-very-happy {
-		@apply bg-green-500;
+		@apply bg-accent-yellow;
 	}
 	.circle {
 		@apply h-5 w-5 rounded-full;

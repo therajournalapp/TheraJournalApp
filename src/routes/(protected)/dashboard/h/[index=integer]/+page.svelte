@@ -13,7 +13,7 @@
 			id={data.habit.id}
 			name={data.habit.name}
 			entries={data.habit.HabitEntry}
-			entry_values={data.entry_values}
+			load_entry_values={data.entry_values}
 			shared_to={data.habit.SharedHabit}
 		/>
 	{:else}

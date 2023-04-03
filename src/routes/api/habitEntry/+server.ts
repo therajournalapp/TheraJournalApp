@@ -111,7 +111,7 @@ export const PATCH = (async ({ request, locals }) => {
 				data: {
 					date: entry,
 					habit_id: id,
-					value: (values ? values[index] : 1)
+					value: values ? values[index] : 1
 				}
 			});
 		}

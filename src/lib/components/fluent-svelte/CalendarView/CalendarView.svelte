@@ -55,6 +55,12 @@
 	$: month = page;
 	export let view_only = false;
 	// end added
+	$: {
+		let tempValues = value;
+		console.log('values');
+		console.log(tempValues);
+	}
+
 	$: firstValue = Array.isArray(value) ? value[0] : value;
 	$: view, updatePage(0);
 	$: nextPage = getPageByOffset(1, page, view);
