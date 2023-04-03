@@ -25,7 +25,7 @@
 	let TagsInput: any;
 
 	onMount(async () => {
-		const response = await fetch('http://34.16.133.112:8080/tags', {
+		const response = await fetch('http://35.219.179.207:8080/tags', {
 			method: 'POST',
 			body: JSON.stringify({ text: body }),
 			headers: {
