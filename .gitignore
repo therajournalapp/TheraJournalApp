@@ -14,3 +14,9 @@ vite.config.ts.timestamp-*
 # Additional Ignores
 db.cmd
 *.db
+
+# playwright build files
+src/tests-out/
+
+# playwright state files
+playwright/*
