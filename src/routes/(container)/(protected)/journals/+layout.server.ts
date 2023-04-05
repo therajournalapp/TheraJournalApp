@@ -6,7 +6,30 @@ export const load = (async ({ locals }) => {
     if (!session) return { error: 401, message: "Unauthorized" };
     if (!user) return { error: 401, message: "Unauthorized" };
 
-    const journal_entries = await prisma.journalEntry.findMany({
+    let journal_entries = await prisma.journalEntry.findMany({
+        select: {
+            id: true,
+            user_id: true,
+            title: true,
+            body: true,
+            createdAt: true,
+            updatedAt: true,
+            tags: true,
+            SharedEntry: {
+                select: {
+                    user: {
+                        select: {
+                            email: true
+                        }
+                    }
+                }
+            },
+            LinkShare: {
+                select: {
+                    link: true
+                }
+            }
+        },
         where: {
             user_id: user.userId
         },
@@ -14,6 +37,24 @@ export const load = (async ({ locals }) => {
             updatedAt: 'desc'
         }
     });
+
+    journal_entries = journal_entries.map(entry => {
+        const { SharedEntry, ...rest } = entry;
+
+        if (SharedEntry.length > 0) {
+            rest.shared = SharedEntry.map(shared => {
+                return {
+                    email: shared.user.email as string,
+                }
+            });
+        } else {
+            rest.shared = [];
+        }
+
+        return rest
+    });
+
+    console.log(JSON.stringify(journal_entries));
 
     return {
         entries: journal_entries

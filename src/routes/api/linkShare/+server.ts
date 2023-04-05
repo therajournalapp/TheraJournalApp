@@ -11,7 +11,7 @@ export const POST = (async ({ request, locals }) => {
     const body = await request.json()
     const entry_id = body.entry_id;
 
-    console.log("trying to create new link share for habit: " + entry_id);
+    console.log("trying to create new link share for entry: " + entry_id);
 
     try {
         let link = generateRandomString(10)
@@ -26,8 +26,9 @@ export const POST = (async ({ request, locals }) => {
                         link: link
                     }
                 })
-            } catch (e) {
                 link_exists = false;
+            } catch (e) {
+                link_exists = true;
             }
         }
 

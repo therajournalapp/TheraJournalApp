@@ -57,6 +57,8 @@
 				body={entry.body}
 				date={entry.createdAt}
 				link_to="journals"
+				shared_to={entry.shared}
+				share_link={entry.LinkShare.length > 0 ? entry.LinkShare[0].link : ''}
 			/>
 		{/each}
 	</div>

@@ -45,20 +45,21 @@
 	// If the entry will use the link sharing feature
 	export let using_link_share = false;
 
-	// If the entry is curently shared by link
-	let link_share = false;
 	// The link the entry is shared to or empty string
-	let share_link = '';
+	export let share_link = '';
+	// If the entry is curently shared by link
+	let link_share = share_link == '' ? false : true;
 
 	async function onLinkShareChange() {
 		link_share = !link_share;
 		if (link_share) {
 			const link = await linkshareCallback();
 			if (link != '') {
-				share_link = link;
+				share_link = 'https://www.therajournal.app/s/' + link;
 			}
 		} else {
 			linkunshareCallback();
+			share_link = '';
 		}
 	}
 
@@ -276,7 +277,9 @@
 												<button
 													type="button"
 													class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark"
-													on:click={copyLink()}
+													on:click={() => {
+														copyLink();
+													}}
 												>
 													<PhClipboard class="mr-0.5 inline translate-y-[-1px] text-[14px]" />
 												</button>
