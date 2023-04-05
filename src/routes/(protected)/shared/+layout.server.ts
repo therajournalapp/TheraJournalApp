@@ -1,6 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 import type { Habit, JournalEntry } from '@prisma/client';
 import prisma from '$lib/prisma';
+import type { User } from 'lucia-auth';
 
 export const load = (async ({ locals }) => {
 	const { session, user } = await locals.validateUser();
@@ -19,7 +20,7 @@ export const load = (async ({ locals }) => {
 				return shared_entries.map((x) => x.entry_id);
 			});
 
-		const shared_posts: any | null = await prisma.journalEntry.findMany({
+		const shared_posts: JournalEntry[] | null = await prisma.journalEntry.findMany({
 			where: {
 				id: {
 					in: shared_post_ids
@@ -72,11 +73,14 @@ export const load = (async ({ locals }) => {
 
 		type Event = Habit | JournalEntry;
 		let shared_events: Event[] = [ ...shared_posts, ...shared_habits ];
+		let user_list = shared_events.map((x) => x.user_id);
+		let user_set = new Set(user_list);
 		shared_events = shared_events.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1).slice(0, 20);
 		console.log(shared_events);
 
 		return {
 			entries: shared_posts,
+			user_ids: user_set,
 			habits: shared_habits,
 			events: shared_events
 		};
