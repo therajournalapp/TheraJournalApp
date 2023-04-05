@@ -218,6 +218,7 @@
 							big
 							shareCallback={onShare}
 							unshareCallback={onUnshare}
+							using_link_share
 						/>
 						<EditorOptionMenu
 							deleteCallBack={() => {

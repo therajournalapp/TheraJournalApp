@@ -81,6 +81,25 @@
 			return Error('Error deleting share.');
 		}
 	};
+
+	let onLinkShare: Function = async (): Promise<string> => {
+		// const response = await fetch('/api/shareEntry', {
+		// 	method: 'POST',
+		// 	body: JSON.stringify({ entry_id: id }),
+		// 	headers: {
+		// 		'content-type': 'application/json'
+		// 	}
+		// });
+		// const json = await response.json();
+		// const { message } = json;
+		// if (response.ok) {
+		// 	invalidateAll();
+		// 	return message as string;
+		// } else {
+		// 	return Error('Error creating link share.');
+		// }
+		return 'from journal card';
+	};
 </script>
 
 <div
@@ -99,7 +118,14 @@
 			</div>
 		</div>
 		{#if shared_by == ''}
-			<ShareSelector {title} shareCallback={onShare} unshareCallback={onUnshare} {shared_to} />
+			<ShareSelector
+				{title}
+				shareCallback={onShare}
+				unshareCallback={onUnshare}
+				{shared_to}
+				using_link_share
+				linkshareCallback={onLinkShare}
+			/>
 		{/if}
 	</div>
 

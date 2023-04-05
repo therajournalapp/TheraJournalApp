@@ -16,7 +16,6 @@
 	import PhUserPlus from '~icons/ph/user-plus';
 	import PhUserCircle from '~icons/ph/user-circle';
 	import PhX from '~icons/ph/x';
-	import { Switch } from '@rgossiaux/svelte-headlessui';
 	import PhClipboard from '~icons/ph/clipboard';
 
 	// Used to set the title of the dialog, should be the same as the entry or habit title
@@ -43,15 +42,35 @@
 	// Used to show an error for the add user form
 	let error: string = '';
 
-	// If the entry is shared by link
+	// If the entry will use the link sharing feature
+	export let using_link_share = false;
+
+	// If the entry is curently shared by link
 	let link_share = false;
+	// The link the entry is shared to or empty string
 	let share_link = '';
-	$: {
+
+	async function onLinkShareChange() {
+		link_share = !link_share;
 		if (link_share) {
-			share_link = 'https://www.therajournal.app/s/101';
+			const link = await linkshareCallback();
+			if (link != '') {
+				share_link = link;
+			}
 		} else {
-			share_link = '';
+			linkunshareCallback();
 		}
+	}
+
+	export let linkshareCallback: Function = (): string => {
+		return 'https://www.therajournal.app/s/201';
+	};
+	export let linkunshareCallback: Function = (): boolean => {
+		return false;
+	};
+
+	function copyLink() {
+		navigator.clipboard.writeText(share_link);
 	}
 
 	// Used for styling button
@@ -229,45 +248,45 @@
 								{/if}
 							</div>
 
-							<div class="-m-5 flex flex-col gap-3 px-5 pt-2 align-baseline">
-								<div class="flex gap-3">
-									<span class="font-medium text-neutral-600"> Share by Link </span>
+							{#if using_link_share}
+								<div class="-m-5 flex flex-col gap-3 px-5 pt-2 align-baseline">
+									<div class="flex gap-3">
+										<span class="font-medium text-neutral-600"> Share by Link </span>
 
-									<Switch
-										as="button"
-										checked={link_share}
-										on:change={(e) => (link_share = e.detail)}
-										class="focus:shadow-outline relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none
-									{link_share ? 'bg-primary' : 'bg-gray-200'}"
-									>
-										<span
-											class="inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition duration-200 ease-in-out
-									{link_share ? 'translate-x-5' : 'translate-x-0'}"
-										/>
-									</Switch>
+										<button
+											on:click={onLinkShareChange}
+											class="focus:shadow-outline relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none
+												   {link_share ? 'bg-primary' : 'bg-gray-200'}"
+										>
+											<span
+												class="inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition duration-200 ease-in-out
+													  {link_share ? 'translate-x-5' : 'translate-x-0'}"
+											/>
+										</button>
+									</div>
+
+									<div class="flex min-h-[76px] flex-col">
+										{#if link_share}
+											<span class="pb-3 text-sm text-neutral-600">
+												Anyone with the link can view this entry
+											</span>
+
+											<div class="relative">
+												<input class="input select-text text-sm" bind:value={share_link} readonly />
+												<button
+													type="button"
+													class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark"
+													on:click={copyLink()}
+												>
+													<PhClipboard class="mr-0.5 inline translate-y-[-1px] text-[14px]" />
+												</button>
+											</div>
+										{:else}
+											<span class="text-sm text-neutral-600"> Not shared by link </span>
+										{/if}
+									</div>
 								</div>
-
-								<div class="flex min-h-[76px] flex-col">
-									{#if link_share}
-										<span class="pb-3 text-sm text-neutral-600">
-											Anyone with the link can view this entry
-										</span>
-
-										<div class="relative">
-											<input class="input select-text text-sm" bind:value={share_link} readonly />
-											<button
-												type="button"
-												class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark"
-												on:click={() => console.log('copy')}
-											>
-												<PhClipboard class="mr-0.5 inline translate-y-[-1px] text-[14px]" />
-											</button>
-										</div>
-									{:else}
-										<span class="text-sm text-neutral-600"> Not shared by link </span>
-									{/if}
-								</div>
-							</div>
+							{/if}
 
 							<div class="mt-5 flex justify-end">
 								<button
