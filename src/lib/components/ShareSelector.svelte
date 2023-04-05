@@ -43,7 +43,7 @@
 	// Used to show an error for the add user form
 	let error: string = '';
 
-	// If link share is enabled
+	// If the entry is shared by link
 	let link_share = false;
 	let share_link = '';
 	$: {
@@ -229,7 +229,7 @@
 								{/if}
 							</div>
 
-							<div class="-m-5 flex flex-col gap-3 px-5 pt-2">
+							<div class="-m-5 flex flex-col gap-3 px-5 pt-2 align-baseline">
 								<div class="flex gap-3">
 									<span class="font-medium text-neutral-600"> Share by Link </span>
 
