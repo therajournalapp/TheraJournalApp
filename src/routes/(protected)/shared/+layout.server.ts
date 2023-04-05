@@ -19,7 +19,7 @@ export const load = (async ({ locals }) => {
 				return shared_entries.map((x) => x.entry_id);
 			});
 
-		const shared_posts: JournalEntry[] | null = await prisma.journalEntry.findMany({
+		const shared_posts: any | null = await prisma.journalEntry.findMany({
 			where: {
 				id: {
 					in: shared_post_ids
@@ -70,9 +70,15 @@ export const load = (async ({ locals }) => {
 
 		console.log(shared_habits);
 
+		type Event = Habit | JournalEntry;
+		let shared_events: Event[] = [ ...shared_posts, ...shared_habits ];
+		shared_events = shared_events.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1).slice(0, 20);
+		console.log(shared_events);
+
 		return {
 			entries: shared_posts,
-			habits: shared_habits
+			habits: shared_habits,
+			events: shared_events
 		};
 	}
 	return { error: 401, message: 'Unauthorized' };
