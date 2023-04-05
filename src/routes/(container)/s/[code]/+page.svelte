@@ -1,26 +1,27 @@
 <script lang="ts">
-	import EditorWrapper from '$lib/components/EditorWrapper.svelte';
+	//import params from '$app/stores';
+	import { page } from '$app/stores';
 	import Editor from '$lib/components/Editor.svelte';
-	export let data: any;
+	import EditorWrapper from '$lib/components/EditorWrapper.svelte';
+	let code = $page.params.code;
+
+	export let data;
 </script>
 
-<svelte:head>
-	<title>{data.entry?.title ?? 'Entry'}</title>
-</svelte:head>
-
 {#if data.entry}
-	<EditorWrapper>
+	<EditorWrapper back_link="/dashboard">
 		<Editor
 			id={data.entry.id}
 			title={data.entry.title}
 			date={data.entry.createdAt}
 			body={data.entry.body}
-			shared_to={data.entry.shared_to ?? []}
-			share_link={data.entry.LinkShare.length > 0 ? data.entry.LinkShare[0].link : ''}
+			view_only
+			back_link="/shared"
+			tags={[]}
 		/>
 	</EditorWrapper>
 {:else}
-	<EditorWrapper>
+	<EditorWrapper back_link="/dashboard">
 		<div
 			class="fixed inset-0 top-1/2 left-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-10"
 		>

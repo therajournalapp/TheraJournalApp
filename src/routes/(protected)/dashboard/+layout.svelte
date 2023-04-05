@@ -79,6 +79,7 @@
 				date={entry.createdAt}
 				shared_to={entry.shared}
 				link_to="dashboard"
+				share_link={entry.LinkShare.length > 0 ? entry.LinkShare[0].link : ''}
 			/>
 		</div>
 	{/each}

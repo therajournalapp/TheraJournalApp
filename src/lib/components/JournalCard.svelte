@@ -27,6 +27,9 @@
 	// Only used on the shared page.
 	export let shared_by: string = '';
 
+	// If this entry is shared by link, this will be the link's code.
+	export let share_link: string = '';
+
 	// Sets the shadow color of the card,
 	// change if not putting card over default background.
 	export let shadowclr: string = 'shadow-offwhite-light';
@@ -81,6 +84,44 @@
 			return Error('Error deleting share.');
 		}
 	};
+
+	// The share selector will call this function when a entry is shared by link
+	let onLinkShare: Function = async (): Promise<string> => {
+		const response = await fetch('/api/linkShare', {
+			method: 'POST',
+			body: JSON.stringify({ entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { link } = json;
+		invalidateAll();
+		if (response.ok) {
+			return link as string;
+		} else {
+			return '';
+		}
+	};
+
+	// The share selector will call this function when a entry is unshared by link
+	let onLinkUnshare: Function = async (): Promise<boolean> => {
+		const response = await fetch('/api/linkShare', {
+			method: 'DELETE',
+			body: JSON.stringify({ entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		invalidateAll();
+		if (response.ok) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 </script>
 
 <div
@@ -99,7 +140,16 @@
 			</div>
 		</div>
 		{#if shared_by == ''}
-			<ShareSelector {title} shareCallback={onShare} unshareCallback={onUnshare} {shared_to} />
+			<ShareSelector
+				{title}
+				shareCallback={onShare}
+				unshareCallback={onUnshare}
+				{shared_to}
+				using_link_share
+				linkshareCallback={onLinkShare}
+				linkunshareCallback={onLinkUnshare}
+				share_link={share_link != '' ? 'https://www.therajournal.app/s/' + share_link : ''}
+			/>
 		{/if}
 	</div>
 

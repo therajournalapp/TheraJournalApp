@@ -42,6 +42,9 @@
 	// view only mode, used for viewing shared entries
 	export let view_only: boolean = false;
 
+	// If this entry is shared by link, this will be the link's code.
+	export let share_link: string = '';
+
 	let content: string = '';
 	if (body && body.length > 0) {
 		if (body.charAt(0) == '<') {
@@ -171,6 +174,44 @@
 			return Error('Error deleting share.');
 		}
 	};
+
+	// The share selector will call this function when a entry is shared by link
+	let onLinkShare: Function = async (): Promise<string> => {
+		const response = await fetch('/api/linkShare', {
+			method: 'POST',
+			body: JSON.stringify({ entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { link } = json;
+		invalidateAll();
+		if (response.ok) {
+			return link as string;
+		} else {
+			return '';
+		}
+	};
+
+	// The share selector will call this function when a entry is unshared by link
+	let onLinkUnshare: Function = async (): Promise<boolean> => {
+		const response = await fetch('/api/linkShare', {
+			method: 'DELETE',
+			body: JSON.stringify({ entry_id: id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		const { message } = json;
+		invalidateAll();
+		if (response.ok) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 </script>
 
 <svelte:head>
@@ -218,6 +259,10 @@
 							big
 							shareCallback={onShare}
 							unshareCallback={onUnshare}
+							using_link_share
+							linkshareCallback={onLinkShare}
+							linkunshareCallback={onLinkUnshare}
+							share_link={share_link != '' ? 'https://www.therajournal.app/s/' + share_link : ''}
 						/>
 						<EditorOptionMenu
 							deleteCallBack={() => {
