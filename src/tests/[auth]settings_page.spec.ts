@@ -1,10 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-test('Accessing dashboard authenticated works', async ({ page }) => {
-	await page.goto('/dashboard');
-	await expect(page).toHaveURL('/dashboard');
-});
-
 test('Dashboard navigation to settings page', async ({ page }) => {
 	await page.goto('/dashboard');
 
@@ -32,7 +27,7 @@ test('Settings page data download', async ({ page }) => {
 
 	// Click some text to take focus off the password field
 	await page
-		.getByText('This will download a zip file containing all of the data you have on TheraJourna')
+		.getByText('This will download a zip file containing all of the data you have on TheraJournal')
 		.click();
 	await page.getByRole('button', { name: 'Confirm Download' }).click();
 

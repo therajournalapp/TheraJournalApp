@@ -6,6 +6,8 @@ const authTestPattern = /.*\[auth\].*\.spec\.ts/;
 // Any file inside src/tests that contains '[noauth]' will be run in an unauthenticated browser state.
 const noAuthTestPattern = /.*\[noauth\].*\.spec\.ts/;
 
+// Any file inside src/tests that contains both '[auth]' and '[noauth]' will be run in both states.
+
 export default defineConfig({
 	retries: 3, // failed tests get 3 additional tries to pass. Flaky tests are reported separately from passed tests.
 	webServer: {
