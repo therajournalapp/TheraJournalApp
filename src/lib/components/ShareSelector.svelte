@@ -16,6 +16,8 @@
 	import PhUserPlus from '~icons/ph/user-plus';
 	import PhUserCircle from '~icons/ph/user-circle';
 	import PhX from '~icons/ph/x';
+	import { Switch } from '@rgossiaux/svelte-headlessui';
+	import PhClipboard from '~icons/ph/clipboard';
 
 	// Used to set the title of the dialog, should be the same as the entry or habit title
 	export let title: string;
@@ -37,8 +39,21 @@
 
 	// Used to track if the dialog is open or not
 	export let isOpen = false;
+
 	// Used to show an error for the add user form
 	let error: string = '';
+
+	// If link share is enabled
+	let link_share = false;
+	let share_link = '';
+	$: {
+		if (link_share) {
+			share_link = 'https://www.therajournal.app/s/101';
+		} else {
+			share_link = '';
+		}
+	}
+
 	// Used for styling button
 	let hover = false;
 	let icon = 'ph:lock-key';
@@ -149,72 +164,111 @@
 					<div
 						class="pointer-events-auto h-[500px] w-[375px] rounded-lg bg-white p-5 shadow-xl transition-all"
 					>
-						<div class="flex h-full flex-col justify-between">
-							<div class="flex flex-col gap-3">
-								<DialogTitle class="text-xl text-neutral-700">Share "{title}"</DialogTitle>
+						<div class="flex h-full flex-col justify-between gap-3">
+							<DialogTitle class="text-xl text-neutral-700">Share "{title}"</DialogTitle>
 
-								<form on:submit|preventDefault={handleSubmit}>
-									<div class="flex gap-2">
-										<input
-											class="input !h-[50px]"
-											placeholder="Add by email"
-											name="user"
-											type="email"
-										/>
+							<form on:submit|preventDefault={handleSubmit}>
+								<div class="flex gap-2">
+									<input
+										class="input !h-[50px]"
+										placeholder="Add by email"
+										name="user"
+										type="email"
+									/>
 
-										<button
-											class="flex h-[50px] w-[50px] flex-shrink-0 items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10 active:bg-black active:bg-opacity-20"
-											type="submit"
-											value="Submit"
+									<button
+										class="flex h-[50px] w-[50px] flex-shrink-0 items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10 active:bg-black active:bg-opacity-20"
+										type="submit"
+										value="Submit"
+									>
+										<PhUserPlus class="text-[25px]" />
+									</button>
+								</div>
+							</form>
+							<span class:invisible={error === ''} class="invisible -my-3 text-sm text-red-500">
+								Error: {error}
+							</span>
+							<span class="font-medium text-neutral-600">
+								People who can read this entry ({shared_to ? shared_to.length + 1 : 1})
+							</span>
+							<div class="ppl-scroll scrollba h-64 min-h-[75px] w-full overflow-y-scroll">
+								<div class="flex h-12 w-full items-center rounded-md pl-1 hover:bg-neutral-200">
+									<div class="h-[40px] w-[40px]">
+										<PhUserCircle class="text-[34px] text-neutral-800" />
+									</div>
+									<span class="p-2 text-sm font-medium">
+										{shared_to ? (shared_to.length > 0 ? 'You' : 'Only you') : 'Only you'}
+									</span>
+								</div>
+								{#if shared_to}
+									{#each shared_to as user (user.email)}
+										<div
+											animate:flip
+											in:fade|local
+											out:fly|local={{ x: 100 }}
+											class="flex h-12 w-full items-center justify-between rounded-md pl-1 hover:bg-neutral-200"
 										>
-											<PhUserPlus class="text-[25px]" />
-										</button>
-									</div>
-								</form>
-								<span class:invisible={error === ''} class="invisible -my-3 text-sm text-red-500">
-									Error: {error}
-								</span>
-								<span class="font-medium text-neutral-600">
-									People who can read this entry ({shared_to ? shared_to.length + 1 : 1})
-								</span>
-								<div class="ppl-scroll scrollba h-64 min-h-[75px] w-full overflow-y-scroll">
-									<div class="flex h-12 w-full items-center rounded-md pl-1 hover:bg-neutral-200">
-										<div class="h-[40px] w-[40px]">
-											<PhUserCircle class="text-[34px] text-neutral-800" />
-										</div>
-										<span class="p-2 text-sm font-medium">
-											{shared_to ? (shared_to.length > 0 ? 'You' : 'Only you') : 'Only you'}
-										</span>
-									</div>
-									{#if shared_to}
-										{#each shared_to as user (user.email)}
-											<div
-												animate:flip
-												in:fade|local
-												out:fly|local={{ x: 100 }}
-												class="flex h-12 w-full items-center justify-between rounded-md pl-1 hover:bg-neutral-200"
-											>
-												<div class="ml-1 flex items-center">
-													<UserInitial email={user.email} />
-													<div class="max-w-[240px] overflow-hidden text-ellipsis">
-														<span class="p-3 text-sm font-medium" title={user.email}>
-															{user.email}
-														</span>
-													</div>
+											<div class="ml-1 flex items-center">
+												<UserInitial email={user.email} />
+												<div class="max-w-[240px] overflow-hidden text-ellipsis">
+													<span class="p-3 text-sm font-medium" title={user.email}>
+														{user.email}
+													</span>
 												</div>
-												<button
-													class="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10"
-													on:click={() => {
-														unshareCallback(user.email);
-													}}
-												>
-													<PhX class="inline text-[13px]" />
-												</button>
 											</div>
-										{/each}
+											<button
+												class="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10"
+												on:click={() => {
+													unshareCallback(user.email);
+												}}
+											>
+												<PhX class="inline text-[13px]" />
+											</button>
+										</div>
+									{/each}
+								{/if}
+							</div>
+
+							<div class="-m-5 flex flex-col gap-3 px-5 pt-2">
+								<div class="flex gap-3">
+									<span class="font-medium text-neutral-600"> Share by Link </span>
+
+									<Switch
+										as="button"
+										checked={link_share}
+										on:change={(e) => (link_share = e.detail)}
+										class="focus:shadow-outline relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none
+									{link_share ? 'bg-primary' : 'bg-gray-200'}"
+									>
+										<span
+											class="inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition duration-200 ease-in-out
+									{link_share ? 'translate-x-5' : 'translate-x-0'}"
+										/>
+									</Switch>
+								</div>
+
+								<div class="flex min-h-[76px] flex-col">
+									{#if link_share}
+										<span class="pb-3 text-sm text-neutral-600">
+											Anyone with the link can view this entry
+										</span>
+
+										<div class="relative">
+											<input class="input select-text text-sm" bind:value={share_link} readonly />
+											<button
+												type="button"
+												class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark"
+												on:click={() => console.log('copy')}
+											>
+												<PhClipboard class="mr-0.5 inline translate-y-[-1px] text-[14px]" />
+											</button>
+										</div>
+									{:else}
+										<span class="text-sm text-neutral-600"> Not shared by link </span>
 									{/if}
 								</div>
 							</div>
+
 							<div class="mt-5 flex justify-end">
 								<button
 									class="btn-alt"
