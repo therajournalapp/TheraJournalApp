@@ -31,6 +31,10 @@
 	export { className as class };
 	/** Obtains a bound DOM reference to the calendar's outer container element. */
 	export let element = null;
+	export let pick_day_callback = (day) => {
+		console.log('no pick day callback!');
+	};
+
 	const dispatch = createEventDispatcher();
 	const forwardEvents = createEventForwarder(get_current_component(), ['change']);
 	const bodyElementBinding = (node) => (bodyElement = node); // bind:this breaks with our page transition for some reason
@@ -54,12 +58,10 @@
 	export let month = page;
 	$: month = page;
 	export let view_only = false;
-	// end added
-	$: {
-		let tempValues = value;
-		console.log('values');
-		console.log(tempValues);
-	}
+	console.log(view_only);
+
+	// map of dates to mood values
+	export let entry_values;
 
 	$: firstValue = Array.isArray(value) ? value[0] : value;
 	$: view, updatePage(0);
@@ -379,6 +381,13 @@
 			}
 		};
 	}
+
+	function getValue(day) {
+		if (entry_values.has(day.toString())) {
+			return entry_values.get(day.toString());
+		}
+		return 0;
+	}
 </script>
 
 <!--
@@ -494,67 +503,73 @@ A calendar view lets a user view and interact with a calendar that they can navi
 						}}
 					>
 						{#if view === 'days'}
-							{#each Array(6) as _, week}
-								<!-- begin changes -->
-								{@const this_week = getCalendarDays(page).slice(week * 7, week * 7 + 7)}
-								{@const days_not_in_month = this_week.map(
-									(day) => !compareDates(day, page, 'month')
-								)}
-								{@const not_all_in_month = (days_in_month) =>
-									days_in_month.every((d) => d === true)}
-								<!-- end changes -->
-								{#if !not_all_in_month(days_not_in_month)}
-									<tr>
-										{#each getCalendarDays(page).slice(week * 7, week * 7 + 7) as day, i}
-											{@const selected =
-												value !== null &&
-												(Array.isArray(value)
-													? indexOfDate(value, day, 'day') > -1
-													: compareDates(value, day, 'day'))}
-											{@const inMonth = compareDates(day, page, 'month')}
-											{@const firstFocusableDay = getCalendarDays(page).find(
-												(d) =>
-													compareDates(d, page, 'month') &&
-													(!blackout || indexOfDate(blackout, d, 'day') === -1) &&
-													(!min || min <= d) &&
-													(!max || max >= d)
-											)}
-											<td role="gridcell">
-												{#if inMonth}
+							{#key entry_values}
+								{#each Array(6) as _, week}
+									<!-- begin changes -->
+									{@const this_week = getCalendarDays(page).slice(week * 7, week * 7 + 7)}
+									{@const days_not_in_month = this_week.map(
+										(day) => !compareDates(day, page, 'month')
+									)}
+									{@const not_all_in_month = (days_in_month) =>
+										days_in_month.every((d) => d === true)}
+									<!-- end changes -->
+									{#if !not_all_in_month(days_not_in_month)}
+										<tr>
+											{#each getCalendarDays(page).slice(week * 7, week * 7 + 7) as day, i}
+												{@const selected =
+													value !== null &&
+													(Array.isArray(value)
+														? indexOfDate(value, day, 'day') > -1
+														: compareDates(value, day, 'day'))}
+												{@const inMonth = compareDates(day, page, 'month')}
+												{@const firstFocusableDay = getCalendarDays(page).find(
+													(d) =>
+														compareDates(d, page, 'month') &&
+														(!blackout || indexOfDate(blackout, d, 'day') === -1) &&
+														(!min || min <= d) &&
+														(!max || max >= d)
+												)}
+												<td role="gridcell">
+													{#if inMonth}
+														<!-- added -->
+														<div class:pointer-events-none={view_only}>
+															<CalendarViewItem
+																on:click={() => {
+																	selectDay(day);
+																	pick_day_callback(day);
+																}}
+																on:keydown={(e) => handleKeyDown(e, day)}
+																outOfRange={!inMonth}
+																current={compareDates(day, new Date(), 'day')}
+																disabled={min > day || max < day}
+																blackout={blackout && indexOfDate(blackout, day, 'day') > -1}
+																header={page &&
+																	headers &&
+																	day.getDate() === 1 &&
+																	getMonthLocale(day.getMonth(), {
+																		locale,
+																		format: 'short'
+																	})}
+																tabindex={firstFocusableDay &&
+																compareDates(firstFocusableDay, day, 'day')
+																	? 0
+																	: -1}
+																{selected}
+																value={getValue(day)}
+															>
+																{day.getDate()}
+															</CalendarViewItem>
+														</div>
+													{:else}
+														<div class="h-[40px] w-[40px]" />
+													{/if}
 													<!-- added -->
-													<div class:pointer-events-none={view_only}>
-														<CalendarViewItem
-															on:click={() => selectDay(day)}
-															on:keydown={(e) => handleKeyDown(e, day)}
-															outOfRange={!inMonth}
-															current={compareDates(day, new Date(), 'day')}
-															disabled={min > day || max < day}
-															blackout={blackout && indexOfDate(blackout, day, 'day') > -1}
-															header={page &&
-																headers &&
-																day.getDate() === 1 &&
-																getMonthLocale(day.getMonth(), {
-																	locale,
-																	format: 'short'
-																})}
-															tabindex={firstFocusableDay &&
-															compareDates(firstFocusableDay, day, 'day')
-																? 0
-																: -1}
-															{selected}
-														>
-															{day.getDate()}
-														</CalendarViewItem>
-													</div>
-												{:else}
-													<div class="h-[40px] w-[40px]" />
-												{/if}
-												<!-- added -->
-											</td>
-										{/each}
-									</tr>
-								{/if}
-							{/each}
+												</td>
+											{/each}
+										</tr>
+									{/if}
+								{/each}
+							{/key}
 						{:else}
 							{#each Array(4) as _, row}
 								<tr>

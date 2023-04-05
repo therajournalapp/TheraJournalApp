@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll, invalidate } from '$app/navigation';
 	import {
 		Dialog,
 		DialogOverlay,
@@ -11,12 +11,10 @@
 	// import 'fluent-svelte/theme.css';
 	import '$lib/components/fluent-svelte/theme.css';
 	// import { CalendarView } from 'fluent-svelte';
-	import CalendarView from '$lib/components/fluent-svelte/CalendarView/CalendarView.svelte';
+	import CalendarView from '$lib/components/fluent-svelte/CalendarMoodView/CalendarView.svelte';
 	import ShareSelector from './ShareSelector.svelte';
 	import HabitOptionMenu from './HabitOptionMenu.svelte';
 	import debounce from 'lodash/debounce';
-	import PhPlusCircle from '~icons/ph/plus-circle';
-	import PhMinusCircle from '~icons/ph/minus-circle';
 
 	// ID of the habit, used to load entries
 	export let id: number;
@@ -29,6 +27,9 @@
 
 	// list of entries for the habit from load function
 	export let entries: Date[];
+
+	// Map of entry dates to entry values from load function
+	export let load_entry_values: Map<string, number>;
 
 	// view only mode, used for viewing shared entries
 	export let view_only: boolean = false;
@@ -47,8 +48,14 @@
 	// Array of dates that are selected
 	let value: Date[] = entries;
 
+	// Working map of entry dates to entry values
+	let entry_values: Map<string, number> = load_entry_values;
+
 	// Used to track if the dialog is open or not
 	let isOpen = false;
+
+	// Whether the mood selector is open or not
+	let mood_select = false;
 
 	// Tracks if the share selector is open or not,
 	// to hide popup while it is open
@@ -65,6 +72,8 @@
 
 	// Stops user input while the calendar is loading/saving a month's entries
 	let loading = false;
+
+	let mood_select_day: number;
 
 	// Updates the title of the habit
 	async function updateTitle() {
@@ -86,7 +95,6 @@
 	// Gets the entries for a month, replaces the value array
 	async function getEntriesForMonth(month: Date) {
 		await saveEntries.flush();
-
 		loading = true;
 
 		const params = [
@@ -110,9 +118,19 @@
 		}
 
 		const json = await result.json();
-		console.log(json);
-		const dates: Date[] = json.entries.map((d: string) => new Date(d));
+		const entries = json.entries;
+		const dates: Date[] = entries.map((d: string) => new Date(d));
 		value = dates;
+
+		const values = json.values;
+		// entry_values = values;
+
+		const new_entry_values = new Map();
+		for (let i = 0; i < entries.length; i++) {
+			new_entry_values.set(entries[i].toString(), values[i]);
+		}
+
+		entry_values = new_entry_values;
 
 		loading = false;
 	}
@@ -162,15 +180,17 @@
 		}
 
 		let days_in_month = getDaysInMonth(value);
+
+		let entryValueArr = Array.from(entry_values.values());
+
 		const result = await fetch('/api/habitEntry', {
 			method: 'PATCH',
-			body: JSON.stringify({ id: id, month: month, entries: days_in_month }),
+			body: JSON.stringify({ id: id, month: month, entries: days_in_month, values: entryValueArr }),
 			headers: {
 				'content-type': 'application/json'
 			}
 		});
 
-		// console.log('result: ' + result.ok);
 		invalidateAll();
 	}
 
@@ -249,6 +269,27 @@
 		}
 	};
 
+	function select_day(day: any) {
+		// If the day has a habit entry, delete it
+		if (entry_values.has(day.toString())) {
+			entry_values.delete(day.toString());
+			updateEntries();
+		}
+		// If the day doesn't have a habit entry, create one
+		else {
+			mood_select_day = day;
+			mood_select = !mood_select;
+		}
+	}
+
+	const selectDay = debounce(select_day, 1000);
+
+	function setMood(value: number) {
+		entry_values.set(mood_select_day.toString(), value);
+		mood_select = false;
+		saveEntries();
+	}
+
 	// Open the dialog when the component is mounted (page is loaded)
 	onMount(() => {
 		isOpen = true;
@@ -296,7 +337,7 @@
 				leaveTo="opacity-0 scale-95"
 			>
 				<div
-					class="pointer-events-auto h-fit w-fit rounded-lg bg-white p-5 shadow-xl transition-all "
+					class="pointer-events-auto h-fit min-h-[562.5px] w-fit rounded-lg bg-white p-5 shadow-xl transition-all "
 				>
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
@@ -328,68 +369,143 @@
 							</div>
 						</div>
 
-						{#if !view_only}
-							<div class="my-2 ">
-								<button
-									class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
-									on:click={() => {
-										if (value.some((date) => sameDayMonthYear(date, today) == true)) {
-											console.log('remove');
-											value = value.filter((date) => sameDayMonthYear(date, today) == false);
-										} else {
-											console.log('add');
-											value.push(today);
-										}
-										value = value;
-										saveEntries();
-									}}
-								>
-									{#if !value.some((date) => sameDayMonthYear(date, today))}
-										Add Today
-										<PhPlusCircle class="inline translate-y-[-1px] text-[13px]" />
-									{:else}
-										Remove Today
-										<PhMinusCircle class="inline translate-y-[-1px] text-[13px]" />
-									{/if}
-								</button>
-								<span> or click to toggle a date below.</span>
-							</div>
-						{/if}
-
-						{#if !view_only}
-							<div class:cursor-wait={loading}>
-								<div class:pointer-events-none={loading}>
-									<CalendarView
-										multiple
-										bind:value
-										bind:month
-										on:change={async () => {
-											saveEntries();
+						{#if !mood_select}
+							{#if !view_only}
+								<div class="my-2 ">
+									<button
+										class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
+										on:click={() => {
+											if (value.some((date) => sameDayMonthYear(date, today) == true)) {
+												console.log('remove');
+												value = value.filter((date) => sameDayMonthYear(date, today) == false);
+											} else {
+												console.log('add');
+												value.push(today);
+											}
+											value = value;
+											select_day(today);
 										}}
-										max={new Date()}
-									/>
+									>
+										{#if !value.some((date) => sameDayMonthYear(date, today))}
+											Add Today
+											<iconify-icon
+												inline
+												icon="ph:plus-circle"
+												class="text-md translate-y-[1px]"
+											/>
+										{:else}
+											Remove Today
+											<iconify-icon
+												inline
+												icon="ph:minus-circle"
+												class="text-md translate-y-[1px]"
+											/>
+										{/if}
+									</button>
+									<span> or click to toggle a date below.</span>
 								</div>
-							</div>
+							{/if}
+
+							{#if !view_only}
+								<div class:cursor-wait={loading}>
+									<div class:pointer-events-none={loading}>
+										<CalendarView
+											multiple
+											bind:value
+											bind:month
+											on:change={async () => {
+												//saveEntries();
+											}}
+											pick_day_callback={select_day}
+											max={new Date()}
+											bind:entry_values
+										/>
+									</div>
+								</div>
+							{:else}
+								<div class:cursor-wait={loading}>
+									<div class:pointer-events-none={loading}>
+										<CalendarView
+											view_only
+											multiple
+											bind:value
+											bind:month
+											max={new Date()}
+											bind:entry_values
+										/>
+									</div>
+								</div>
+							{/if}
 						{:else}
-							<div class:cursor-wait={loading}>
-								<div class:pointer-events-none={loading}>
-									<CalendarView view_only multiple bind:value bind:month max={new Date()} />
+							<div class="flex justify-center">
+								<div class="flex gap-2.5 text-white">
+									<button
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-purple"
+										on:click={() => {
+											setMood(1);
+										}}
+									>
+										<span> awful </span>
+									</button>
+									<button
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-blue"
+										on:click={() => {
+											setMood(2);
+										}}
+									>
+										<span>bad</span>
+									</button>
+									<button
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-400"
+										on:click={() => {
+											setMood(3);
+										}}
+									>
+										<span>meh</span>
+									</button>
+									<button
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-green"
+										on:click={() => {
+											setMood(4);
+										}}
+									>
+										<span>good</span>
+									</button>
+									<button
+										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-yellow"
+										on:click={() => {
+											setMood(5);
+										}}
+									>
+										<span>great</span>
+									</button>
 								</div>
 							</div>
 						{/if}
 
 						<div class="mt-0.5 flex justify-end">
-							<button
-								class="btn-alt"
-								on:click={() => {
-									isOpen = false;
-									setTimeout(() => {
-										goto(back_link);
-									}, 300);
-								}}
-							>
-								Done
-							</button>
+							{#if mood_select}
+								<button
+									class="btn-alt"
+									on:click={() => {
+										mood_select = false;
+									}}
+								>
+									Cancel
+								</button>
+							{:else}
+								<button
+									class="btn-alt"
+									on:click={() => {
+										isOpen = false;
+										setTimeout(() => {
+											goto(back_link);
+										}, 300);
+									}}
+								>
+									Done
+								</button>
+							{/if}
 						</div>
 					</div>
 				</div>

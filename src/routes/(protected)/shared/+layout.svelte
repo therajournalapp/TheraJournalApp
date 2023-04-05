@@ -56,9 +56,10 @@
 			<HabitCard
 				id={habit.id}
 				name={habit.name}
+				date={habit.createdAt}
 				entries={habit.HabitEntry}
 				shared_by={habit.user.email}
-				date={habit.createdAt}
+				type={habit.type}
 				link_to="shared"
 			/>
 		</div>

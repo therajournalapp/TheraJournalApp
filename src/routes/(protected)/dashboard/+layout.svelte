@@ -52,6 +52,7 @@
 				date={habit.createdAt}
 				entries={habit.HabitEntry}
 				shared_to={habit.shared_to}
+				type={habit.type}
 			/>
 		</div>
 	{/each}

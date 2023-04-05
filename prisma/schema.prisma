@@ -97,6 +97,8 @@ model HabitEntry {
     habit     Habit    @relation(references: [id], fields: [habit_id], onDelete: Cascade)
     date      DateTime
     value     Int
+
+    @@unique([habit_id, date])
 }
 
 model LinkShare {

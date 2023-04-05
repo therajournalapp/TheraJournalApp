@@ -77,6 +77,7 @@ export const load = (async ({ locals }) => {
             HabitEntry: {
                 select: {
                     date: true,
+                    value: true,
                 },
                 where: {
                     date: {

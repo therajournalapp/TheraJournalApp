@@ -36,7 +36,7 @@ export const load = (async ({ locals }) => {
 					user_id: user.userId
 				},
 				select: {
-					habit_id: true
+					habit_id: true,
 				}
 			})
 			.then((shared_entries) => {
@@ -57,6 +57,7 @@ export const load = (async ({ locals }) => {
 				HabitEntry: {
 					select: {
 						date: true,
+						value: true,
 					},
 					where: {
 						date: {
