@@ -1,18 +1,29 @@
 <script lang="ts">
 	import EditorWrapper from '$lib/components/EditorWrapper.svelte';
-	// import HabitDialog from '$lib/components/HabitDialog.svelte';
 	import HabitDialog from '$lib/components/HabitDialog.svelte';
+	import MoodDialog from '$lib/components/MoodDialog.svelte';
 	export let data: any;
 </script>
 
 {#if data.habit}
-	<HabitDialog
-		view_only
-		id={data.habit.id}
-		name={data.habit.name}
-		entries={data.habit.HabitEntry}
-		back_link="/shared"
-	/>
+	{#if data.habit.type == 'Mood'}
+		<MoodDialog
+			view_only
+			id={data.habit.id}
+			name={data.habit.name}
+			entries={data.habit.HabitEntry}
+			load_entry_values={data.entry_values}
+			back_link="/shared"
+		/>
+	{:else}
+		<HabitDialog
+			view_only
+			id={data.habit.id}
+			name={data.habit.name}
+			entries={data.habit.HabitEntry}
+			back_link="/shared"
+		/>
+	{/if}
 {:else}
 	<EditorWrapper back_link="/shared">
 		<div

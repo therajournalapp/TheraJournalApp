@@ -37,9 +37,17 @@ export const load = (async ({ params, locals }) => {
         return null;
     }
 
+    const entryVals = habit.HabitEntry.map((entry) => entry.value);
     habit.HabitEntry = habit.HabitEntry.map(entry => (entry.date));
 
+    // map date to value
+    const entry_values = new Map();
+    for (let i = 0; i < habit.HabitEntry.length; i++) {
+        entry_values.set(habit.HabitEntry[i].toString(), entryVals[i]);
+    }
+
     return {
-        habit: habit
+        habit: habit,
+        entry_values: entry_values
     };
 }) satisfies PageServerLoad;

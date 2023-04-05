@@ -425,7 +425,14 @@
 							{:else}
 								<div class:cursor-wait={loading}>
 									<div class:pointer-events-none={loading}>
-										<CalendarView view_only multiple bind:value bind:month max={new Date()} />
+										<CalendarView
+											view_only
+											multiple
+											bind:value
+											bind:month
+											max={new Date()}
+											bind:entry_values
+										/>
 									</div>
 								</div>
 							{/if}

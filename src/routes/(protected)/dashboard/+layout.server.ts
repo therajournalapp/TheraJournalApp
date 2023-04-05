@@ -61,34 +61,34 @@ export const load = (async ({ locals }) => {
     const first_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - new Date().getDay());
     const last_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay()));
 
-        let habits: HabitWithHabitEntry[] | null = await prisma.habit.findMany({
-            where: {
-                user_id: user.userId,
+    let habits: HabitWithHabitEntry[] | null = await prisma.habit.findMany({
+        where: {
+            user_id: user.userId,
+        },
+        orderBy: {
+            id: 'desc'
+        },
+        include: {
+            HabitEntry: {
+                select: {
+                    date: true,
+                    value: true,
+                },
+                where: {
+                    date: {
+                        gte: first_day_of_week,
+                        lte: last_day_of_week,
+                    }
+                }
             },
-            orderBy: {
-                id: 'desc'
-            },
-            include: {
-                HabitEntry: {
-                    select: {
-                        date: true,
-                        value: true,
-                    },
-                    where: {
-                        date: {
-                            gte: first_day_of_week,
-                            lte: last_day_of_week,
+            SharedHabit: {
+                include:
+                {
+                    user: {
+                        select: {
+                            email: true,
                         }
                     }
-                },
-                SharedHabit: {
-                    include:
-                    {
-                        user: {
-                            select: {
-                                email: true,
-                            }
-                        }
 
                 }
             }

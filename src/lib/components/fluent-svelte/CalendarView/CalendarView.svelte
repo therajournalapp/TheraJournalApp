@@ -421,7 +421,7 @@ A calendar view lets a user view and interact with a calendar that they can navi
 			</button>
 		</div>
 	</header>
-	<div class="calendar-view-table-wrapper" class:pointer-events-none={view_only}>
+	<div class="calendar-view-table-wrapper">
 		{#key view}
 			<table
 				class="calendar-view-table view-{view}"
@@ -522,28 +522,30 @@ A calendar view lets a user view and interact with a calendar that they can navi
 											<td role="gridcell">
 												{#if inMonth}
 													<!-- added -->
-													<CalendarViewItem
-														on:click={() => selectDay(day)}
-														on:keydown={(e) => handleKeyDown(e, day)}
-														outOfRange={!inMonth}
-														current={compareDates(day, new Date(), 'day')}
-														disabled={min > day || max < day}
-														blackout={blackout && indexOfDate(blackout, day, 'day') > -1}
-														header={page &&
-															headers &&
-															day.getDate() === 1 &&
-															getMonthLocale(day.getMonth(), {
-																locale,
-																format: 'short'
-															})}
-														tabindex={firstFocusableDay &&
-														compareDates(firstFocusableDay, day, 'day')
-															? 0
-															: -1}
-														{selected}
-													>
-														{day.getDate()}
-													</CalendarViewItem>
+													<div class:pointer-events-none={view_only}>
+														<CalendarViewItem
+															on:click={() => selectDay(day)}
+															on:keydown={(e) => handleKeyDown(e, day)}
+															outOfRange={!inMonth}
+															current={compareDates(day, new Date(), 'day')}
+															disabled={min > day || max < day}
+															blackout={blackout && indexOfDate(blackout, day, 'day') > -1}
+															header={page &&
+																headers &&
+																day.getDate() === 1 &&
+																getMonthLocale(day.getMonth(), {
+																	locale,
+																	format: 'short'
+																})}
+															tabindex={firstFocusableDay &&
+															compareDates(firstFocusableDay, day, 'day')
+																? 0
+																: -1}
+															{selected}
+														>
+															{day.getDate()}
+														</CalendarViewItem>
+													</div>
 												{:else}
 													<div class="h-[40px] w-[40px]" />
 												{/if}
