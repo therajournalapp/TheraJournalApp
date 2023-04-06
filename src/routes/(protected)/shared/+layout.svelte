@@ -5,10 +5,12 @@
 	import { flip } from 'svelte/animate';
 	import { fade, fly } from 'svelte/transition';
 	import PhXCircle from '~icons/ph/x-circle';
+	import UserCard from '$lib/components/UserCard.svelte';
 
 	// Lets desktop users scroll horizontal sections with scroll wheel
 	let habit: any;
 	let journal: any;
+	let users: any;
 	onMount(() => {
 		habit.addEventListener('wheel', (ev: any) => {
 			ev.preventDefault();
@@ -66,10 +68,20 @@
 	<div class="right-pad" />
 </div>
 
+{#if data.users.length > 0}
+	<div class="app-container mt-10 mb-2 flex items-baseline">
+		<div class="mr-3 text-3xl font-medium hover:underline">Users</div>
+	</div>
+	<div class="card-scroll" bind:this={users}>
+		<div class="left-pad" />
+		{#each data.users as user_info}
+			<UserCard user_id={user_info['user_id']} email={user_info['email']} />
+		{/each}
+	</div>
+{/if}
 <div class="app-container mt-10 mb-2 flex items-baseline">
 	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
 </div>
-
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
 	{#if data.entries && data.entries.length === 0}

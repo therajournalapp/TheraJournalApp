@@ -44,8 +44,16 @@ export const load = (async ({ locals }) => {
 				return shared_entries.map((x) => x.habit_id);
 			});
 
-		const first_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - new Date().getDay());
-		const last_day_of_week = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay()));
+		const first_day_of_week = new Date(
+			new Date().getFullYear(),
+			new Date().getMonth(),
+			new Date().getDate() - new Date().getDay()
+		);
+		const last_day_of_week = new Date(
+			new Date().getFullYear(),
+			new Date().getMonth(),
+			new Date().getDate() + (6 - new Date().getDay())
+		);
 
 		const shared_habits: Habit[] | null = await prisma.habit.findMany({
 			where: {
@@ -57,30 +65,32 @@ export const load = (async ({ locals }) => {
 				user: true,
 				HabitEntry: {
 					select: {
-						date: true,
+						date: true
 					},
 					where: {
 						date: {
 							gte: first_day_of_week,
-							lte: last_day_of_week,
+							lte: last_day_of_week
 						}
 					}
-				},
+				}
 			}
 		});
 
-		console.log(shared_habits);
+		//console.log(shared_habits);
+		type Event = any;
+		let shared_events: Event[] = [...shared_posts, ...shared_habits];
+		let user_list = shared_events.map((x) => ({ email: x.user.email, user_id: x.user_id }));
 
-		type Event = Habit | JournalEntry;
-		let shared_events: Event[] = [ ...shared_posts, ...shared_habits ];
-		let user_list = shared_events.map((x) => x.user_id);
-		let user_set = new Set(user_list);
-		shared_events = shared_events.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1).slice(0, 20);
-		console.log(shared_events);
+		let user_set = [...new Map(user_list.map((item) => [item['user_id'], item])).values()];
+
+		console.log(user_set);
+		shared_events = shared_events.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).slice(0, 20);
+		//console.log(shared_events);
 
 		return {
 			entries: shared_posts,
-			user_ids: user_set,
+			users: user_set,
 			habits: shared_habits,
 			events: shared_events
 		};
