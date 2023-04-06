@@ -11,15 +11,15 @@
 	let habit: any;
 	let journal: any;
 	let users: any;
+	let events: any;
 	onMount(() => {
-		habit.addEventListener('wheel', (ev: any) => {
-			ev.preventDefault();
-			habit.scrollLeft += ev.deltaY + ev.deltaX;
+		events.addEventListener('wheel', (event: any) => {
+			event.preventDefault();
+			events.scrollLeft += event.deltaY + event.deltaX;
 		});
-
-		journal.addEventListener('wheel', (ev: any) => {
-			ev.preventDefault();
-			journal.scrollLeft += ev.deltaY + ev.deltaX;
+		users.addEventListener('wheel', (event: any) => {
+			event.preventDefault();
+			users.scrollLeft += event.deltaY + event.deltaX;
 		});
 	});
 
@@ -31,44 +31,51 @@
 	<title>TheraJournal</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
-
 <div class="app-container mb-2">
-	<a href="/shared#" class="text-3xl font-medium hover:underline">Shared Habits</a>
+	<a href="/shared#" class="text-3xl font-medium hover:underline">Recent</a>
 </div>
-
-<div class="card-scroll" bind:this={habit}>
+<div class="card-scroll" bind:this={events}>
 	<div class="left-pad" />
-	{#if data.habits && data.habits.length === 0}
+	{#if data.events && data.events.length === 0}
 		<div
 			class="relative flex h-[124px] w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
 		>
 			<div class="flex h-full w-full items-center justify-center">
 				<PhXCircle class="mr-2 text-[160px] opacity-60" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium">No Shared Habits</p>
+					<p class="text-xl font-medium">No Recent Events</p>
 
-					<p>If anyone shares any habit trackers with you in the future they will show up here.</p>
+					<p>If anyone shares anything with you in the future they will show up here.</p>
 				</div>
 			</div>
 		</div>
 	{/if}
-	<!-- TODO: undeletable mood tracker here? -->
-	{#each data.habits as habit (habit.id)}
+	{#each data.events as event (event.id)}
 		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
-			<HabitCard
-				id={habit.id}
-				name={habit.name}
-				date={habit.createdAt}
-				entries={habit.HabitEntry}
-				shared_by={habit.user.email}
-				type={habit.type}
-				link_to="shared"
-			/>
+			{#if event.type}
+				<HabitCard
+					id={event.id}
+					name={event.name}
+					date={event.createdAt}
+					entries={event.HabitEntry}
+					shared_by={event.user.email}
+					type={event.type}
+					link_to="shared"
+				/>
+			{:else}
+				<JournalCard
+					id={event.id}
+					title={event.title}
+					body={event.body}
+					date={event.createdAt}
+					shared_by={event.user.email}
+					link_to="shared"
+				/>
+			{/if}
 		</div>
 	{/each}
 	<div class="right-pad" />
 </div>
-
 {#if data.users.length > 0}
 	<div class="app-container mt-10 mb-2 flex items-baseline">
 		<div class="mr-3 text-3xl font-medium hover:underline">Users</div>
@@ -80,40 +87,6 @@
 		{/each}
 	</div>
 {/if}
-<div class="app-container mt-10 mb-2 flex items-baseline">
-	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
-</div>
-<div class="card-scroll" bind:this={journal}>
-	<div class="left-pad" />
-	{#if data.entries && data.entries.length === 0}
-		<div
-			class="relative flex h-56 w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
-		>
-			<div class="flex h-full w-full items-center justify-center">
-				<PhXCircle class="mr-2 text-[160px] opacity-60" />
-				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium">No Shared Entries</p>
-
-					<p>If anyone shares entries with you in the future they will show up here.</p>
-				</div>
-			</div>
-		</div>
-	{/if}
-
-	{#each data.entries as entry (entry.id)}
-		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
-			<JournalCard
-				id={entry.id}
-				title={entry.title}
-				body={entry.body}
-				date={entry.createdAt}
-				shared_by={entry.user.email}
-				link_to="shared"
-			/>
-		</div>
-	{/each}
-	<div class="right-pad" />
-</div>
 
 <slot />
 
