@@ -76,26 +76,7 @@
 
 	// Used for styling button
 	let hover = false;
-	let icon = 'ph:lock-key';
-	let color = '#808080';
 	let share = shared_to.length > 0 ? true : false;
-	$: {
-		share = shared_to.length > 0 ? true : false;
-	}
-	$: {
-		if (share) {
-			icon = 'ph:users';
-			color = '#739244';
-		} else {
-			if (hover) {
-				icon = 'ph:lock-key-open';
-				color = '#5f7938';
-			} else {
-				icon = 'ph:lock-key';
-				color = '#808080';
-			}
-		}
-	}
 
 	// Handles the submit of the add user form
 	// takes in user email and calls the shareCallback
@@ -146,7 +127,7 @@
 				isOpen = true;
 				invalidateAll();
 			}}
-			class="-m-1.5 rounded-full p-1.5 text-neutral-500 hover:bg-green-900/10 hover:text-primary-dark active:bg-green-900/20"
+			class="-m-1.5 rounded-full p-1.5 text-neutral-500 hover:bg-green-900/10 hover:text-primary-dark active:bg-green-900/20 dark:text-neutral-300 dark:hover:bg-green-700/10 dark:hover:text-primary dark:active:bg-green-700/20"
 		>
 			{#if share}
 				<UserInitial email={shared_to[0].email} />
@@ -182,10 +163,12 @@
 					leaveTo="opacity-0 scale-95"
 				>
 					<div
-						class="pointer-events-auto h-[500px] w-[375px] rounded-lg bg-white p-5 shadow-xl transition-all"
+						class="pointer-events-auto h-[500px] w-[375px] rounded-lg bg-white p-5 shadow-xl transition-all dark:bg-neutral-800 dark:shadow-neutral-900"
 					>
 						<div class="flex h-full flex-col justify-between gap-3">
-							<DialogTitle class="text-xl text-neutral-700">Share "{title}"</DialogTitle>
+							<DialogTitle class="text-xl text-neutral-700 dark:text-neutral-200"
+								>Share "{title}"</DialogTitle
+							>
 
 							<form on:submit|preventDefault={handleSubmit}>
 								<div class="flex gap-2">
@@ -208,15 +191,17 @@
 							<span class:invisible={error === ''} class="invisible -my-3 text-sm text-red-500">
 								Error: {error}
 							</span>
-							<span class="font-medium text-neutral-600">
+							<span class="font-medium text-neutral-600 dark:text-neutral-300">
 								People who can read this entry ({shared_to ? shared_to.length + 1 : 1})
 							</span>
 							<div class="ppl-scroll scrollba h-64 min-h-[75px] w-full overflow-y-scroll">
-								<div class="flex h-12 w-full items-center rounded-md pl-1 hover:bg-neutral-200">
+								<div
+									class="flex h-12 w-full items-center rounded-md pl-1 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+								>
 									<div class="h-[40px] w-[40px]">
-										<PhUserCircle class="text-[34px] text-neutral-800" />
+										<PhUserCircle class="text-[34px] text-neutral-800 dark:text-neutral-300" />
 									</div>
-									<span class="p-2 text-sm font-medium">
+									<span class="p-2 text-sm font-medium dark:text-neutral-200">
 										{shared_to ? (shared_to.length > 0 ? 'You' : 'Only you') : 'Only you'}
 									</span>
 								</div>
@@ -226,18 +211,21 @@
 											animate:flip
 											in:fade|local
 											out:fly|local={{ x: 100 }}
-											class="flex h-12 w-full items-center justify-between rounded-md pl-1 hover:bg-neutral-200"
+											class="flex h-12 w-full items-center justify-between rounded-md pl-1 hover:bg-neutral-200 dark:hover:bg-neutral-700"
 										>
 											<div class="ml-1 flex items-center">
 												<UserInitial email={user.email} />
 												<div class="max-w-[240px] overflow-hidden text-ellipsis">
-													<span class="p-3 text-sm font-medium" title={user.email}>
+													<span
+														class="p-3 text-sm font-medium dark:text-neutral-200"
+														title={user.email}
+													>
 														{user.email}
 													</span>
 												</div>
 											</div>
 											<button
-												class="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10"
+												class="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10 dark:text-neutral-200 dark:hover:bg-neutral-600"
 												on:click={() => {
 													unshareCallback(user.email);
 												}}
@@ -252,7 +240,9 @@
 							{#if using_link_share}
 								<div class="-m-5 flex flex-col gap-3 px-5 pt-2 align-baseline">
 									<div class="flex gap-3">
-										<span class="font-medium text-neutral-600"> Share by Link </span>
+										<span class="font-medium text-neutral-600 dark:text-neutral-300">
+											Share by Link
+										</span>
 
 										<button
 											on:click={onLinkShareChange}
@@ -268,7 +258,7 @@
 
 									<div class="flex min-h-[76px] flex-col">
 										{#if link_share}
-											<span class="pb-3 text-sm text-neutral-600">
+											<span class="pb-3 text-sm text-neutral-600 dark:text-neutral-300">
 												Anyone with the link can view this entry
 											</span>
 
