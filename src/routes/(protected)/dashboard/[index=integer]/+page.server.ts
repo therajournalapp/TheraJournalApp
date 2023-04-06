@@ -36,6 +36,11 @@ export const load = (async ({ params, locals }) => {
                         }
                     }
                 }
+            },
+            LinkShare: {
+                select: {
+                    link: true
+                }
             }
         }
     });

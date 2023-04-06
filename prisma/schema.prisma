@@ -46,6 +46,7 @@ model JournalEntry {
     preview     String        @default("") @db.VarChar(1000)
     user        User          @relation(references: [id], fields: [user_id], onDelete: Cascade)
     SharedEntry SharedEntry[]
+    LinkShare   LinkShare[]
     tags        String        @default("") @db.VarChar(255) // list of string separated by comma
 
     @@index([user_id])
@@ -96,4 +97,14 @@ model HabitEntry {
     habit     Habit    @relation(references: [id], fields: [habit_id], onDelete: Cascade)
     date      DateTime
     value     Int
+
+    @@unique([habit_id, date])
+}
+
+model LinkShare {
+    entry_id Int          @id
+    entry    JournalEntry @relation(references: [id], fields: [entry_id], onDelete: Cascade)
+    link     String       @unique @db.VarChar(255)
+
+    @@map("link_share")
 }

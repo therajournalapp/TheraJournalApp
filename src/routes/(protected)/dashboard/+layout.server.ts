@@ -25,6 +25,11 @@ export const load = (async ({ locals }) => {
                 include: {
                     user: true
                 }
+            },
+            LinkShare: {
+                select: {
+                    link: true
+                }
             }
         },
         orderBy: {
@@ -72,6 +77,7 @@ export const load = (async ({ locals }) => {
             HabitEntry: {
                 select: {
                     date: true,
+                    value: true,
                 },
                 where: {
                     date: {
@@ -105,6 +111,8 @@ export const load = (async ({ locals }) => {
 
         return rest;
     });
+
+    // console.log(JSON.stringify(journal_entries));
 
     return {
         entries: journal_entries,
