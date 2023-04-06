@@ -310,16 +310,17 @@
 		height: 100%;
 		align-items: center;
 		padding: 0 0.5rem;
-		color: rgba(0, 0, 0, 0.7);
+		/* color: rgba(0, 0, 0, 0.7); */
 		font-weight: 700;
 		font-size: 0.8rem;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		text-decoration: none;
 		transition: color 0.2s linear;
+		@apply text-neutral-900 dark:text-neutral-300;
 	}
 
 	nav a:hover {
-		color: var(--light-green);
+		@apply text-primary-light;
 	}
 </style>

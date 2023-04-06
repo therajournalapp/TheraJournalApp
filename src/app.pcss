@@ -13,10 +13,6 @@
 	--off-white: #efebce;
 	--form-bg: #e3e9e0;
 
-	/* dark background colors */
-	--almost-black: #171f36;
-	--dark-blue: #2b4162;
-
 	/* primary brand colors */
 	--dark-green: #5f7938;
 	--light-green: #739244; /* same as logo */
@@ -42,7 +38,8 @@
 
 body {
 	margin: 0;
-	background-color: var(--almost-white);
+	/* background-color: var(--almost-white); */
+	@apply bg-offwhite-light dark:bg-neutral-800;
 }
 
 .link {
