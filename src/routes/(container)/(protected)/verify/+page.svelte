@@ -71,17 +71,21 @@
 		Loading…
 	</label>
 {:else if state == 'verified'}
-	<h1 class="my-6 text-center text-3xl font-medium sm:text-4xl">Your Email Address is Verified!</h1>
-	<p class="mx-auto mb-6 max-w-2xl text-center text-lg">
+	<h1 class="my-6 text-center text-3xl font-medium dark:text-neutral-200 sm:text-4xl">
+		Your Email Address is Verified!
+	</h1>
+	<p class="mx-auto mb-6 max-w-2xl text-center text-lg dark:text-neutral-300">
 		Go to your dashboard by clicking the logo in the top left.
 	</p>
 {:else}
-	<h1 class="my-6 text-center text-3xl font-medium sm:text-4xl">Verify Your Email Address</h1>
-	<p class="mx-auto mb-6 max-w-2xl text-center text-lg">
+	<h1 class="my-6 text-center text-3xl font-medium dark:text-neutral-200 sm:text-4xl">
+		Verify Your Email Address
+	</h1>
+	<p class="mx-auto mb-6 max-w-2xl text-center text-lg dark:text-neutral-300">
 		We emailed you a email link to {email}. Enter the code below to confirm your email address.
 	</p>
 
-	<p class="mx-auto mb-6 max-w-2xl text-center text-lg">
+	<p class="mx-auto mb-6 max-w-2xl text-center text-lg dark:text-neutral-200">
 		Need another code?
 		<span
 			on:click={handleClick}
@@ -91,14 +95,6 @@
 			{sendCodeText}
 		</span>
 	</p>
-	<!-- <div class="flex justify-center">
-	<input
-		type="text"
-		inputmode="decimal"
-		placeholder="012345"
-		class="input mx-auto max-w-xs bg-offwhite-formfield text-4xl"
-	/>
-</div> -->
 {/if}
 
 <style lang="postcss">
