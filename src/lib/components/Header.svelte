@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import NavPopover from '$lib/components/NavPopover.svelte';
 	import { getUser } from '@lucia-auth/sveltekit/client';
@@ -19,6 +20,17 @@
 	let loaded = false;
 	let hover = false;
 	let screen_width: number;
+
+	let dark = false;
+
+	if (browser) {
+		dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		console.log('dark mode?: ' + dark);
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			dark = e.matches;
+			console.log('dark mode?: ' + dark);
+		});
+	}
 
 	onMount(() => {
 		loaded = true;
@@ -78,7 +90,7 @@
 									<g id="right-leaf" class:before-load-right={!loaded} class:hover>
 										<path
 											d="M933.114 21.7c-17.02 5.479-17.166 5.333-17.166 5.333s-3.125 31.696-7.195 34.12c-4.07 2.426 20.855-7.969 22.974-16.88 2.118-8.913 3.871-9.205 1.387-22.573z"
-											style="display:inline;fill:#fefbf6;fill-opacity:1"
+											style="display:inline;fill:{dark ? '#262626' : '#fefbf6'};fill-opacity:1"
 											transform="translate(2.27 .252) scale(.30147)"
 										/>
 										<path
@@ -91,7 +103,7 @@
 									<g id="left-leaf" class:before-load-left={!loaded} class:hover>
 										<path
 											d="M885.637 20.6c17.02 5.478 17.166 5.332 17.166 5.332s3.125 31.696 7.195 34.12c4.07 2.426-20.855-7.969-22.973-16.88-2.119-8.912-3.872-9.205-1.388-22.572z"
-											style="display:inline;fill:#fefbf6;fill-opacity:1"
+											style="display:inline;fill:{dark ? '#262626' : '#fefbf6'};fill-opacity:1"
 											transform="translate(-.563) scale(.30147)"
 										/>
 										<path
@@ -103,7 +115,9 @@
 									</g>
 									<path
 										d="M164.143 73.92c-50.767 0-51.695 113.017-.105 113.017 53.588 0 51.966-113.017.105-113.017z"
-										style="display:inline;fill:#fefbf6;fill-opacity:1;stroke-width:2.72975"
+										style="display:inline;fill:{dark ? '#262626' : '#fefbf6'};fill-opacity:{loaded
+											? 1
+											: 0};stroke-width:2.72975"
 										transform="translate(256.89 -4.436) scale(.11044)"
 									/>
 									<path
@@ -151,7 +165,7 @@
 									<g id="right-leaf-sm" class:before-load-right-sm={!loaded} class:hover>
 										<path
 											d="M933.114 21.7c-17.02 5.479-17.166 5.333-17.166 5.333s-3.125 31.696-7.195 34.12c-4.07 2.426 20.855-7.969 22.974-16.88 2.118-8.913 3.871-9.205 1.387-22.573z"
-											style="display:inline;fill:#fefbf6;fill-opacity:1"
+											style="display:inline;fill:{dark ? '#262626' : '#fefbf6'};fill-opacity:1"
 											transform="translate(-262.387 .252) scale(.30147)"
 										/>
 										<path
@@ -164,7 +178,7 @@
 									<g id="left-leaf-sm" class:before-load-left-sm={!loaded} class:hover>
 										<path
 											d="M885.637 20.6c17.02 5.478 17.166 5.332 17.166 5.332s3.125 31.696 7.195 34.12c4.07 2.426-20.855-7.969-22.973-16.88-2.119-8.912-3.872-9.205-1.388-22.572z"
-											style="display:inline;fill:#fefbf6;fill-opacity:1"
+											style="display:inline;fill:{dark ? '#262626' : '#fefbf6'};fill-opacity:1"
 											transform="translate(-265.22) scale(.30147)"
 										/>
 										<path
@@ -176,7 +190,8 @@
 									</g>
 									<path
 										d="M164.143 73.92c-50.767 0-51.695 113.017-.105 113.017 53.588 0 51.966-113.017.105-113.017z"
-										style="display:inline;fill:#fefbf6;fill-opacity:1;stroke-width:2.72975"
+										style="display:inline;fill:{dark ? '#262626' : '#fefbf6'};fill-opacity:
+										{loaded ? 1 : 0};stroke-width:2.72975"
 										transform="translate(-7.767 -4.436) scale(.11044)"
 									/>
 									<path
