@@ -12,10 +12,6 @@
 	// The habit entires for this month from load function
 	export let entries: any[];
 
-	// Sets the shadow color of the card,
-	// change if not putting card over default background.
-	export let shadowclr: String = 'shadow-offwhite-light';
-
 	// The entry's shared users. Used for the share selector.
 	export let shared_to: any | undefined = [];
 
@@ -106,12 +102,14 @@
 </script>
 
 <div
-	class="relative flex w-72 min-w-[18rem] flex-col gap-1.5 rounded-lg bg-white p-4 shadow-md {shadowclr} ring-1 ring-black ring-opacity-10
+	class="relative flex w-72 min-w-[18rem] flex-col gap-1.5 rounded-lg bg-white p-4 shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700
 	{shared_by == '' ? 'h-28' : 'h-[124px]'}"
 >
 	<div class="flex justify-between">
 		<div class="flex">
-			<div class="relative max-w-[220px] overflow-hidden text-ellipsis whitespace-nowrap">
+			<div
+				class="relative max-w-[220px] overflow-hidden text-ellipsis whitespace-nowrap dark:text-neutral-200"
+			>
 				<a
 					href="/{link_to}/h/{id}"
 					class="text-xl font-medium hover:underline"
@@ -127,7 +125,7 @@
 	</div>
 
 	<div class="mx-[-5px]">
-		<div class="flex w-full justify-around font-mono">
+		<div class="flex w-full justify-around font-mono dark:text-neutral-200">
 			{#each days as day}
 				<span class="day-label {currentDay == day ? 'current-day' : ''}">{day}</span>
 			{/each}
@@ -169,7 +167,9 @@
 				{shared_by}
 			</span>
 
-			<span class="font-semibold tabular-nums tracking-tighter text-neutral-500 text-opacity-90">
+			<span
+				class="font-semibold tabular-nums tracking-tighter text-neutral-500 text-opacity-90 dark:text-neutral-400"
+			>
 				{formatted_date}
 			</span>
 		</div>
@@ -197,11 +197,11 @@
 	}
 
 	.circle-future {
-		@apply border-[1px] border-dashed border-black bg-transparent;
+		@apply border-[1px] border-dashed border-black bg-transparent dark:border-white;
 	}
 
 	.circle-untracked {
-		@apply border-[1px] border-solid border-black bg-transparent;
+		@apply border-[1px] border-solid border-black bg-transparent dark:border-white;
 	}
 
 	.current-day {

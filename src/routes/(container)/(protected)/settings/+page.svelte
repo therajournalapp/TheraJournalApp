@@ -10,7 +10,7 @@
 
 	const user = getUser();
 	const email = $user?.email;
-	console.log(email); //TODO remove after test
+
 	const auth = getAuth();
 
 	let confirmDownload = false;
@@ -65,9 +65,9 @@
 	<title>Settings</title>
 	<meta name="description" content="TheraJournal settings" />
 </svelte:head>
-<div class="mb-10 text-3xl">Settings</div>
-<h1>Profile</h1>
-<div>
+<div class="mb-10 text-3xl dark:text-neutral-200">Settings</div>
+<h1 class="dark:text-neutral-200">Profile</h1>
+<div class="dark:text-neutral-200">
 	<p>User id: {$user?.userId}</p>
 	<p>Email: {$user?.email}</p>
 </div>

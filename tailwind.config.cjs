@@ -14,10 +14,6 @@ const config = {
 					DEFAULT: '#efebce',
 					formfield: '#e3e9e0',
 				},
-				'offblack': {
-					light: '#2b4162',
-					DEFAULT: '#171f36'
-				},
 				'accent': {
 					red: '#ff595e',
 					yellow: '#ffca3a',

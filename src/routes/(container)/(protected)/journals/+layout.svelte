@@ -36,11 +36,13 @@
 
 {#if !data.entries || data.entries.length === 0}
 	<div class="text-center">
-		<h3 class="text-2xl font-medium">No journal entries found</h3>
-		<p class="text-gray-500">You can create a new journal entry by clicking the button below</p>
+		<h3 class="text-2xl font-medium dark:text-neutral-200">No journal entries found</h3>
+		<p class="text-gray-500 dark:text-neutral-300">
+			You can create a new journal entry by clicking the button below
+		</p>
 	</div>
 {:else}
-	<div class="container mx-auto mb-8">
+	<div class="container mx-auto mb-8 dark:text-neutral-200">
 		<h1 class="label text-lg">Search for journal entries:</h1>
 		<input
 			type="text"

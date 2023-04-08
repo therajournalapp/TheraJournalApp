@@ -31,21 +31,25 @@
 </svelte:head>
 
 <div class="app-container mb-2">
-	<a href="/shared#" class="text-3xl font-medium hover:underline">Shared Habits</a>
+	<a href="/shared#" class="text-3xl font-medium hover:underline dark:text-neutral-200"
+		>Shared Habits</a
+	>
 </div>
 
 <div class="card-scroll" bind:this={habit}>
 	<div class="left-pad" />
 	{#if data.habits && data.habits.length === 0}
 		<div
-			class="relative flex h-[124px] w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
+			class="relative flex h-[124px] w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light dark:border-neutral-200 dark:shadow-none"
 		>
 			<div class="flex h-full w-full items-center justify-center">
-				<PhXCircle class="mr-2 text-[160px] opacity-60" />
+				<PhXCircle class="mr-2 text-[160px] opacity-60 dark:text-white" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium">No Shared Habits</p>
+					<p class="text-xl font-medium dark:text-neutral-200">No Shared Habits</p>
 
-					<p>If anyone shares any habit trackers with you in the future they will show up here.</p>
+					<p class="dark:text-neutral-300">
+						If anyone shares any habit trackers with you in the future they will show up here.
+					</p>
 				</div>
 			</div>
 		</div>
@@ -68,21 +72,25 @@
 </div>
 
 <div class="app-container mt-10 mb-2 flex items-baseline">
-	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
+	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline dark:text-neutral-200">
+		Shared Entries
+	</a>
 </div>
 
 <div class="card-scroll" bind:this={journal}>
 	<div class="left-pad" />
 	{#if data.entries && data.entries.length === 0}
 		<div
-			class="relative flex h-56 w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
+			class="relative flex h-56 w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light dark:border-neutral-200 dark:shadow-none"
 		>
 			<div class="flex h-full w-full items-center justify-center">
-				<PhXCircle class="mr-2 text-[160px] opacity-60" />
+				<PhXCircle class="mr-2 text-[160px] opacity-60 dark:text-white" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium">No Shared Entries</p>
+					<p class="text-xl font-medium dark:text-neutral-200">No Shared Entries</p>
 
-					<p>If anyone shares entries with you in the future they will show up here.</p>
+					<p class="dark:text-neutral-300">
+						If anyone shares entries with you in the future they will show up here.
+					</p>
 				</div>
 			</div>
 		</div>

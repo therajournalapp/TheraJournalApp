@@ -28,15 +28,17 @@
 </script>
 
 <div class="mx-auto">
-	<h1 class="mb-2 text-center text-[28px] font-medium">Reset your password</h1>
+	<h1 class="mb-2 text-center text-[28px] font-medium dark:text-neutral-200">
+		Reset your password
+	</h1>
 
-	<p class="text-center">
+	<p class="text-center dark:text-neutral-300">
 		Enter the your account email to send an email with a link to change your password.
 	</p>
 
 	<div class="mx-auto mt-12 block w-full max-w-md rounded-l text-gray-700 ">
 		<div class="mb-6">
-			<a href="/" class="arrow-link">
+			<a href="/" class="arrow-link dark:text-neutral-200">
 				<div class="arrow">
 					<PhCaretLeftThin class="inline text-[22px]" />
 				</div>

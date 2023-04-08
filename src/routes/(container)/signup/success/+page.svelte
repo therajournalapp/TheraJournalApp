@@ -9,8 +9,10 @@
 	});
 </script>
 
-<h1 class="my-6 text-center text-3xl font-medium sm:text-4xl">Succesfully Signed Up!</h1>
-<p class="mx-auto mb-6 max-w-2xl text-center text-lg">
+<h1 class="my-6 text-center text-3xl font-medium dark:text-neutral-200 sm:text-4xl">
+	Succesfully Signed Up!
+</h1>
+<p class="mx-auto mb-6 max-w-2xl text-center text-lg dark:text-neutral-200">
 	Redirecting you to the
 	<a href="/login/first" class="link">login</a> page.
 
