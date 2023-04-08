@@ -15,6 +15,8 @@
 	import ShareSelector from './ShareSelector.svelte';
 	import HabitOptionMenu from './HabitOptionMenu.svelte';
 	import debounce from 'lodash/debounce';
+	import PhPlusCircle from '~icons/ph/plus-circle';
+	import PhMinusCircle from '~icons/ph/minus-circle';
 
 	// ID of the habit, used to load entries
 	export let id: number;
@@ -337,7 +339,7 @@
 				leaveTo="opacity-0 scale-95"
 			>
 				<div
-					class="pointer-events-auto h-fit min-h-[562.5px] w-fit rounded-lg bg-white p-5 shadow-xl transition-all "
+					class="pointer-events-auto h-fit min-h-[562.5px] w-fit rounded-lg bg-white p-5 shadow-xl transition-all dark:bg-neutral-700 dark:shadow-neutral-900"
 				>
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
@@ -348,14 +350,14 @@
 									placeholder="Untitled Mood Tracker"
 									on:input={saveTitle}
 									bind:value={title}
-									class="rounded-md text-2xl outline-none hover:underline focus:!no-underline"
+									class="rounded-md bg-transparent text-2xl outline-none hover:underline focus:!no-underline dark:text-neutral-200"
 									tabindex="-1"
 								/>
 							{:else}
-								<DialogTitle class="text-2xl">{name}</DialogTitle>
+								<DialogTitle class="text-2xl dark:text-neutral-200">{name}</DialogTitle>
 							{/if}
 
-							<div class="mt-1 mr-1 mb-2 flex gap-3">
+							<div class="mt-1 mr-1 mb-2 flex items-center gap-3">
 								{#if !view_only}
 									<ShareSelector
 										title={name == '' ? 'Untitled Habit Tracker' : name}
@@ -373,7 +375,7 @@
 							{#if !view_only}
 								<div class="my-2 ">
 									<button
-										class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
+										class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark dark:text-neutral-200"
 										on:click={() => {
 											if (value.some((date) => sameDayMonthYear(date, today) == true)) {
 												console.log('remove');
@@ -388,21 +390,13 @@
 									>
 										{#if !value.some((date) => sameDayMonthYear(date, today))}
 											Add Today
-											<iconify-icon
-												inline
-												icon="ph:plus-circle"
-												class="text-md translate-y-[1px]"
-											/>
+											<PhPlusCircle class="inline translate-y-[-1px] text-[13px]" />
 										{:else}
 											Remove Today
-											<iconify-icon
-												inline
-												icon="ph:minus-circle"
-												class="text-md translate-y-[1px]"
-											/>
+											<PhMinusCircle class="inline translate-y-[-1px] text-[13px]" />
 										{/if}
 									</button>
-									<span> or click to toggle a date below.</span>
+									<span class="dark:text-neutral-300"> or click to toggle a date below.</span>
 								</div>
 							{/if}
 
@@ -437,7 +431,7 @@
 								</div>
 							{/if}
 						{:else}
-							<div class="flex justify-center">
+							<div class="flex min-h-[500px] items-center justify-center">
 								<div class="flex gap-2.5 text-white">
 									<button
 										class="flex h-16 w-16 items-center justify-center rounded-full bg-accent-purple"

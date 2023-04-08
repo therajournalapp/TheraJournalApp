@@ -167,7 +167,9 @@
 				{shared_by}
 			</span>
 
-			<span class="font-semibold tabular-nums tracking-tighter text-neutral-500 text-opacity-90">
+			<span
+				class="font-semibold tabular-nums tracking-tighter text-neutral-500 text-opacity-90 dark:text-neutral-400"
+			>
 				{formatted_date}
 			</span>
 		</div>
