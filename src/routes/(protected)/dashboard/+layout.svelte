@@ -32,9 +32,9 @@
 </svelte:head>
 
 <div class="app-container mb-2 flex items-baseline">
-	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline dark:text-neutral-200"
-		>Habits</a
-	>
+	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline dark:text-neutral-200">
+		Habits
+	</a>
 	<a
 		href="/dashboard/h/new"
 		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700 dark:text-neutral-400"

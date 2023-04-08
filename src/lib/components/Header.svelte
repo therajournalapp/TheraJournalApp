@@ -207,7 +207,9 @@
 		{:else if $page.url.pathname === '/' || $page.url.pathname === '/login'}
 			<!-- hide on root page -->
 		{:else}
-			<div class="hover: flex h-[48px] content-center hover:text-primary active:text-primary-dark">
+			<div
+				class="hover: flex h-[48px] content-center hover:text-primary active:text-primary-dark dark:text-neutral-200"
+			>
 				<a href="/login" class="">Log in</a>
 			</div>
 		{/if}
