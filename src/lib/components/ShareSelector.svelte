@@ -92,6 +92,15 @@
 			return;
 		}
 	}
+
+	let addEmail = false;
+	function onInput(e: any) {
+		if (e.target.value != '') {
+			addEmail = true;
+		} else {
+			addEmail = false;
+		}
+	}
 </script>
 
 <div>
@@ -173,6 +182,7 @@
 							<form on:submit|preventDefault={handleSubmit}>
 								<div class="flex gap-2">
 									<input
+										on:input={onInput}
 										class="input !h-[50px]"
 										placeholder="Add by email"
 										name="user"
@@ -180,7 +190,10 @@
 									/>
 
 									<button
-										class="flex h-[50px] w-[50px] flex-shrink-0 items-center justify-center rounded-full hover:bg-black hover:bg-opacity-10 active:bg-black active:bg-opacity-20"
+										class="flex h-[50px] w-[50px] flex-shrink-0 items-center justify-center rounded-full 
+										{addEmail
+											? 'bg-primary text-white hover:bg-primary-light active:bg-primary-dark'
+											: 'hover:bg-black hover:bg-opacity-10 active:bg-black active:bg-opacity-20'}"
 										type="submit"
 										value="Submit"
 									>
@@ -285,6 +298,7 @@
 
 							<div class="mt-5 flex justify-end">
 								<button
+									class:!bg-neutral-200={addEmail}
 									class="btn-alt"
 									on:click={() => {
 										isOpen = false;
