@@ -103,10 +103,12 @@
 </script>
 
 <div class="mx-auto">
-	<h1 class="mb-12 text-center text-[28px] font-medium">Sign up for TheraJournal</h1>
+	<h1 class="mb-12 text-center text-[28px] font-medium dark:text-neutral-200">
+		Sign up for TheraJournal
+	</h1>
 	<div class="mx-auto block w-full max-w-md rounded-l text-gray-700 ">
 		<div class="mb-6">
-			<a href="/" class="arrow-link">
+			<a href="/" class="arrow-link dark:text-neutral-200">
 				<div class="arrow">
 					<PhCaretLeftThin class="inline text-[22px]" />
 				</div>
@@ -141,7 +143,7 @@
 				/>
 				<button
 					type="button"
-					class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark"
+					class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark dark:text-neutral-200"
 					on:click={() => (show_password = !show_password)}
 				>
 					{#if show_password}
@@ -153,7 +155,7 @@
 				</button>
 			</div>
 
-			<ul class="mb-3 mt-1 ml-6">
+			<ul class="mb-3 mt-1 ml-6 dark:text-neutral-200">
 				<li>
 					{#if icon1 == Icon.circle_dashed}
 						<PhCircleDashed class="inline translate-y-[-1px] text-[18px]" />
@@ -200,7 +202,7 @@
 				</button>
 			</div>
 		</form>
-		<div class="mt-4 text-center">
+		<div class="mt-4 text-center dark:text-neutral-200">
 			<p>Already have an account? <a href="/login" class="link">Log in here</a></p>
 		</div>
 	</div>

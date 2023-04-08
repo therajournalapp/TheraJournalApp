@@ -16,9 +16,9 @@
 	<title>TheraJournal</title>
 </svelte:head>
 
-<h1 class="mb-3 text-center text-4xl font-medium">Welcome to TheraJournal</h1>
+<h1 class="mb-3 text-center text-4xl font-medium dark:text-neutral-200">Welcome to TheraJournal</h1>
 
-<div class="mx-auto mb-4 w-full max-w-screen-sm">
+<div class="mx-auto mb-4 w-full max-w-screen-sm dark:text-neutral-200">
 	<p class="text-center">
 		TheraJournal is a journaling app for therapists and their clients. It is designed to help
 		therapists and their clients track their progress and stay on track with their therapy goals.
