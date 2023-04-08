@@ -98,7 +98,7 @@
 			editorProps: {
 				attributes: {
 					class:
-						'prose mt-[150px] min-h-[calc(100vh-150px)] prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none bg-white p-8 rounded-t-lg w-full max-w-full sm:max-w-full'
+						'prose prose-sm mx-auto mt-[150px] min-h-[calc(100vh-150px)] w-full max-w-full rounded-t-lg bg-white p-8 focus:outline-none dark:bg-neutral-700 dark:prose-invert sm:dark:prose-invert sm:max-w-full sm:prose lg:prose-lg xl:prose-xl'
 				}
 			},
 			onTransaction: () => {

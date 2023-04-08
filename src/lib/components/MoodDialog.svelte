@@ -345,7 +345,7 @@
 								<input
 									type="text"
 									id="entry-title"
-									placeholder="Untitled Habit Tracker"
+									placeholder="Untitled Mood Tracker"
 									on:input={saveTitle}
 									bind:value={title}
 									class="rounded-md text-2xl outline-none hover:underline focus:!no-underline"

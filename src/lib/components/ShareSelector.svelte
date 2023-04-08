@@ -163,7 +163,7 @@
 					leaveTo="opacity-0 scale-95"
 				>
 					<div
-						class="pointer-events-auto h-[500px] w-[375px] rounded-lg bg-white p-5 shadow-xl transition-all dark:bg-neutral-800 dark:shadow-neutral-900"
+						class="pointer-events-auto h-[500px] w-[375px] rounded-lg bg-white p-5 shadow-xl transition-all dark:bg-neutral-700 dark:shadow-neutral-900"
 					>
 						<div class="flex h-full flex-col justify-between gap-3">
 							<DialogTitle class="text-xl text-neutral-700 dark:text-neutral-200"
@@ -184,7 +184,7 @@
 										type="submit"
 										value="Submit"
 									>
-										<PhUserPlus class="text-[25px]" />
+										<PhUserPlus class="text-[25px] dark:text-neutral-200" />
 									</button>
 								</div>
 							</form>
@@ -247,10 +247,10 @@
 										<button
 											on:click={onLinkShareChange}
 											class="focus:shadow-outline relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none
-												   {link_share ? 'bg-primary' : 'bg-gray-200'}"
+												   {link_share ? 'bg-primary' : 'bg-gray-200 dark:bg-neutral-500'}"
 										>
 											<span
-												class="inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition duration-200 ease-in-out
+												class="inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition duration-200 ease-in-out dark:bg-neutral-200
 													  {link_share ? 'translate-x-5' : 'translate-x-0'}"
 											/>
 										</button>
@@ -266,7 +266,7 @@
 												<input class="input select-text text-sm" bind:value={share_link} readonly />
 												<button
 													type="button"
-													class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark"
+													class="absolute right-0 h-full rounded-md px-2 hover:text-primary active:text-primary-dark dark:text-white"
 													on:click={() => {
 														copyLink();
 													}}
@@ -275,7 +275,9 @@
 												</button>
 											</div>
 										{:else}
-											<span class="text-sm text-neutral-600"> Not shared by link </span>
+											<span class="text-sm text-neutral-600 dark:text-neutral-300">
+												Not shared by link
+											</span>
 										{/if}
 									</div>
 								</div>

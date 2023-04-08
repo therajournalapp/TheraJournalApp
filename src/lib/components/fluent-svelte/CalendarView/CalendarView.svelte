@@ -646,10 +646,10 @@ A calendar view lets a user view and interact with a calendar that they can navi
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	.calendar-view {
 		background-clip: padding-box;
-		background-color: var(--fds-solid-background-quarternary);
+		/* background-color: var(--fds-solid-background-quarternary); */
 		/* block-size: 347px; */ /* height */
 		block-size: 400px; /* added */
 		/* border: 1px solid var(--fds-surface-stroke-flyout); */
@@ -666,6 +666,7 @@ A calendar view lets a user view and interact with a calendar that they can navi
 		-moz-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
+		@apply dark:bg-neutral-700;
 	}
 	.calendar-view.floating {
 		border-radius: var(--fds-overlay-corner-radius);

@@ -6,12 +6,12 @@
 	export let deleteCallBack: () => void;
 </script>
 
-<Menu class="relative z-10 max-h-[50px] ">
+<Menu class="relative z-10 max-h-[18px]">
 	<MenuButton>
 		<div
-			class="-m-1.5 flex items-center justify-center rounded-full p-1.5 text-neutral-500 hover:bg-green-900/10 hover:text-primary-dark active:bg-green-900/20"
+			class="-m-1.5 flex items-center justify-center rounded-full text-neutral-500 hover:bg-green-900/10 hover:text-primary-dark active:bg-green-900/20 dark:text-neutral-200"
 		>
-			<PhDotsThreeCircleVertical class="inline text-[23px]" />
+			<PhDotsThreeCircleVertical class="inline text-[25px]" />
 		</div>
 	</MenuButton>
 	<Transition
@@ -23,17 +23,17 @@
 		leaveTo="transform scale-95 opacity-0"
 	>
 		<MenuItems
-			class="absolute right-0 z-10 mt-2 w-56 max-w-sm origin-top-right transform divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+			class="absolute right-0 z-10 mt-2 w-56 max-w-sm origin-top-right transform divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-600 dark:ring-neutral-600"
 		>
 			<div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-				<div class="relative grid grid-cols-1 divide-y bg-white">
+				<div class="relative grid grid-cols-1 divide-y bg-white dark:bg-neutral-600">
 					<div class="px-1 py-1">
 						<MenuItem let:active on:click={deleteCallBack}>
 							<button
-								class="group flex w-full items-center rounded-md p-2 text-sm text-gray-900"
+								class="group flex w-full items-center rounded-md p-2 text-sm text-gray-900 dark:text-neutral-200"
 								class:active
 							>
-								<PhTrash class="mr-2 inline text-[17px]" />
+								<PhTrash class="mr-2 inline text-[17px] dark:text-neutral-200" />
 								Delete Habit Tracker
 							</button>
 						</MenuItem>
