@@ -125,7 +125,7 @@
 						class="pointer-events-auto flex h-[650px] w-[400px] flex-col justify-between rounded-lg bg-white p-5 shadow-xl transition-all dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
 					>
 						<div class="flex flex-col gap-3">
-							<DialogTitle class="text-xl text-neutral-700">Tags</DialogTitle>
+							<DialogTitle class="text-xl text-neutral-700 dark:text-neutral-200">Tags</DialogTitle>
 							<!-- <p>{body}</p> -->
 							<Tags
 								bind:tags={existingTags}
@@ -136,7 +136,7 @@
 								placeholder={'Type a new tag'}
 							/>
 							<h5 class="dark:text-neutral-200">Suggested Tags:</h5>
-							<div class="overflow-scroll whitespace-normal">
+							<div class="whitespace-normal">
 								<!-- TODO: I can't get it to remove things when deleting this suggestion from suggestedTags list. Maybe because it is a set? -->
 								{#each [...suggestedTags] as tag (tag)}
 									<!-- svelte-ignore a11y-invalid-attribute -->
