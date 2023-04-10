@@ -58,6 +58,7 @@
 
 		const summaryData = await (await summaryResponse).json();
 		if (summaryData.summary != body) summary = summaryData.summary;
+		else summary = 'Journal is too short to summarize.';
 	});
 
 	async function saveTags() {
@@ -152,7 +153,7 @@
 								{/each}
 							</div>
 							<h5 class="dark:text-neutral-200">Auto Summary</h5>
-							<p class="dark:text-neutral-200">{summary}</p>
+							<p id="summary" class="dark:text-neutral-200">{summary}</p>
 						</div>
 
 						<div class="mt-5 flex justify-end">
