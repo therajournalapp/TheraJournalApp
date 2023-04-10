@@ -24,7 +24,7 @@
 
 	let TagsInput: any;
 	onMount(async () => {
-		const summaryResponse = fetch('http://35.219.179.297:8080/summary', {
+		const summaryResponse = fetch('http://35.219.179.207:8080/summary', {
 			method: 'POST',
 			body: JSON.stringify({ text: body }),
 			headers: {
@@ -32,7 +32,7 @@
 			}
 		});
 
-		const response = await fetch('http://35.219.179.297:8080/tags', {
+		const response = await fetch('http://35.219.179.207:8080/tags', {
 			method: 'POST',
 			body: JSON.stringify({ text: body }),
 			headers: {
@@ -121,7 +121,7 @@
 					leaveTo="opacity-0 scale-95"
 				>
 					<div
-						class="pointer-events-auto flex h-[650px] w-[400px] flex-col justify-between rounded-lg bg-white p-5 shadow-xl transition-all"
+						class="pointer-events-auto flex h-[650px] w-[400px] flex-col justify-between rounded-lg bg-white p-5 shadow-xl transition-all dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
 					>
 						<div class="flex flex-col gap-3">
 							<DialogTitle class="text-xl text-neutral-700">Tags</DialogTitle>
@@ -134,14 +134,14 @@
 								labelText={'Saved Tags: '}
 								placeholder={'Type a new tag'}
 							/>
-							<h5>Suggested Tags:</h5>
+							<h5 class="dark:text-neutral-200">Suggested Tags:</h5>
 							<div class="overflow-scroll whitespace-normal">
 								<!-- TODO: I can't get it to remove things when deleting this suggestion from suggestedTags list. Maybe because it is a set? -->
 								{#each [...suggestedTags] as tag (tag)}
 									<!-- svelte-ignore a11y-invalid-attribute -->
 									<a
 										href="#"
-										class="ml-1 whitespace-normal rounded-sm border-2 border-solid border-neutral-700 text-neutral-700 hover:border-primary hover:text-neutral-900"
+										class="p-0.25 ml-1 whitespace-normal rounded-sm border-2 border-solid border-neutral-700 text-neutral-700 hover:border-primary hover:text-neutral-900 dark:border-neutral-400 dark:text-neutral-200"
 										on:click={() => {
 											console.log(tag);
 											addTag(tag);
@@ -151,8 +151,8 @@
 									</a>
 								{/each}
 							</div>
-							<h5>Auto Summary</h5>
-							<p>{summary}</p>
+							<h5 class="dark:text-neutral-200">Auto Summary</h5>
+							<p class="dark:text-neutral-200">{summary}</p>
 						</div>
 
 						<div class="mt-5 flex justify-end">
