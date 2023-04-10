@@ -44,13 +44,14 @@
 				<PhXCircle class="mr-2 text-[160px] opacity-60 dark:text-white" />
 				<div class="w-fit max-w-[250px]">
 					<p class="text-xl font-medium dark:text-neutral-200">No Recent Events</p>
-					<p class="dark:text-neutral-300">If anyone shares anything with you in the future they will show up here.</p>
+					<p class="dark:text-neutral-300">
+						If anyone shares anything with you in the future they will show up here.
+					</p>
 				</div>
 			</div>
 		</div>
 	{/if}
 	{#each data.events as event (event.id)}
-
 		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
 			{#if event.type}
 				<HabitCard
@@ -78,7 +79,7 @@
 </div>
 {#if data.users.length > 0}
 	<div class="app-container mt-10 mb-2 flex items-baseline">
-		<div class="mr-3 text-3xl font-medium hover:underline">Users</div>
+		<div class="mr-3 text-3xl font-medium hover:underline dark:text-neutral-200">Users</div>
 	</div>
 	<div class="card-scroll" bind:this={users}>
 		<div class="left-pad" />
