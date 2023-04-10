@@ -16,6 +16,7 @@
 	export let body: string;
 	export let existingTags: string[] = [];
 	let summary: string = '';
+	let summary: string = '';
 	// handle bug with tiny zero space tag in input
 	if (existingTags[0] == '') existingTags = [];
 
