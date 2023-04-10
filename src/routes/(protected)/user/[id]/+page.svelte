@@ -1,7 +1,26 @@
 <script lang="ts">
-	export let data;
+	export let data: any;
+
+	async function getMoodEntries() {
+		// Adds the shared user id as a parameter
+		const search_params = new URLSearchParams([['sharedId', data.shared_user_id]]);
+
+		// Fetches the shared mood entries
+		const res = await fetch('/api/analysis/mood?' + search_params.toString(), {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const mood_entries = await res.json();
+
+		console.log('Retrieved mood entries');
+		console.log(mood_entries);
+	}
 </script>
 
+{getMoodEntries()}
 <h1>Hello from user</h1>
 
 <!-- <div class="app-container mt-10 mb-2 flex items-baseline">
