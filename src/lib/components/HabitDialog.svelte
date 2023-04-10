@@ -296,7 +296,7 @@
 				leaveTo="opacity-0 scale-95"
 			>
 				<div
-					class="pointer-events-auto h-fit w-fit rounded-lg bg-white p-5 shadow-xl transition-all "
+					class="pointer-events-auto h-fit w-fit rounded-lg bg-white p-5 shadow-xl transition-all dark:bg-neutral-700 dark:shadow-neutral-900"
 				>
 					<div class="flex h-full w-[350px] flex-col justify-between">
 						<div class="flex justify-between align-middle">
@@ -307,14 +307,14 @@
 									placeholder="Untitled Habit Tracker"
 									on:input={saveTitle}
 									bind:value={title}
-									class="rounded-md text-2xl outline-none hover:underline focus:!no-underline"
+									class="rounded-md bg-transparent text-2xl outline-none hover:underline focus:!no-underline dark:text-neutral-200"
 									tabindex="-1"
 								/>
 							{:else}
-								<DialogTitle class="text-2xl">{name}</DialogTitle>
+								<DialogTitle class="text-2xl dark:text-neutral-200">{name}</DialogTitle>
 							{/if}
 
-							<div class="mt-1 mr-1 mb-2 flex gap-3">
+							<div class="mt-1 mr-1 mb-2 flex items-center gap-3">
 								{#if !view_only}
 									<ShareSelector
 										title={name == '' ? 'Untitled Habit Tracker' : name}
@@ -331,7 +331,7 @@
 						{#if !view_only}
 							<div class="my-2 ">
 								<button
-									class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark"
+									class="font-medium text-neutral-700 underline hover:text-neutral-400 active:text-primary-dark dark:text-neutral-200"
 									on:click={() => {
 										if (value.some((date) => sameDayMonthYear(date, today) == true)) {
 											console.log('remove');
@@ -352,7 +352,7 @@
 										<PhMinusCircle class="inline translate-y-[-1px] text-[13px]" />
 									{/if}
 								</button>
-								<span> or click to toggle a date below.</span>
+								<span class="dark:text-neutral-300"> or click to toggle a date below.</span>
 							</div>
 						{/if}
 

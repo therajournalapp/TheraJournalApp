@@ -32,25 +32,25 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 <div class="app-container mb-2">
-	<a href="/shared#" class="text-3xl font-medium hover:underline">Recent</a>
+	<a href="/shared#" class="text-3xl font-medium hover:underline dark:text-neutral-200">Recent</a>
 </div>
 <div class="card-scroll" bind:this={events}>
 	<div class="left-pad" />
 	{#if data.events && data.events.length === 0}
 		<div
-			class="relative flex h-[124px] w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light"
+			class="relative flex h-[124px] w-[400px] min-w-[16rem] flex-col overflow-hidden rounded-lg border-2 border-dashed border-black border-opacity-60 p-4 shadow-md shadow-offwhite-light dark:border-neutral-200 dark:shadow-none"
 		>
 			<div class="flex h-full w-full items-center justify-center">
-				<PhXCircle class="mr-2 text-[160px] opacity-60" />
+				<PhXCircle class="mr-2 text-[160px] opacity-60 dark:text-white" />
 				<div class="w-fit max-w-[250px]">
-					<p class="text-xl font-medium">No Recent Events</p>
-
-					<p>If anyone shares anything with you in the future they will show up here.</p>
+					<p class="text-xl font-medium dark:text-neutral-200">No Recent Events</p>
+					<p class="dark:text-neutral-300">If anyone shares anything with you in the future they will show up here.</p>
 				</div>
 			</div>
 		</div>
 	{/if}
 	{#each data.events as event (event.id)}
+
 		<div animate:flip={{ duration: 500 }} in:fly|local={{ y: 150 }} out:fade|local>
 			{#if event.type}
 				<HabitCard

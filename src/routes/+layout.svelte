@@ -15,7 +15,7 @@
 		<slot />
 	</main>
 
-	<footer class="mx-auto py-6">
+	<footer class="mx-auto py-6 dark:text-neutral-300">
 		<p>© 2022 Copyright: TheraJournal</p>
 	</footer>
 </div>

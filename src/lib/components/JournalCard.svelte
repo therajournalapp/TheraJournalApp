@@ -30,10 +30,6 @@
 	// If this entry is shared by link, this will be the link's code.
 	export let share_link: string = '';
 
-	// Sets the shadow color of the card,
-	// change if not putting card over default background.
-	export let shadowclr: string = 'shadow-offwhite-light';
-
 	// Formatted date used for /shared
 	function getFormattedDate(date: Date) {
 		let year = date.getFullYear().toString().substring(2);
@@ -125,11 +121,13 @@
 </script>
 
 <div
-	class="relative mb-4 flex h-56 w-64 min-w-[16rem] flex-col overflow-hidden rounded-lg bg-white p-4 shadow-md {shadowclr} ring-1 ring-black ring-opacity-10"
+	class="relative mb-4 flex h-56 w-64 min-w-[16rem] flex-col overflow-hidden rounded-lg bg-white p-4 shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
 >
 	<div class="flex justify-between">
 		<div class="flex">
-			<div class="relative max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap">
+			<div
+				class="relative max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap dark:text-neutral-200"
+			>
 				<a
 					href="/{link_to}/{id}"
 					class="text-xl font-medium hover:underline"
@@ -154,7 +152,7 @@
 	</div>
 
 	<div class="w-full break-words">
-		<div class="prose prose-sm prose-neutral pt-3">
+		<div class="prose prose-sm prose-neutral pt-3 dark:prose-invert">
 			{@html body.substring(1, body.length - 1)}
 		</div>
 	</div>
@@ -173,7 +171,9 @@
 			<span />
 		{/if}
 
-		<span class="font-semibold tabular-nums tracking-tighter text-neutral-500 text-opacity-90">
+		<span
+			class="font-semibold tabular-nums tracking-tighter text-neutral-500 text-opacity-90 dark:text-neutral-400"
+		>
 			{formatted_date}
 		</span>
 	</div>
@@ -181,12 +181,6 @@
 
 <style lang="postcss">
 	.fade-out {
-		background-image: linear-gradient(
-			0deg,
-			rgba(255, 255, 255, 1) 0%,
-			rgba(255, 255, 255, 1) 30%,
-			rgba(255, 255, 255, 0.75) 50%,
-			rgba(255, 255, 255, 0) 100%
-		);
+		@apply bg-[linear-gradient(_0deg,rgba(255,255,255,1)_0%,rgba(255,255,255,1)_30%,rgba(255,255,255,0.75)_50%,rgba(255,255,255,0)_100%_)] dark:bg-[linear-gradient(_0deg,rgba(64,64,64,1)_0%,rgba(64,64,64,1)_30%,rgba(64,64,64,0.75)_50%,rgba(64,64,64,0)_100%_)];
 	}
 </style>

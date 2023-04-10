@@ -452,6 +452,8 @@ A calendar view lets a user view and interact with a calendar that they can navi
 										current_day_of_week}
 									class:!text-black={getWeekdayLocale(day, { locale, offset: weekStart }) ===
 										current_day_of_week}
+									class:dark:!text-white={getWeekdayLocale(day, { locale, offset: weekStart }) ===
+										current_day_of_week}
 									scope="col"
 									{...{
 										abbr: getWeekdayLocale(day, { locale, offset: weekStart })
@@ -646,10 +648,10 @@ A calendar view lets a user view and interact with a calendar that they can navi
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	.calendar-view {
 		background-clip: padding-box;
-		background-color: var(--fds-solid-background-quarternary);
+		/* background-color: var(--fds-solid-background-quarternary); */
 		/* block-size: 347px; */ /* height */
 		block-size: 400px; /* added */
 		/* border: 1px solid var(--fds-surface-stroke-flyout); */
@@ -666,6 +668,7 @@ A calendar view lets a user view and interact with a calendar that they can navi
 		-moz-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
+		@apply dark:bg-neutral-700;
 	}
 	.calendar-view.floating {
 		border-radius: var(--fds-overlay-corner-radius);
@@ -683,12 +686,13 @@ A calendar view lets a user view and interact with a calendar that they can navi
 		padding: 0;
 	}
 	.calendar-view-header {
-		-webkit-border-after: 1px solid var(--fds-card-stroke-default);
-		border-block-end: 1px solid var(--fds-card-stroke-default);
+		/* -webkit-border-after: 1px solid var(--fds-card-stroke-default); */
+		/* border-block-end: 1px solid var(--fds-card-stroke-default); */
 		box-sizing: border-box;
 		inline-size: 100%;
 		/* padding: 7px; */
 		padding: 7px 2px; /* added */
+		@apply border-b border-neutral-200 dark:border-neutral-600;
 	}
 	.calendar-view-header button {
 		align-items: center;
@@ -729,8 +733,9 @@ A calendar view lets a user view and interact with a calendar that they can navi
 	.calendar-view-header button svg {
 		fill: currentColor;
 		block-size: auto;
-		color: var(--fds-control-strong-fill-default);
+		/* color: var(--fds-control-strong-fill-default); */
 		inline-size: 16px;
+		@apply text-neutral-500;
 	}
 	.calendar-view-header-text {
 		flex: 1 1 auto;
@@ -739,6 +744,7 @@ A calendar view lets a user view and interact with a calendar that they can navi
 		flex: 1 1 auto;
 		inline-size: 100%;
 		justify-content: flex-start;
+		@apply dark:!text-neutral-200;
 		/* padding-inline: 9px; */
 	}
 	.calendar-view-table {
@@ -753,7 +759,7 @@ A calendar view lets a user view and interact with a calendar that they can navi
 		position: absolute;
 	}
 	.calendar-view-table-wrapper {
-		background-color: var(--fds-layer-on-acrylic-background-default);
+		/* background-color: var(--fds-layer-on-acrylic-background-default); */
 		/* block-size: 298px; */ /* height */
 		block-size: 350px; /* added */
 		contain: layout;
@@ -800,11 +806,11 @@ A calendar view lets a user view and interact with a calendar that they can navi
 	}
 	.calendar-view-table tbody,
 	.calendar-view-table thead tr {
-		background-color: var(--fds-solid-background-quarternary);
-		box-shadow: inset 0 0 0 100vmax var(--fds-layer-on-acrylic-background-default);
+		/* background-color: var(--fds-solid-background-quarternary); */
+		/* box-shadow: inset 0 0 0 100vmax var(--fds-layer-on-acrylic-background-default); */
 	}
 	.calendar-view-table thead {
-		@apply font-mono;
+		@apply font-mono dark:!text-neutral-200;
 		position: relative;
 		z-index: 1;
 	}

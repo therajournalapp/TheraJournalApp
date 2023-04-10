@@ -17,7 +17,7 @@
 				height="50"
 				fill="currentColor"
 				viewBox="0 0 256 256"
-				class="text-black hover:text-primary-dark"
+				class="text-black hover:text-primary-dark dark:text-neutral-300"
 			>
 				<rect width="256" height="256" fill="none" /><circle
 					cx="128"
@@ -134,35 +134,25 @@
 		leaveTo="transform scale-95 opacity-0"
 	>
 		<PopoverPanel class="absolute right-0 z-10 mt-0 w-48 max-w-sm transform">
-			<div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-				<div class="relative grid grid-cols-1 divide-y bg-white">
+			<div
+				class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-600"
+			>
+				<div
+					class="relative grid grid-cols-1 divide-y bg-white dark:divide-neutral-500 dark:bg-neutral-700"
+				>
 					<PopoverButton
 						as="a"
 						href="/settings"
-						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary"
+						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary dark:text-neutral-200"
 					>
 						Settings
 					</PopoverButton>
 					<PopoverButton
 						as="a"
 						href="##"
-						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary"
+						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary dark:text-neutral-200"
 					>
-						Invite a Friend
-					</PopoverButton>
-					<PopoverButton
-						as="a"
-						href="##"
-						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary"
-					>
-						Add a Therapist
-					</PopoverButton>
-					<PopoverButton
-						as="a"
-						href="##"
-						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary"
-					>
-						Data Privacy
+						Switch Themes (Light/Dark)
 					</PopoverButton>
 					<PopoverButton
 						as="a"
@@ -171,7 +161,7 @@
 							await signOut();
 							invalidateAll();
 						}}
-						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary"
+						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary dark:text-neutral-200"
 					>
 						Sign Out
 					</PopoverButton>

@@ -67,7 +67,7 @@
 
 		<div class="mx-auto mt-12 block w-full max-w-md rounded-l text-gray-700 ">
 			<div class="mb-6">
-				<a href="/" class="arrow-link">
+				<a href="/" class="arrow-link dark:text-neutral-200">
 					<div class="arrow">
 						<PhCaretLeftThin class="inline text-[22px]" />
 					</div>
@@ -99,11 +99,11 @@
 				</div>
 			</form>
 
-			<div class="mt-4 text-center">
+			<div class="mt-4 text-center dark:text-neutral-200">
 				<p>Don't have an account? <a href="/signup" class="link">Register here</a></p>
 			</div>
 
-			<div class="mt-4 text-center">
+			<div class="mt-4 text-center dark:text-neutral-200">
 				<p>Forgot your password? <a href="/resetpassword" class="link">Reset password</a></p>
 			</div>
 		</div>
