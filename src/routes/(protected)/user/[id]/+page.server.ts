@@ -8,6 +8,5 @@ export const load = (async ({ params, locals }) => {
 
 	return {
 		shared_user_id: params.id
-	}
-
+	};
 }) satisfies PageServerLoad;

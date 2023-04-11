@@ -1,4 +1,20 @@
 <script lang="ts">
+	import { Line } from 'svelte-chartjs';
+	import { chartData } from './data.js';
+
+	import {
+		Chart as ChartJS,
+		Title,
+		Tooltip,
+		Legend,
+		LineElement,
+		LinearScale,
+		PointElement,
+		CategoryScale
+	} from 'chart.js';
+
+	ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
+
 	export let data: any;
 
 	async function getMoodEntries() {
@@ -6,7 +22,7 @@
 		const search_params = new URLSearchParams([['sharedId', data.shared_user_id]]);
 
 		// Fetches the shared mood entries
-		const res = await fetch('/api/analysis/mood?' + search_params.toString(), {
+		const res = await fetch('http://127.0.0.1:5173/api/analysis/mood?' + search_params.toString(), {
 			method: 'GET',
 			headers: {
 				'content-type': 'application/json'
@@ -21,7 +37,25 @@
 </script>
 
 {getMoodEntries()}
+
 <h1>Hello from user</h1>
+
+<Line data={chartData} options={{ responsive: false }} width={600} height={300} />
+
+<!-- <Line
+	data={{
+		labels: [1, 2, 3],
+		datasets: [
+			{
+				label: 'Acquisitions by year',
+				data: [2, 3, 2]
+			}
+		]
+	}}
+	width={100}
+	height={50}
+	options={{ maintainAspectRatio: false }}
+/> -->
 
 <!-- <div class="app-container mt-10 mb-2 flex items-baseline">
 	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
@@ -66,4 +100,4 @@ entries={event.HabitEntry}
 shared_by={event.user.email}
 type={event.type}
 link_to="shared" -->
-/>
+<!-- /> -->
