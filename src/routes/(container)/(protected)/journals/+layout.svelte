@@ -11,6 +11,9 @@
 	// bundle entries title and tags into easy to search string
 	type SearchTerms = JournalEntry & {
 		terms: string;
+		shared: boolean;
+		startDate: string;
+		endDate: string;
 	};
 	const searchTerms = data.entries?.map((entry) => {
 		console.log(entry.tags);
