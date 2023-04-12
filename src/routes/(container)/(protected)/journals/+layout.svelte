@@ -1,31 +1,32 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import JournalCard from '$lib/components/JournalCard.svelte';
 	import { createSearchStore, searchHandler } from '$lib/stores/search';
-	import type { JournalEntry } from '@prisma/client';
+	import type { JournalEntry, LinkShare, SharedEntry } from '@prisma/client';
 	import { onDestroy } from 'svelte';
-	import StandardToggle from '$lib/components/StandardToggle.svelte';
 
-	export let data: PageData;
+	export let data;
 
-	// bundle entries title and tags into easy to search string
-	type SearchTerms = JournalEntry & {
-		terms: string;
-		shared: boolean;
-		startDate: string;
-		endDate: string;
-	};
+	// bundle entries title and tags into easy to search string - linkshare and sharedentry are to
+	// prevent some errors that I do not understand
+	type SearchTerms = JournalEntry &
+		LinkShare &
+		SharedEntry & {
+			terms: string;
+			LinkShare: LinkShare[];
+		};
 	const searchTerms = data.entries?.map((entry) => {
-		console.log(entry.tags);
+		console.log('entry: ', entry.LinkShare);
 		if (entry.tags) {
 			return {
 				...entry,
-				terms: `${entry.title} ${entry.tags.split(',').join(' ')}`
+				terms: `${entry.title} ${entry.tags.split(',').join(' ')}`,
+				LinkShare: entry.LinkShare // it exists on there i swear
 			};
 		} else {
 			return {
 				...entry,
-				terms: `${entry.title}`
+				terms: `${entry.title}`,
+				LinkShare: entry.LinkShare
 			};
 		}
 	});
@@ -72,17 +73,18 @@
 					<option value="400">All Time</option>
 				</select>
 				<select
+					bind:value={$searchStore.isShared}
 					class="w-full rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
 				>
-					<option value="">Private / Shared</option>
-					<option value="200">Private Only</option>
-					<option value="400">Shared Only</option>
+					<option value={undefined}>Private / Shared</option>
+					<option value={false}>Private Only</option>
+					<option value={true}>Shared Only</option>
 				</select>
 			</div>
 		</div>
 	</div>
 	<div class="mb-2 flex flex-row flex-wrap justify-start gap-4 self-center ">
-		{#each $searchStore.filtered as entry}
+		{#each $searchStore.filtered as entry (entry.id)}
 			<JournalCard
 				id={entry.id}
 				title={entry.title}
