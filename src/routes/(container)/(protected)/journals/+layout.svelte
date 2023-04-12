@@ -74,14 +74,14 @@
 			<p class="mr-3 font-semibold">Filters</p>
 			<select
 				bind:value={$searchStore.isShared}
-				class=" mr-4 w-64 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
+				class=" mr-4 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
 			>
-				<option value={undefined}>Private / Shared</option>
-				<option value={false}>Private Only</option>
-				<option value={true}>Shared Only</option>
+				<option value={undefined}>All</option>
+				<option value={false}>Private</option>
+				<option value={true}>Shared</option>
 			</select>
 			<label for="beginDate" class="mr-3">From: </label>
-			<input type="date" id="beginDate" class="input mr-3" bind:value={$searchStore.beginDate} />
+			<input type="date" id="beginDate" class=" input mr-3" bind:value={$searchStore.beginDate} />
 			<label for="endDate" class="mx-3">To: </label>
 			<input type="date" id="endDate" class="input mr-3" bind:value={$searchStore.endDate} />
 		</div>
@@ -89,17 +89,17 @@
 			<p class="mr-3 font-semibold">Sort By</p>
 			<select
 				bind:value={$searchStore.sortBy}
-				class=" mr-4 w-64 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
+				class=" mr-4 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
 			>
 				<option value="created">Created</option>
 				<option value="modified">Modifed</option>
 			</select>
 			<select
 				bind:value={$searchStore.sortOrder}
-				class=" mr-4 w-64 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
+				class=" mr-4 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
 			>
-				<option value="asc">Ascending</option>
 				<option value="desc">Descending</option>
+				<option value="asc">Ascending</option>
 			</select>
 			<button class="btn btn-alt ml-3" id="btnResetFilters" on:click={resetFilters}>
 				Reset Filters
