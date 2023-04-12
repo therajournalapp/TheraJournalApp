@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let email: string;
+	export let big: boolean = false;
 
 	const initial = email.charAt(0).toUpperCase();
 
@@ -26,12 +27,24 @@
 	};
 </script>
 
-<div
-	class="flex h-[33px] w-[33px] items-center justify-center rounded-full border-2 border-black border-opacity-10"
-	style="background-color: #{colors[hash(email) % colors.length]};
-           color: #{tx_col[hash(email) % tx_col.length]};"
->
-	<span class="select-none font-medium">
-		{initial}
-	</span>
-</div>
+{#if big}
+	<div
+		class="flex h-[45px] w-[45px] items-center justify-center rounded-full border-2 border-black border-opacity-10"
+		style="background-color: #{colors[hash(email) % colors.length]};
+		color: #{tx_col[hash(email) % tx_col.length]};"
+	>
+		<span class="select-none text-xl font-medium">
+			{initial}
+		</span>
+	</div>
+{:else}
+	<div
+		class="flex h-[33px] w-[33px] items-center justify-center rounded-full border-2 border-black border-opacity-10"
+		style="background-color: #{colors[hash(email) % colors.length]};
+	   	color: #{tx_col[hash(email) % tx_col.length]};"
+	>
+		<span class="select-none font-medium">
+			{initial}
+		</span>
+	</div>
+{/if}

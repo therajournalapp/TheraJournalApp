@@ -78,7 +78,7 @@
 	<div class="right-pad" />
 </div>
 {#if data.users.length > 0}
-	<div class="app-container mt-10 mb-2 flex items-baseline">
+	<div class="app-container mb-2 flex items-baseline">
 		<div class="mr-3 text-3xl font-medium hover:underline dark:text-neutral-200">Users</div>
 	</div>
 	<div class="card-scroll" bind:this={users}>
