@@ -30,7 +30,6 @@
 	export let body: string;
 	// existing tags for the entry
 	export let tags: string[];
-	console.log('Editor tags: ' + tags); // TODO: remove
 	// editor text used for passing to the tag viewer
 	let text: string;
 	// list of emails that the entry is shared with

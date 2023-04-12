@@ -17,6 +17,7 @@
 			body={data.entry.body}
 			shared_to={data.entry.shared_to ?? []}
 			share_link={data.entry.LinkShare.length > 0 ? data.entry.LinkShare[0].link : ''}
+			tags={data.entry.tags.split(',')}
 		/>
 	</EditorWrapper>
 {:else}
