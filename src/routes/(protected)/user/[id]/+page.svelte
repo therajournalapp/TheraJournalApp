@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	export let data: any;
 
 	async function getMoodEntries() {
@@ -18,10 +20,61 @@
 		console.log('Retrieved mood entries');
 		console.log(mood_entries);
 	}
+
+	async function getHabitNames() {
+		const search_params = new URLSearchParams([['sharedId', data.shared_user_id]]);
+
+		// Fetches the shared mood entries
+		const res = await fetch('/api/analysis/habit?' + search_params.toString(), {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const habit_names = await res.json();
+
+		console.log('Retrieved habit names');
+		console.log(habit_names);
+	}
+
+	async function getHabitEntries(habit: String) {
+		const params = [
+			['sharedId', data.shared_user_id],
+			['habit', habit]
+		];
+
+		const search = new URLSearchParams(params);
+
+		const res = await fetch('/api/analysis/habitEntry?' + search.toString(), {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const habit_entries = await res.json();
+
+		console.log('Retrieved ' + habit + ' entries');
+		console.log(habit_entries);
+	}
+	onMount(() => {
+		getMoodEntries();
+		getHabitEntries('sleep');
+		getHabitNames();
+	});
 </script>
 
-{getMoodEntries()}
+<!-- {console.log('Data.entries: ' + data.entries)}
+{console.log(data.entries)} -->
 <h1>Hello from user</h1>
+<button
+	on:click={() => {
+		getHabitEntries('sleep');
+	}}
+>
+	test
+</button>
 
 <!-- <div class="app-container mt-10 mb-2 flex items-baseline">
 	<a href="/shared#" class="mr-3 text-3xl font-medium hover:underline">Shared Entries</a>
