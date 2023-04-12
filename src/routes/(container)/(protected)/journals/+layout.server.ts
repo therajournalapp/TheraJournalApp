@@ -35,7 +35,7 @@ export const load = (async ({ locals }) => {
             }
         },
         orderBy: {
-            updatedAt: 'desc'
+            createdAt: 'desc'
         }
     });
 

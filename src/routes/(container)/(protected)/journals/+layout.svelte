@@ -3,8 +3,9 @@
 	import { createSearchStore, searchHandler } from '$lib/stores/search';
 	import type { JournalEntry, LinkShare, SharedEntry } from '@prisma/client';
 	import { onDestroy } from 'svelte';
+	import type { PageData } from './$types';
 
-	export let data;
+	export let data: PageData;
 
 	// bundle entries title and tags into easy to search string - linkshare and sharedentry are to
 	// prevent some errors that I do not understand
@@ -20,13 +21,13 @@
 			return {
 				...entry,
 				terms: `${entry.title} ${entry.tags.split(',').join(' ')}`,
-				LinkShare: entry.LinkShare // it exists on there i swear
+				LinkShare: entry.LinkShare as LinkShare[] // it exists on there i swear
 			};
 		} else {
 			return {
 				...entry,
 				terms: `${entry.title}`,
-				LinkShare: entry.LinkShare
+				LinkShare: entry.LinkShare as LinkShare[]
 			};
 		}
 	});
@@ -37,6 +38,18 @@
 	onDestroy(() => {
 		unsubscribe();
 	});
+
+	function resetFilters() {
+		searchStore.update((model) => {
+			model.search = '';
+			model.isShared = undefined;
+			model.beginDate = '';
+			model.endDate = '';
+			model.sortBy = 'created';
+			model.sortOrder = 'desc';
+			return model;
+		});
+	}
 </script>
 
 {#if !data.entries || data.entries.length === 0}
@@ -58,29 +71,39 @@
 			placeholder="Type keywords in journal titles or tags"
 		/>
 		<div class="mt-4 flex items-center">
-			<p class="mr-3 font-medium">Filters</p>
-
-			<button class="btn btn-alt"> Reset Filters </button>
+			<p class="mr-3 font-semibold">Filters</p>
+			<select
+				bind:value={$searchStore.isShared}
+				class=" mr-4 w-64 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
+			>
+				<option value={undefined}>Private / Shared</option>
+				<option value={false}>Private Only</option>
+				<option value={true}>Shared Only</option>
+			</select>
+			<label for="beginDate" class="mr-3">From: </label>
+			<input type="date" id="beginDate" class="input mr-3" bind:value={$searchStore.beginDate} />
+			<label for="endDate" class="mx-3">To: </label>
+			<input type="date" id="endDate" class="input mr-3" bind:value={$searchStore.endDate} />
 		</div>
-
-		<div>
-			<div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-				<select
-					class="w-full rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
-				>
-					<option value="">Last Month</option>
-					<option value="200">Last Year</option>
-					<option value="400">All Time</option>
-				</select>
-				<select
-					bind:value={$searchStore.isShared}
-					class="w-full rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
-				>
-					<option value={undefined}>Private / Shared</option>
-					<option value={false}>Private Only</option>
-					<option value={true}>Shared Only</option>
-				</select>
-			</div>
+		<div class="mt-4 flex items-center">
+			<p class="mr-3 font-semibold">Sort By</p>
+			<select
+				bind:value={$searchStore.sortBy}
+				class=" mr-4 w-64 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
+			>
+				<option value="created">Created</option>
+				<option value="modified">Modifed</option>
+			</select>
+			<select
+				bind:value={$searchStore.sortOrder}
+				class=" mr-4 w-64 rounded-md border-r-4 border-transparent bg-white py-3 pl-4 text-sm shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 focus:border-gray-500 focus:ring-0 dark:bg-neutral-700 dark:shadow-neutral-800 dark:ring-neutral-700"
+			>
+				<option value="asc">Ascending</option>
+				<option value="desc">Descending</option>
+			</select>
+			<button class="btn btn-alt ml-3" id="btnResetFilters" on:click={resetFilters}>
+				Reset Filters
+			</button>
 		</div>
 	</div>
 	<div class="mb-2 flex flex-row flex-wrap justify-start gap-4 self-center ">
