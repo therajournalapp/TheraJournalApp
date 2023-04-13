@@ -118,6 +118,16 @@
 
 	onDestroy(async () => {
 		if (view_only) {
+			if (browser) {
+				// save sentiment score
+				fetch('/api/sentiment', {
+					method: 'POST',
+					body: JSON.stringify({ entry_id: id }),
+					headers: {
+						'content-type': 'application/json'
+					}
+				});
+			}
 			return;
 		}
 
@@ -125,6 +135,16 @@
 			if (browser) {
 				// immediately save before unmounting
 				await saveContent.flush();
+
+				// save sentiment score
+				fetch('/api/sentiment', {
+					method: 'POST',
+					body: JSON.stringify({ entry_id: id }),
+					headers: {
+						'content-type': 'application/json'
+					}
+				});
+
 				// update dashboard preview by invalidating it's load function
 				invalidateAll();
 			}
