@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Line } from 'svelte-chartjs';
-	// import { chartData } from './data.js';
 
 	import {
 		Chart as ChartJS,
