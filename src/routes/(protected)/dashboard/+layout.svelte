@@ -5,6 +5,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import PhPlusCircle from '~icons/ph/plus-circle';
+	import PhCaretRight from '~icons/ph/caret-right';
 
 	let habit: any;
 	let journal: any;
@@ -31,10 +32,8 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<div class="app-container mb-2 flex items-baseline">
-	<a href="/dashboard#" class="mr-3 text-3xl font-medium hover:underline dark:text-neutral-200">
-		Habits
-	</a>
+<div class="app-container mb-2 flex items-baseline gap-3">
+	<span class="text-3xl font-medium dark:text-neutral-200">Habits</span>
 	<a
 		href="/dashboard/h/new"
 		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700 dark:text-neutral-400"
@@ -61,15 +60,21 @@
 	<div class="right-pad" />
 </div>
 
-<div class="app-container mt-10 mb-2 flex items-baseline" data-sveltekit-preload-data="off">
-	<a href="/journals" class="mr-3 text-3xl font-medium hover:underline dark:text-neutral-200"
-		>Journal Entries</a
-	>
+<div class="app-container mt-10 mb-2 flex items-baseline gap-3" data-sveltekit-preload-data="off">
+	<a href="/journals" class="text-3xl font-medium hover:underline dark:text-neutral-200"
+		>Journal Entries
+	</a>
 	<a
-		href="/dashboard/new"
+		href="/journals"
 		class="block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700 dark:text-neutral-400"
 	>
-		create new <PhPlusCircle class="inline text-[17px]" />
+		view all <PhCaretRight class="inline translate-y-[-1px] translate-x-[-5px] text-[17px]" />
+	</a>
+	<a
+		href="/dashboard/new"
+		class="-ml-2 block translate-y-[-2px] text-xl text-neutral-600 hover:text-neutral-300 hover:underline active:text-neutral-700 dark:text-neutral-400"
+	>
+		create new <PhPlusCircle class="inline translate-y-[-1px] text-[17px]" />
 	</a>
 </div>
 

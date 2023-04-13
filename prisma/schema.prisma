@@ -48,6 +48,7 @@ model JournalEntry {
     SharedEntry SharedEntry[]
     LinkShare   LinkShare[]
     tags        String        @default("") @db.VarChar(255) // list of string separated by comma
+    sentiment   Float?
 
     @@index([user_id])
     @@map("journal_entry")
