@@ -77,11 +77,9 @@
 	<div class="flex flex-col">
 		<!--  Create a button -->
 		<!-- Download User data button -->
-		<button class="btn" on:click={() => downloadDialog.showModal()}>
-			<i />
-			<!-- Insert icon for download -->
-			Download a copy of my data</button
-		>
+		<!-- <button class="btn" on:click={() => downloadDialog.showModal()}>
+			Download a copy of my data
+		</button> -->
 	</div>
 	<Dialog bind:dialog={downloadDialog} on:close={() => console.log('closed')}>
 		<h1 class="text-xl text-primary">Download a copy of your data</h1>

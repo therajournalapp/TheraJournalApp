@@ -179,18 +179,22 @@
 
 		const search_params = new URLSearchParams(params);
 
-		// Fetches the shared mood entries
-		const res = await fetch('/api/analysis/sentiment?' + search_params.toString(), {
-			method: 'GET',
-			headers: {
-				'content-type': 'application/json'
+		try {
+			// Fetches the shared mood entries
+			const res = await fetch('/api/analysis/sentiment?' + search_params.toString(), {
+				method: 'GET',
+				headers: {
+					'content-type': 'application/json'
+				}
+			});
+
+			const responseData = await res.json();
+
+			if (responseData.entries) {
+				return responseData.entries;
 			}
-		});
-
-		const responseData = await res.json();
-
-		if (responseData.entries) {
-			return responseData.entries;
+		} catch (err) {
+			console.log(err);
 		}
 
 		return [];
@@ -296,18 +300,27 @@
 </div>
 
 <div class="app-container">
-	<select bind:value={selectedMonth} class="w-1/2">
-		{#each months as month}
-			<option value={month}>{month.text}</option>
-		{/each}
-	</select>
+	<div class="my-3 flex max-w-xl gap-2">
+		<select
+			bind:value={selectedMonth}
+			class="mr-4 w-1/2 rounded-md border-r-4 !border-transparent py-3 pl-4 text-sm text-black shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 dark:bg-neutral-700 dark:text-neutral-200 dark:shadow-neutral-800 dark:ring-neutral-700"
+		>
+			{#each months as month}
+				<option value={month}>{month.text}</option>
+			{/each}
+		</select>
 
-	<select bind:value={selectedYear} class="w-1/2">
-		{#each years as year}
-			<option value={year}>{year.text}</option>
-		{/each}
-	</select>
-	<h2 class="mt-4 mb-2 text-2xl font-medium dark:text-neutral-200">Mood</h2>
+		<select
+			bind:value={selectedYear}
+			class="mr-4 w-1/2 rounded-md border-r-4 !border-transparent py-3 pl-4 text-sm text-black shadow-md shadow-offwhite-light ring-1 ring-black ring-opacity-10 dark:bg-neutral-700 dark:text-neutral-200 dark:shadow-neutral-800 dark:ring-neutral-700"
+		>
+			{#each years as year}
+				<option value={year}>{year.text}</option>
+			{/each}
+		</select>
+	</div>
+
+	<h2 class="mb-2 text-2xl font-medium dark:text-neutral-200">Mood</h2>
 	<div class="chart-wrapper">
 		{#if moodChartData != null}
 			<Line
@@ -375,6 +388,8 @@
 			</div>
 		{/if}
 	</div>
+
+	<h2 class="mt-6 mb-2 text-3xl font-medium dark:text-neutral-200">Habits</h2>
 
 	{#if habit_names}
 		{#each habit_names as habit}
