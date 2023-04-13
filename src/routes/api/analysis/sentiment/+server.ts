@@ -19,39 +19,23 @@ export const GET = (async ({ url, locals }) => {
         return new Response(JSON.stringify({ message: 'Invalid month request' }), { status: 400 });
     }
 
-    // Retrieves the mood habit ID of the user who shared their data
-    const mood_habit_id = await prisma.habit.findFirst({
-        select: {
-            id: true
-        },
-        where: {
-            user_id: id_str,
-            type: 'Mood'
-        }
-    });
-
-    if (!mood_habit_id) {
-        return new Response(JSON.stringify({ message: 'Invalid mood habit ID' }), { status: 400 });
-    }
 
     const first_day_of_month = new Date(date_str);
     const last_day_of_month = new Date(first_day_of_month.getFullYear(), first_day_of_month.getMonth() + 1, 0);
 
-    // Gets date and value of the mood habit entries from the current month
-    const mood_habit_entries = await prisma.habitEntry.findMany({
+    const sentiment_entries = await prisma.journalEntry.findMany({
         select: {
-            date: true,
-            value: true,
+            createdAt: true,
+            sentiment: true,
         },
         where: {
-            habit_id: mood_habit_id.id,
-            date: {
+            user_id: id_str,
+            createdAt: {
                 gte: first_day_of_month,
                 lte: last_day_of_month
             }
-        },
+        }
     });
 
-
-    return new Response(JSON.stringify({ entries: mood_habit_entries }), { status: 200 });
+    return new Response(JSON.stringify({ entries: sentiment_entries }), { status: 200 });
 }) satisfies RequestHandler;
