@@ -3,9 +3,40 @@
 
 TheraJournal is a privacy focused journaling web app for therapy and mental health. Therapists often ask for their patients to keep a personal journal. A problem arises where this journal is often never revisited, even when patients may feel the desire to share certain parts of it with their trusted therapist. The project’s core aim is to solve that problem by providing a patient with a secure way to create journal entries and selectively share any specific entries with a trusted person - their therapist.
 
-**Public Alpha Version of TheraJournal:** [Site](https://therajournal.app)
 
-This is a rewrite of the original react version of the app using [SvelteKit](https://kit.svelte.dev/) and several different libraries.
+Create an account and try it out today on our 
+**live site:** [therajournal.app](https://therajournal.app)
+
+### Abstract
+
+TheraJournal will feature a dashboard with data visualization based on your journal entries, medication tracking, and reminders from your therapist. It will have a separate dashboard for therapists where they can manage multiple clients. This is not an AI therapist. The software will never make mental health recommendations to the user. Rather, its purpose is to promote communication between clients and therapists.
+
+Features in order of priority: 
+
+Patient side: 
+* Dashboard to see your journal entries and tracked habits
+* Share individual habits and journal entries, or share everything by default with your therapist
+* Ability to add your therapists using a unique code that you obtain from them personally 
+* Share to another user account through their email account or through a special link
+* Automatic suggested tags for your journal entries for fast and easy search of your journals
+* Auto generated summaries of your longer journals
+* Sort and filter through all of your journals
+
+Therapist side: 
+* A client management dashboard where you can see client data at a high-level view (mood, medication, NLP-generated journal highlights, etc.) 
+* A per-client dashboard where you can view recent journal entries that have been shared and view client data via charts and graphs
+
+
+### Summary of Technologies
+* Programming Languages: Typescript, Python
+* Web Framework / Frontend: Svelte + SvelteKit
+* Authentication: FireBase
+* NLP Libraries: Spacy, Textblob, (served with Flask on Google Cloud)
+* Hosting: Vercel
+* Databases: MariaDB on Google Cloud
+* Platforms Supported: All modern browsers
+
+You can read our full original project design document on [TheraJournal Wiki](https://capstone-cs.eng.utah.edu/groups/therajournal/-/wikis/home)
 
 ----
 
@@ -26,20 +57,5 @@ This is a rewrite of the original react version of the app using [SvelteKit](htt
 
 1. Run `pnpm playwright install` to install the test browsers
 2. Find the test task and run it to run all the tests, or use the Tests pane on VSCode to run individual tests or debug them as usual. 
-
-----
-
-## TODO
-
-- [x] Routing - Using SvelteKit filebased routing with +layout.svelte.
-- [x] Styling - Ported from Bootstrap components to [Tailwind CSS](https://tailwindcss.com/), [PostCSS](https://postcss.org/), and [Svelte Headless UI](https://svelte-headlessui.goss.io/docs).
-- [x] ORM - Using [Prisma](https://www.prisma.io/) ORM with typesafety. (Need to experiment with migrations when developing with full team)
-- [x] Dashboard Layout - reworked using svelte components and tailwind. Added polish and improved mobile layout.
-- [x] Authentication - Using [Lucia Auth](https://github.com/pilcrowOnPaper/lucia-auth) and server handle hook. Protected routes should follow "/(protected)/".
-- [x] WYSIWYG - Using [tiptap](https://tiptap.dev/) with the [tailwind typography plugin](https://tailwindcss.com/docs/typography-plugin) for text styling.
-- [x] Vercel Hosting - The main branch of this repo is automatically deployed to [therajournalapp.vercel.app](https://therajournalapp.vercel.app)
-- [x] Zod - Using [Zod](https://zod.dev/?id=introduction) for validation with TypeScript.
-- [x] Journal Entry Journal Entry CRUD - Creating, Deleting, and Editing journal entries with autosave is implemented.
-- [ ] tRPC - Looking into using [tRPC](trpc.io) with [tRPC-SvelteKit](https://github.com/icflorescu/trpc-sveltekit) for typesafe API. Currently using sveltekit page load functions and fetch.
 
 ----
