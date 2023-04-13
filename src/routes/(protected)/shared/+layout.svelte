@@ -13,14 +13,16 @@
 	let users: any;
 	let events: any;
 	onMount(() => {
-		events.addEventListener('wheel', (event: any) => {
-			event.preventDefault();
-			events.scrollLeft += event.deltaY + event.deltaX;
+		events.addEventListener('wheel', (e: any) => {
+			e.preventDefault();
+			events.scrollLeft += e.deltaY + e.deltaX;
 		});
-		users.addEventListener('wheel', (event: any) => {
-			event.preventDefault();
-			users.scrollLeft += event.deltaY + event.deltaX;
-		});
+		if (users) {
+			users.addEventListener('wheel', (e: any) => {
+				e.preventDefault();
+				users.scrollLeft += e.deltaY + e.deltaX;
+			});
+		}
 	});
 
 	// Get data from +layout.server.ts load function
