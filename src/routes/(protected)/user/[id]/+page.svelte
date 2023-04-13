@@ -5,16 +5,56 @@
 
 	export let data: any;
 
-	let chartData = {};
-	let habitChartData = {};
+	let moodChartData: any = null;
+	let sentimentChartData: any = null;
 
-	async function populateChartData() {
+	let months = [
+		{ id: 0, text: 'January' },
+		{ id: 1, text: 'February' },
+		{ id: 2, text: 'March' },
+		{ id: 3, text: 'April' },
+		{ id: 4, text: 'May' },
+		{ id: 5, text: 'June' },
+		{ id: 6, text: 'July' },
+		{ id: 7, text: 'August' },
+		{ id: 8, text: 'September' },
+		{ id: 9, text: 'October' },
+		{ id: 10, text: 'November' },
+		{ id: 11, text: 'December' }
+	];
+
+	let years = [
+		{ id: 2022, text: '2022' },
+		{ id: 2023, text: '2023' }
+	];
+
+	let selectedMonth = months[new Date().getMonth()];
+	let selectedYear = years[1];
+
+	$: {
+		populateChartData(selectedMonth.id, selectedYear.id).then((chartData) => {
+			moodChartData = chartData;
+		});
+
+		getSentimentEntries(selectedMonth.id, selectedYear.id).then((entries) => {
+			populateSentimentChartData(entries).then((chartData) => {
+				sentimentChartData = chartData;
+			});
+		});
+	}
+
+	async function populateChartData(month: number, year: number) {
 		const currDate = new Date();
-		const moodEntries: any = await getMoodEntries(currDate.getMonth(), currDate.getFullYear());
+		const moodEntries: any = await getMoodEntries(month, year);
+
+		if (moodEntries.length < 1) {
+			console.log('No mood entries found');
+			return null;
+		}
 
 		const therajournalGreen = '#5F7938';
 
-		chartData = {
+		let moodChartData = {
 			labels: moodEntries?.map((entry: any) => {
 				let date = new Date(entry.date);
 				return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
@@ -43,9 +83,16 @@
 				}
 			]
 		};
+
+		return moodChartData;
 	}
 
 	async function populateSentimentChartData(sentimentEntries: any) {
+		if (sentimentEntries.length < 1) {
+			console.log('No sentiment entries found');
+			return null;
+		}
+
 		const therajournalGreen = '#5F7938';
 
 		console.log('Sentiment Entries');
@@ -224,7 +271,16 @@
 
 	let habit_names: any;
 	onMount(async () => {
-		populateChartData();
+		// populateChartData(selectedMonth.id, selectedYear.id).then((chartData) => {
+		// 	moodChartData = chartData;
+		// });
+
+		getSentimentEntries(selectedMonth.id, selectedYear.id).then((entries) => {
+			populateSentimentChartData(entries).then((chartData) => {
+				sentimentChartData = chartData;
+			});
+		});
+
 		habit_names = await getHabitNames();
 		habit_names = habit_names.habit_names;
 		console.log(habit_names);
@@ -240,44 +296,86 @@
 </div>
 
 <div class="app-container">
+	<select bind:value={selectedMonth} class="w-1/2">
+		{#each months as month}
+			<option value={month}>{month.text}</option>
+		{/each}
+	</select>
+
+	<select bind:value={selectedYear} class="w-1/2">
+		{#each years as year}
+			<option value={year}>{year.text}</option>
+		{/each}
+	</select>
 	<h2 class="mt-4 mb-2 text-2xl font-medium dark:text-neutral-200">Mood</h2>
 	<div class="chart-wrapper">
-		<Line
-			data={chartData}
-			options={{
-				responsive: true,
-				maintainAspectRatio: false,
-				plugins: {
-					legend: {
-						display: false
-					}
-				},
-				scales: {
-					y: {
-						ticks: {
-							callback: function (value, index, ticks) {
-								switch (value) {
-									case 1:
-										return 'Awful';
-									case 2:
-										return 'Bad';
-									case 3:
-										return 'Meh';
-									case 4:
-										return 'Good';
-									case 5:
-										return 'Great';
-									default:
-										return '';
-								}
-							},
-							color: '#fff'
+		{#if moodChartData != null}
+			<Line
+				data={moodChartData}
+				options={{
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						}
+					},
+					scales: {
+						y: {
+							ticks: {
+								callback: function (value, index, ticks) {
+									switch (value) {
+										case 1:
+											return 'Awful';
+										case 2:
+											return 'Bad';
+										case 3:
+											return 'Meh';
+										case 4:
+											return 'Good';
+										case 5:
+											return 'Great';
+										default:
+											return '';
+									}
+								},
+								color: '#fff'
+							}
 						}
 					}
-				}
-			}}
-		/>
+				}}
+			/>
+		{:else}
+			<div class="flex h-full w-full flex-col items-center justify-center gap-3">
+				<span class="text-2xl dark:text-neutral-200">No data for this month.</span>
+				<span class="dark:text-neutral-300">Please select another month.</span>
+			</div>
+		{/if}
 	</div>
+
+	<h2 class="mt-4 mb-2 text-2xl font-medium dark:text-neutral-200">Sentiment</h2>
+	<div class="chart-wrapper">
+		{#if sentimentChartData != null}
+			<Line
+				data={sentimentChartData}
+				options={{
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						}
+					}
+				}}
+			/>
+		{:else}
+			<div class="flex h-full w-full flex-col items-center justify-center gap-3">
+				<span class="text-2xl dark:text-neutral-200">No data for this month.</span>
+				<span class="dark:text-neutral-300">Please select another month.</span>
+			</div>
+		{/if}
+	</div>
+
 	{#if habit_names}
 		{#each habit_names as habit}
 			<h2 class="mt-4 mb-2 text-2xl font-medium dark:text-neutral-200">{habit}</h2>
@@ -305,27 +403,6 @@
 			{/await}
 		{/each}
 	{/if}
-	{#await getSentimentEntries(new Date().getMonth(), new Date().getFullYear())}
-		loading
-	{:then sentiment_entries}
-		<h2 class="mt-4 mb-2 text-2xl font-medium dark:text-neutral-200">Sentiment</h2>
-		{#await populateSentimentChartData(sentiment_entries) then sentimentChartData}
-			<div class="chart-wrapper">
-				<Line
-					data={sentimentChartData}
-					options={{
-						responsive: true,
-						maintainAspectRatio: false,
-						plugins: {
-							legend: {
-								display: false
-							}
-						}
-					}}
-				/>
-			</div>
-		{/await}
-	{/await}
 </div>
 
 <style lang="postcss">
