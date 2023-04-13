@@ -1,6 +1,14 @@
 import type { RequestHandler } from './$types';
 import prisma from '$lib/prisma';
 
+type sentimentResponse = {
+    compound: string,
+    neg: string,
+    neu: string,
+    pos: string
+
+}
+
 export const POST = (async ({ request, locals }) => {
     const user = (await locals.validateUser()).user;
     if (!user) {
@@ -29,7 +37,7 @@ export const POST = (async ({ request, locals }) => {
             }
         });
 
-        const data = await response.json();
+        const data : sentimentResponse = await response.json();
 
         const compound = parseFloat(data.compound);
         console.log("Compound: " + compound);

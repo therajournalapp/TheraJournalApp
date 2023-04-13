@@ -24,7 +24,7 @@
 
 	let TagsInput: any;
 	onMount(async () => {
-		const summaryResponse = fetch('http://35.219.179.207:8080/summary', {
+		const summaryResponse = fetch('/api/theraPy/summary', {
 			method: 'POST',
 			body: JSON.stringify({ text: body }),
 			headers: {
@@ -32,7 +32,7 @@
 			}
 		});
 
-		const response = await fetch('http://35.219.179.207:8080/tags', {
+		const response = await fetch('/api/theraPy/tags', {
 			method: 'POST',
 			body: JSON.stringify({ text: body }),
 			headers: {
