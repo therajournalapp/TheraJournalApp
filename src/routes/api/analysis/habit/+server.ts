@@ -27,7 +27,5 @@ export const GET = (async ({ url, locals }) => {
 
     habits = habits.map((habit: any) => habit.name);
 
-    console.log(habits);
-
 	return new Response(JSON.stringify({ habit_names: habits }), { status: 200 });
 }) satisfies RequestHandler;

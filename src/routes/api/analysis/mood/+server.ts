@@ -32,9 +32,8 @@ export const GET = (async ({ url, locals }) => {
 
 
     const first_day_of_month = new Date(date_str);
-    console.log(first_day_of_month);
     const last_day_of_month = new Date(first_day_of_month.getFullYear(), first_day_of_month.getMonth() + 1, 0);
-    console.log(last_day_of_month);
+    
     // Gets date and value of the mood habit entries from the current month
     let mood_habit_entries: any[] | null = await prisma.habitEntry.findMany({
         select: {
