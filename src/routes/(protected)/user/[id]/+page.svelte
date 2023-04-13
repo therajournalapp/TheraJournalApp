@@ -32,7 +32,7 @@
 		const search_params = new URLSearchParams(params);
 
 		// Fetches the shared mood entries
-		const res = await fetch('http://127.0.0.1:5173/api/analysis/mood?' + search_params.toString(), {
+		const res = await fetch('/api/analysis/mood?' + search_params.toString(), {
 			method: 'GET',
 			headers: {
 				'content-type': 'application/json'
