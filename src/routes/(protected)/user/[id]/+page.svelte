@@ -18,9 +18,18 @@
 
 	let chartData = {};
 
-	async function getMoodEntries() {
-		// Adds the shared user id as a parameter
-		const search_params = new URLSearchParams([['sharedId', data.shared_user_id]]);
+	// Gets all mood entries for the requested month and year for the shared user
+	async function getMoodEntries(month: number, year: number) {
+		// Create a date string for the requested month and year
+		const date = new Date(year, month, 1);
+
+		// Adds the shared user id and requested date as query parameters
+		const params = [
+			['sharedId', data.shared_user_id],
+			['date', date.toString()]
+		];
+
+		const search_params = new URLSearchParams(params);
 
 		// Fetches the shared mood entries
 		const res = await fetch('http://127.0.0.1:5173/api/analysis/mood?' + search_params.toString(), {
@@ -40,12 +49,13 @@
 	}
 
 	async function populateChartData() {
-		const moodEntries: any = await getMoodEntries();
+		const currDate = new Date();
+		const moodEntries: any = await getMoodEntries(currDate.getMonth(), currDate.getFullYear());
 
 		const therajournalGreen = '#5F7938';
 
 		chartData = {
-			labels: moodEntries?.map((entry) => {
+			labels: moodEntries?.map((entry: any) => {
 				let date = new Date(entry.date);
 				return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
 			}),
@@ -69,12 +79,51 @@
 					pointHoverBorderWidth: 2,
 					pointRadius: 1,
 					pointHitRadius: 10,
-					data: moodEntries?.map((entry) => entry.value)
+					data: moodEntries?.map((entry: any) => entry.value)
 				}
 			]
 		};
 	}
 
+	// Gets all custom habit names for the shared user
+	async function getHabitNames() {
+		const search_params = new URLSearchParams([['sharedId', data.shared_user_id]]);
+
+		// Fetches the shared mood entries
+		const res = await fetch('/api/analysis/habit?' + search_params.toString(), {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const habit_names = await res.json();
+
+		console.log('Retrieved habit names');
+		console.log(habit_names);
+	}
+
+	// Gets all custom habit entries for a specific habit for the shared user
+	async function getHabitEntries(habit: String) {
+		const params = [
+			['sharedId', data.shared_user_id],
+			['habit', habit]
+		];
+
+		const search_params = new URLSearchParams(params);
+
+		const res = await fetch('/api/analysis/habitEntry?' + search_params.toString(), {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const habit_entries = await res.json();
+
+		console.log('Retrieved ' + habit + ' entries');
+		console.log(habit_entries);
+	}
 	populateChartData();
 </script>
 
