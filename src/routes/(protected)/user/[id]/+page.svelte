@@ -42,24 +42,26 @@
 	async function populateChartData() {
 		const moodEntries: any = await getMoodEntries();
 
-		console.log('Mood entries: ');
-		console.log(moodEntries);
+		const therajournalGreen = '#5F7938';
 
 		chartData = {
-			labels: moodEntries?.map((entry) => entry.date),
+			labels: moodEntries?.map((entry) => {
+				let date = new Date(entry.date);
+				return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+			}),
 			datasets: [
 				{
-					label: 'My First dataset',
+					label: 'Mood',
 					fill: true,
 					lineTension: 0.4,
 					backgroundColor: 'rgba(225, 204,230, .3)',
-					borderColor: 'rgb(205, 130, 158)',
+					borderColor: therajournalGreen,
 					borderCapStyle: 'butt',
 					borderDash: [],
 					borderDashOffset: 0.0,
 					borderJoinStyle: 'miter',
-					pointBorderColor: 'rgb(205, 130,1 58)',
-					pointBackgroundColor: 'rgb(255, 255, 255)',
+					pointBorderColor: therajournalGreen,
+					pointBackgroundColor: therajournalGreen,
 					pointBorderWidth: 10,
 					pointHoverRadius: 5,
 					pointHoverBackgroundColor: 'rgb(0, 0, 0)',
@@ -72,15 +74,55 @@
 			]
 		};
 	}
+
+	populateChartData();
 </script>
 
-<h1>Hello from user</h1>
+<div class="app-container mb-5">
+	<h1 class="text-3xl font-medium dark:text-neutral-200">
+		{data.user_email['email']}
+	</h1>
+</div>
 
-{populateChartData()}
-
-{#key chartData}
-	<Line data={chartData} options={{ responsive: false }} width={600} height={300} />
-{/key}
+<div class="app-container">
+	<h2 class="text-2xl font-medium dark:text-neutral-200">Mood</h2>
+	<Line
+		data={chartData}
+		options={{
+			responsive: false,
+			plugins: {
+				legend: {
+					display: false
+				}
+			},
+			scales: {
+				y: {
+					ticks: {
+						// Include a dollar sign in the ticks
+						callback: function (value, index, ticks) {
+							switch (value) {
+								case 1:
+									return 'Awful';
+								case 2:
+									return 'Bad';
+								case 3:
+									return 'Meh';
+								case 4:
+									return 'Good';
+								case 5:
+									return 'Great';
+								default:
+									return '';
+							}
+						}
+					}
+				}
+			}
+		}}
+		width={600}
+		height={300}
+	/>
+</div>
 
 <!-- <Line
 	data={{
