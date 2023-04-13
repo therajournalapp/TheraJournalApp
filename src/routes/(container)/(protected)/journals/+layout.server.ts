@@ -1,4 +1,5 @@
 import prisma from '$lib/prisma';
+import type { JournalEntry } from '@prisma/client';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
@@ -6,22 +7,25 @@ export const load = (async ({ locals }) => {
     if (!session) return { error: 401, message: "Unauthorized" };
     if (!user) return { error: 401, message: "Unauthorized" };
 
-    let journal_entries = await prisma.journalEntry.findMany({
-        select: {
-            id: true,
-            user_id: true,
-            title: true,
-            body: true,
-            createdAt: true,
-            updatedAt: true,
-            tags: true,
+
+    interface Shared {
+        email: string
+    }
+
+    interface JournalEntryWithShared extends JournalEntry {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        SharedEntry: any[],
+        shared?: Shared[],
+    }
+
+    const post_by_user: JournalEntryWithShared[] | null = await prisma.journalEntry.findMany({
+        where: {
+            user_id: user.userId,
+        },
+        include: {
             SharedEntry: {
-                select: {
-                    user: {
-                        select: {
-                            email: true
-                        }
-                    }
+                include: {
+                    user: true
                 }
             },
             LinkShare: {
@@ -30,16 +34,15 @@ export const load = (async ({ locals }) => {
                 }
             }
         },
-        where: {
-            user_id: user.userId
-        },
         orderBy: {
-            updatedAt: 'desc'
+            createdAt: 'desc'
         }
     });
 
-    journal_entries = journal_entries.map(entry => {
+    const journal_entries = post_by_user.map(entry => {
         const { SharedEntry, ...rest } = entry;
+
+        rest as JournalEntryWithShared;
 
         if (SharedEntry.length > 0) {
             rest.shared = SharedEntry.map(shared => {
@@ -53,8 +56,6 @@ export const load = (async ({ locals }) => {
 
         return rest
     });
-
-    console.log(JSON.stringify(journal_entries));
 
     return {
         entries: journal_entries
