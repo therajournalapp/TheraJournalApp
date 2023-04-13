@@ -120,7 +120,7 @@
 		if (view_only) {
 			if (browser) {
 				// save sentiment score
-				fetch('/api/sentiment', {
+				fetch('/api/theraPy/sentiment', {
 					method: 'POST',
 					body: JSON.stringify({ entry_id: id }),
 					headers: {
@@ -137,7 +137,7 @@
 				await saveContent.flush();
 
 				// save sentiment score
-				fetch('/api/sentiment', {
+				fetch('/api/theraPy/sentiment', {
 					method: 'POST',
 					body: JSON.stringify({ entry_id: id }),
 					headers: {
