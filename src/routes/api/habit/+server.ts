@@ -17,6 +17,8 @@ export const PATCH = (async ({ request, locals }) => {
         }
     });
 
+    console.log("Hit");
+
     if (!habit || habit.user_id !== user.userId) {
         return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }

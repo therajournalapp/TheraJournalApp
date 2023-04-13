@@ -10,8 +10,14 @@ export const GET = (async ({ url, locals }) => {
     // Retrieves the user ID of the user who shared their data
     const id_str = url.searchParams.get('sharedId');
 	if (!id_str) {
-		return new Response(JSON.stringify({ message: 'Invalid request' }), { status: 400 });
+		return new Response(JSON.stringify({ message: 'Invalid shared ID request' }), { status: 400 });
 	}
+
+    // Retrieves the requested month range for mood entries
+    const date_str = url.searchParams.get('date');
+    if (!date_str) {
+        return new Response(JSON.stringify({ message: 'Invalid month request' }), { status: 400 });
+    }
 
     // Retrieves the mood habit ID of the user who shared their data
     let mood_habit_id: any | null = await prisma.habit.findFirst({
@@ -24,9 +30,11 @@ export const GET = (async ({ url, locals }) => {
         }
     });
 
-    const first_day_of_month = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-    const last_day_of_month = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
+    const first_day_of_month = new Date(date_str);
+    console.log(first_day_of_month);
+    const last_day_of_month = new Date(first_day_of_month.getFullYear(), first_day_of_month.getMonth() + 1, 0);
+    console.log(last_day_of_month);
     // Gets date and value of the mood habit entries from the current month
     let mood_habit_entries: any[] | null = await prisma.habitEntry.findMany({
         select: {
