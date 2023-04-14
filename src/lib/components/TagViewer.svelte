@@ -153,7 +153,9 @@
 								{/each}
 							</div>
 							<h5 class="dark:text-neutral-200">Auto Summary</h5>
-							<p id="summary" class="dark:text-neutral-200">{summary}</p>
+							<div class="h-full max-h-[200px] overflow-auto">
+								<p id="summary" class="dark:text-neutral-200">{summary}</p>
+							</div>
 						</div>
 
 						<div class="mt-5 flex justify-end">
