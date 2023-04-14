@@ -147,13 +147,13 @@
 					>
 						Settings
 					</PopoverButton>
-					<PopoverButton
+					<!-- <PopoverButton
 						as="a"
 						href="##"
 						class="px-4 py-3 text-sm font-medium text-gray-900 transition duration-150 ease-in-out hover:bg-primary-light hover:text-white active:bg-primary dark:text-neutral-200"
 					>
 						Switch Themes (Light/Dark)
-					</PopoverButton>
+					</PopoverButton> -->
 					<PopoverButton
 						as="a"
 						href=""

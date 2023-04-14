@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Line, Bar } from 'svelte-chartjs';
 	import 'chart.js/auto';
+	import { browser } from '$app/environment';
 
 	export let data: any;
 
@@ -31,6 +32,19 @@
 	let selectedMonth = months[new Date().getMonth()];
 	let selectedYear = years[1];
 
+	let textclr: string = '#000';
+
+	let dark = false;
+
+	if (browser) {
+		dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		console.log('dark mode?: ' + dark);
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			dark = e.matches;
+			console.log('dark mode?: ' + dark);
+		});
+	}
+
 	$: {
 		populateChartData(selectedMonth.id, selectedYear.id).then((chartData) => {
 			moodChartData = chartData;
@@ -41,6 +55,12 @@
 				sentimentChartData = chartData;
 			});
 		});
+
+		if (dark) {
+			textclr = '#fff';
+		} else {
+			textclr = '#000';
+		}
 	}
 
 	async function populateChartData(month: number, year: number) {
@@ -213,20 +233,23 @@
 
 		const search_params = new URLSearchParams(params);
 
-		// Fetches the shared mood entries
-		const res = await fetch('/api/analysis/mood?' + search_params.toString(), {
-			method: 'GET',
-			headers: {
-				'content-type': 'application/json'
+		try {
+			// Fetches the shared mood entries
+			const res = await fetch('/api/analysis/mood?' + search_params.toString(), {
+				method: 'GET',
+				headers: {
+					'content-type': 'application/json'
+				}
+			});
+
+			const responseData = await res.json();
+
+			if (responseData.entries) {
+				return responseData.entries;
 			}
-		});
-
-		const responseData = await res.json();
-
-		if (responseData.entries) {
-			return responseData.entries;
+		} catch (err) {
+			console.log(err);
 		}
-
 		return [];
 	}
 
@@ -234,20 +257,25 @@
 	async function getHabitNames() {
 		const search_params = new URLSearchParams([['sharedId', data.shared_user_id]]);
 
-		// Fetches the shared mood entries
-		const res = await fetch('/api/analysis/habit?' + search_params.toString(), {
-			method: 'GET',
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
+		try {
+			// Fetches the shared mood entries
+			const res = await fetch('/api/analysis/habit?' + search_params.toString(), {
+				method: 'GET',
+				headers: {
+					'content-type': 'application/json'
+				}
+			});
 
-		const habit_names = await res.json();
+			const habit_names = await res.json();
 
-		console.log('Retrieved habit names');
-		console.log(habit_names);
+			console.log('Retrieved habit names');
+			console.log(habit_names);
 
-		return habit_names;
+			return habit_names;
+		} catch (err) {
+			console.log(err);
+			return [];
+		}
 	}
 
 	// Gets all custom habit entries for a specific habit for the shared user
@@ -259,32 +287,27 @@
 
 		const search_params = new URLSearchParams(params);
 
-		const res = await fetch('/api/analysis/habitEntry?' + search_params.toString(), {
-			method: 'GET',
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
+		try {
+			const res = await fetch('/api/analysis/habitEntry?' + search_params.toString(), {
+				method: 'GET',
+				headers: {
+					'content-type': 'application/json'
+				}
+			});
 
-		const habit_entries = await res.json();
+			const habit_entries = await res.json();
 
-		console.log('Retrieved ' + habit + ' entries');
-		console.log(habit_entries);
-		return habit_entries;
+			console.log('Retrieved ' + habit + ' entries');
+			console.log(habit_entries);
+			return habit_entries;
+		} catch (err) {
+			console.log(err);
+			return [];
+		}
 	}
 
 	let habit_names: any;
 	onMount(async () => {
-		// populateChartData(selectedMonth.id, selectedYear.id).then((chartData) => {
-		// 	moodChartData = chartData;
-		// });
-
-		getSentimentEntries(selectedMonth.id, selectedYear.id).then((entries) => {
-			populateSentimentChartData(entries).then((chartData) => {
-				sentimentChartData = chartData;
-			});
-		});
-
 		habit_names = await getHabitNames();
 		habit_names = habit_names.habit_names;
 		console.log(habit_names);
@@ -334,6 +357,11 @@
 						}
 					},
 					scales: {
+						x: {
+							ticks: {
+								color: textclr
+							}
+						},
 						y: {
 							ticks: {
 								callback: function (value, index, ticks) {
@@ -352,7 +380,7 @@
 											return '';
 									}
 								},
-								color: '#fff'
+								color: textclr
 							}
 						}
 					}
@@ -377,6 +405,18 @@
 					plugins: {
 						legend: {
 							display: false
+						}
+					},
+					scales: {
+						x: {
+							ticks: {
+								color: textclr
+							}
+						},
+						y: {
+							ticks: {
+								color: textclr
+							}
 						}
 					}
 				}}
@@ -407,6 +447,18 @@
 								plugins: {
 									legend: {
 										display: false
+									}
+								},
+								scales: {
+									x: {
+										ticks: {
+											color: textclr
+										}
+									},
+									y: {
+										ticks: {
+											color: textclr
+										}
 									}
 								}
 							}}
