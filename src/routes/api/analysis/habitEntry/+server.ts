@@ -2,10 +2,10 @@ import type { RequestHandler } from './$types';
 import prisma from '$lib/prisma';
 
 export const GET = (async ({ url, locals }) => {
-	const user = (await locals.validateUser()).user;
-	if (!user) {
-		return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
-	}
+    const user = (await locals.validateUser()).user;
+    if (!user) {
+        return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
+    }
 
     // Retrieves the user ID of the user who shared their data
     const id_str = url.searchParams.get('sharedId');
@@ -39,12 +39,15 @@ export const GET = (async ({ url, locals }) => {
     }
 
     // Retrieves all habit entries for the requested habit
-    let habit_entries: any[] | null = await prisma.habitEntry.findMany({
+    const habit_entries: any[] | null = await prisma.habitEntry.findMany({
         select: {
             date: true,
         },
         where: {
             habit_id: habit_id.id
+        },
+        orderBy: {
+            date: 'asc'
         }
     });
 
@@ -55,14 +58,14 @@ export const GET = (async ({ url, locals }) => {
     const month_counts = new Map();
     habit_dates.forEach((date: String) => {
         if (month_counts.has(date)) {
-            month_counts.set(date, month_counts.get(date) +  1);
+            month_counts.set(date, month_counts.get(date) + 1);
         } else {
             month_counts.set(date, 1);
         }
     });
 
     // Converts map to 2D array of the format [['Month Year', count], ...] for use in the frontend
-    let month_count_arr = Array.from(month_counts);    
+    let month_count_arr = Array.from(month_counts);
 
-	return new Response(JSON.stringify({ month_counts: month_count_arr }), { status: 200 });
+    return new Response(JSON.stringify({ month_counts: month_count_arr }), { status: 200 });
 }) satisfies RequestHandler;
