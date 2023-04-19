@@ -3,8 +3,10 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import techstack from '$lib/images/techstack.png';
+	import techstackdark from '$lib/images/techstackdark.png';
 	import team from '$lib/images/team.png';
 	import PhArrowRight from '~icons/ph/arrow-right';
+	import { browser } from '$app/environment';
 
 	const user = getUser();
 
@@ -13,6 +15,16 @@
 			goto('/dashboard');
 		}
 	});
+
+	let dark = false;
+	if (browser) {
+		dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		// console.log('dark mode?: ' + dark);
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			dark = e.matches;
+			// console.log('dark mode?: ' + dark);
+		});
+	}
 </script>
 
 <svelte:head>
@@ -42,12 +54,14 @@
 	<a href="/login" class="link">Log in</a>
 </div>
 
+<!-- Screenshot -->
 <div
 	class="my-14 flex aspect-video w-full items-center justify-center bg-neutral-400 text-3xl font-bold shadow-lg dark:text-white dark:shadow-neutral-600"
 >
 	TODO - add screenshot here
 </div>
 
+<!-- Features -->
 <div class="flex flex-col gap-5">
 	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Features</h2>
 	<div class="flex flex-col gap-3 dark:text-neutral-200">
@@ -100,6 +114,7 @@
 	</div>
 </div>
 
+<!-- Tech Stack -->
 <div class="my-14 flex flex-col gap-5">
 	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">
 		Powered by the latest in web technologies
@@ -109,9 +124,14 @@
 		deployed on Vercel, a cloud platform for static sites, serverless functions, and more. (TODO:
 		rewrite this)
 	</p>
-	<img src={techstack} alt="techstack" class="mx-auto" />
+	{#if dark}
+		<img src={techstackdark} alt="techstack" class="mx-auto" />
+	{:else}
+		<img src={techstack} alt="techstack" class="mx-auto" />
+	{/if}
 </div>
 
+<!-- Our Team -->
 <div class="flex flex-col items-center gap-5">
 	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Our Team</h2>
 	<div>
@@ -131,6 +151,7 @@
 	<img src={team} alt="team" class="mx-auto" />
 </div>
 
+<!-- User Guide and FAQ -->
 <div class="my-14 flex flex-col items-center gap-5">
 	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">User Guide and FAQ</h2>
 	<div>
