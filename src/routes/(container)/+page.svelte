@@ -2,6 +2,8 @@
 	import { getUser } from '@lucia-auth/sveltekit/client';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import dashboard from '$lib/images/dashboard.png';
+	import dashboard_dark from '$lib/images/dashboard-dark.png';
 	import techstack from '$lib/images/techstack.png';
 	import techstackdark from '$lib/images/techstackdark.png';
 	import team from '$lib/images/team.png';
@@ -54,110 +56,113 @@
 	<a href="/login" class="link">Log in</a>
 </div>
 
-<!-- Screenshot -->
-<div
-	class="my-14 flex aspect-video w-full items-center justify-center bg-neutral-400 text-3xl font-bold shadow-lg dark:text-white dark:shadow-neutral-600"
->
-	TODO - add screenshot here
-</div>
-
-<!-- Features -->
-<div class="flex flex-col gap-5">
-	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Features</h2>
-	<div class="flex flex-col gap-3 dark:text-neutral-200">
-		<div class="flex gap-3">
-			<div class="flex gap-2">
-				<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
-				<div>
-					<h3 class="text-2xl font-medium">Feature 1</h3>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec fermentum
-						lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
-					</p>
-				</div>
-			</div>
-
-			<div class="flex gap-2">
-				<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
-				<div>
-					<h3 class="text-2xl font-medium">Feature 2</h3>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec fermentum
-						lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="flex gap-3">
-			<div class="flex gap-2">
-				<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
-				<div>
-					<h3 class="text-2xl font-medium">Feature 3</h3>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec fermentum
-						lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
-					</p>
-				</div>
-			</div>
-
-			<div class="flex gap-2">
-				<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
-				<div>
-					<h3 class="text-2xl font-medium">Feature 4</h3>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec fermentum
-						lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Tech Stack -->
-<div class="my-14 flex flex-col gap-5">
-	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">
-		Powered by the latest in web technologies
-	</h2>
-	<p class="text-center dark:text-neutral-200">
-		TheraJournal is built with SvelteKit, a new framework for building web applications. It is
-		deployed on Vercel, a cloud platform for static sites, serverless functions, and more. (TODO:
-		rewrite this)
-	</p>
-	{#if dark}
-		<img src={techstackdark} alt="techstack" class="mx-auto" />
-	{:else}
-		<img src={techstack} alt="techstack" class="mx-auto" />
-	{/if}
-</div>
-
-<!-- Our Team -->
-<div class="flex flex-col items-center gap-5">
-	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Our Team</h2>
-	<div>
-		<p class="text-center dark:text-neutral-200">
-			TheraJournal is built by a team of students from the University of Utah. We are passionate
-		</p>
-		<p class="text-center dark:text-neutral-200">
-			about mental health and want to help people understand themselves better.
-		</p>
-	</div>
-	<div
-		class="flex items-center gap-2 rounded-full border border-neutral-400 px-3 py-2 dark:border-white"
+<div class="mt-10 mb-20 flex flex-col gap-28">
+	<!-- Screenshot -->
+	<!-- <div
+		class="flex aspect-video w-full items-center justify-center bg-neutral-400 text-3xl font-bold shadow-lg dark:text-white dark:shadow-neutral-600"
 	>
-		<a href="##" class="w-fit dark:text-neutral-200"> Learn more about our team </a>
-		<PhArrowRight class="translate-y-[1px] dark:text-white" />
-	</div>
-	<img src={team} alt="team" class="mx-auto" />
-</div>
+		TODO - add screenshot here
+	</div> -->
+	<img
+		src={dark ? dashboard_dark : dashboard}
+		alt="dashboard"
+		class="mx-auto max-w-5xl border shadow-lg dark:border-neutral-700 dark:shadow-neutral-600"
+	/>
 
-<!-- User Guide and FAQ -->
-<div class="my-14 flex flex-col items-center gap-5">
-	<h2 class="text-center text-3xl font-medium dark:text-neutral-200">User Guide and FAQ</h2>
-	<div>
+	<!-- Features -->
+	<div class="flex flex-col gap-5">
+		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Features</h2>
+		<div class="flex flex-col gap-3 dark:text-neutral-200">
+			<div class="flex gap-3">
+				<div class="flex gap-2">
+					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+					<div>
+						<h3 class="text-2xl font-medium">Feature 1</h3>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
+							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-2">
+					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+					<div>
+						<h3 class="text-2xl font-medium">Feature 2</h3>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
+							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="flex gap-3">
+				<div class="flex gap-2">
+					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+					<div>
+						<h3 class="text-2xl font-medium">Feature 3</h3>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
+							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-2">
+					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+					<div>
+						<h3 class="text-2xl font-medium">Feature 4</h3>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
+							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Tech Stack -->
+	<div class="flex flex-col gap-5">
+		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">
+			Powered by the latest in web technologies
+		</h2>
 		<p class="text-center dark:text-neutral-200">
-			For help using TheraJournal or if you have any other questions
-			<a href="##" class="link">look here</a>.
+			TheraJournal is built with SvelteKit, a new framework for building web applications. It is
+			deployed on Vercel, a cloud platform for static sites, serverless functions, and more. (TODO:
+			rewrite this)
 		</p>
+		<img src={dark ? techstackdark : techstack} alt="tech stack" class="mx-auto max-w-4xl" />
+	</div>
+
+	<!-- Our Team -->
+	<div class="flex flex-col items-center gap-7">
+		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Our Team</h2>
+		<div>
+			<p class="text-center dark:text-neutral-200">
+				TheraJournal is built by a team of students from the University of Utah. We are passionate
+			</p>
+			<p class="text-center dark:text-neutral-200">
+				about mental health and want to help people understand themselves better.
+			</p>
+		</div>
+		<a href="##" class="w-fit dark:text-neutral-200">
+			<div class="flex items-center gap-2 rounded-full border border-primary px-3 py-2">
+				Learn more about our team
+				<PhArrowRight class="translate-y-[1px] dark:text-white" />
+			</div>
+		</a>
+		<img src={team} alt="team" class="mx-auto" />
+	</div>
+
+	<!-- User Guide and FAQ -->
+	<div class="flex flex-col items-center gap-5">
+		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">User Guide and FAQ</h2>
+		<div>
+			<p class="text-center dark:text-neutral-200">
+				For help using TheraJournal or if you have any other questions
+				<a href="##" class="link">look here</a>.
+			</p>
+		</div>
 	</div>
 </div>
