@@ -41,17 +41,15 @@
 <div class="app-container my-10">
 	<div class="mb-7">
 		<h1 class="text-center text-5xl font-medium dark:text-neutral-200">
-			The Journal that helps you
+			The Journal That Helps You
 		</h1>
-		<h1 class="text-center text-5xl font-medium dark:text-neutral-200">understand yourself</h1>
+		<h1 class="text-center text-5xl font-medium dark:text-neutral-200">Understand Yourself</h1>
 	</div>
 
 	<div class="mx-auto w-full max-w-screen-sm dark:text-neutral-200 ">
-		<p class="text-center">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
-		</p>
-		<p class="text-center">
-			fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+		<p class="mx-auto max-w-3xl text-center">
+			TheraJournal is an all-in-one web application for patients and therapists, making it easy to
+			share information between users and providing analysis on long term trends.
 		</p>
 	</div>
 </div>
@@ -59,7 +57,7 @@
 <!-- Buttons -->
 <div class="mx-auto flex w-full max-w-2xl items-center justify-center gap-7">
 	<a href="/signup" class="btn-alt">Sign up</a>
-	<a href="/login" class="link">Log in</a>
+	<a href="/login" class="link">Log in <PhArrowRight class="inline translate-y-[-1px]" /> </a>
 </div>
 
 <div class="mt-10 mb-20 flex flex-col gap-28">
@@ -131,11 +129,10 @@
 			Powered by the latest in web technologies
 		</h2>
 		<div>
-			<p class="text-center dark:text-neutral-200">
-				TheraJournal is built with SvelteKit, a new framework for building web applications.
-			</p>
-			<p class="text-center dark:text-neutral-200">
-				It is deployed on Vercel, a cloud platform for static sites, serverless functions, and more.
+			<p class="mx-auto max-w-3xl text-center dark:text-neutral-200">
+				TheraJournal is built with SvelteKit, a new framework for building high performance web
+				applications. It is deployed on Vercel, a cloud platform for static sites, serverless
+				functions, and more.
 			</p>
 		</div>
 		<img src={dark ? techstackdark : techstack} alt="tech stack" class="mx-auto w-full max-w-4xl" />
