@@ -77,6 +77,13 @@
 	// Used for styling button
 	let hover = false;
 	let share = shared_to.length > 0 ? true : false;
+	$: {
+		if (shared_to.length > 0) {
+			share = true;
+		} else {
+			share = false;
+		}
+	}
 
 	// Handles the submit of the add user form
 	// takes in user email and calls the shareCallback
@@ -91,6 +98,7 @@
 			console.log(result.message);
 			return;
 		}
+		addEmail = false;
 	}
 
 	let addEmail = false;

@@ -25,10 +25,10 @@
 
 	if (browser) {
 		dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		console.log('dark mode?: ' + dark);
+		// console.log('dark mode?: ' + dark);
 		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
 			dark = e.matches;
-			console.log('dark mode?: ' + dark);
+			// console.log('dark mode?: ' + dark);
 		});
 	}
 
