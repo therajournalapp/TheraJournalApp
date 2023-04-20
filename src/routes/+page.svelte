@@ -71,48 +71,58 @@
 	</div>
 
 	<!-- Features -->
-	<div class="app-container flex flex-col gap-5">
+	<div class="app-container flex flex-col items-center justify-center gap-5">
 		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Features</h2>
-		<div class="flex flex-col gap-3 dark:text-neutral-200">
-			<div class="flex gap-3">
+		<div class="flex max-w-5xl flex-col gap-8 dark:text-neutral-200">
+			<div class="flex gap-8">
 				<div class="flex w-1/2 gap-2">
 					<PhBookBookmark class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
-					<div>
+					<div class="flex flex-col gap-2">
 						<h3 class="text-2xl font-medium">Journal Editor</h3>
 						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
-							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+							TheraJournal's journal editor is designed to be easy to use, while still providing all
+							the features you need to write a journal entry. With rich text support, markdown
+							shortcuts, and even add tags to help you find them later.
 						</p>
 					</div>
 				</div>
 
 				<div class="flex w-1/2 gap-2">
 					<PhCalendarCheck class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
-					<div>
+					<div class="flex flex-col gap-2">
 						<h3 class="text-2xl font-medium">Habit & Mood Tracking</h3>
 						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
-							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+							See how your mood and habits change over time with TheraJournal's habit and mood
+							trackers. Create as many trackers as you need to track your progress for any goal or
+							task.
 						</p>
 					</div>
 				</div>
 			</div>
-			<div class="flex gap-3">
+			<div class="flex gap-8">
 				<div class="flex w-1/2 gap-2">
 					<PhShareNetwork class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
-					<div>
-						<h3 class="text-2xl font-medium">Sharing</h3>
+					<div class="flex flex-col gap-2">
+						<h3 class="text-2xl font-medium">Selective Sharing</h3>
 						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
-							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+							All journal entries and mood/habit tracking data can be selectively shared with your
+							therapist or other TheraJournal users. You can also share your journal entires by
+							link, which lets anyone view that entry, even without an account.
 						</p>
 					</div>
 				</div>
 
 				<div class="flex w-1/2 gap-2">
 					<PhChartLine class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
-					<div>
-						<h3 class="text-2xl font-medium">Therapist Dashboard</h3>
+					<div class="flex flex-col gap-2">
+						<div class="flex items-center">
+							<h3 class="text-2xl font-medium">Therapist Dashboard</h3>
+							<span
+								class="ml-2 flex h-fit translate-y-0.5 items-center rounded-full border border-primary py-0.5 px-2 text-xs text-primary-dark"
+							>
+								for therapists
+							</span>
+						</div>
 						<p>
 							See at a glance what your clients have been writing about. See if they're up to date
 							on their goals and how they've been feeling over time.
@@ -131,8 +141,7 @@
 		<div>
 			<p class="mx-auto max-w-3xl text-center dark:text-neutral-200">
 				TheraJournal is built with SvelteKit, a new framework for building high performance web
-				applications. It is deployed on Vercel, a cloud platform for static sites, serverless
-				functions, and more.
+				applications. It is deployed on Vercel, a cloud platform for web apps that runs on the edge.
 			</p>
 		</div>
 		<img src={dark ? techstackdark : techstack} alt="tech stack" class="mx-auto w-full max-w-4xl" />
@@ -140,7 +149,7 @@
 
 	<!-- Our Team -->
 	<div class="flex flex-col items-center gap-7">
-		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Our Team</h2>
+		<h2 id="team" class="text-center text-3xl font-medium dark:text-neutral-200">Our Team</h2>
 		<div>
 			<p class="text-center dark:text-neutral-200">
 				TheraJournal is built by a team of students from the University of Utah. We are passionate
@@ -149,13 +158,17 @@
 				about mental health and want to help people understand themselves better.
 			</p>
 		</div>
-		<a href="##" class="w-fit dark:text-neutral-200">
-			<div class="flex items-center gap-2 rounded-full border border-primary px-3 py-2">
+		<a href="/about_us" class="w-fit dark:text-neutral-200">
+			<div
+				class="flex items-center gap-2 rounded-full border border-primary px-3 py-2 hover:bg-primary hover:text-white active:border-primary-dark active:bg-primary-dark"
+			>
 				Learn more about our team
 				<PhArrowRight class="translate-y-[1px] dark:text-white" />
 			</div>
 		</a>
-		<img src={team} alt="team" class="mx-auto w-full" />
+		<div class="w-full overflow-auto">
+			<img src={team} alt="team" class="gutter mx-auto w-full" />
+		</div>
 	</div>
 
 	<!-- User Guide -->
@@ -164,7 +177,7 @@
 		<div>
 			<p class="text-center dark:text-neutral-200">
 				For help using TheraJournal or if you have any other questions
-				<a href="##" class="link">look here</a>.
+				<a href="/user_guide" class="link">look here</a>.
 			</p>
 		</div>
 	</div>
