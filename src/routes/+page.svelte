@@ -9,6 +9,10 @@
 	import team from '$lib/images/teamcrop.jpg';
 	import PhArrowRight from '~icons/ph/arrow-right';
 	import { browser } from '$app/environment';
+	import PhBookBookmark from '~icons/ph/book-bookmark';
+	import PhShareNetwork from '~icons/ph/share-network';
+	import PhCalendarCheck from '~icons/ph/calendar-check';
+	import PhChartLine from '~icons/ph/chart-line';
 
 	const user = getUser();
 
@@ -60,21 +64,23 @@
 
 <div class="mt-10 mb-20 flex flex-col gap-28">
 	<!-- Screenshot -->
-	<img
-		src={dark ? dashboard_dark : dashboard}
-		alt="dashboard"
-		class="mx-auto max-w-5xl border shadow-lg dark:border-neutral-700 dark:shadow-neutral-600"
-	/>
+	<div class="app-container">
+		<img
+			src={dark ? dashboard_dark : dashboard}
+			alt="dashboard"
+			class="mx-auto w-full max-w-5xl border shadow-lg dark:border-neutral-700 dark:shadow-neutral-600"
+		/>
+	</div>
 
 	<!-- Features -->
 	<div class="app-container flex flex-col gap-5">
 		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Features</h2>
 		<div class="flex flex-col gap-3 dark:text-neutral-200">
 			<div class="flex gap-3">
-				<div class="flex gap-2">
-					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+				<div class="flex w-1/2 gap-2">
+					<PhBookBookmark class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div>
-						<h3 class="text-2xl font-medium">Feature 1</h3>
+						<h3 class="text-2xl font-medium">Journal Editor</h3>
 						<p>
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
 							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
@@ -82,10 +88,10 @@
 					</div>
 				</div>
 
-				<div class="flex gap-2">
-					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+				<div class="flex w-1/2 gap-2">
+					<PhCalendarCheck class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div>
-						<h3 class="text-2xl font-medium">Feature 2</h3>
+						<h3 class="text-2xl font-medium">Habit & Mood Tracking</h3>
 						<p>
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
 							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
@@ -94,10 +100,10 @@
 				</div>
 			</div>
 			<div class="flex gap-3">
-				<div class="flex gap-2">
-					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+				<div class="flex w-1/2 gap-2">
+					<PhShareNetwork class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div>
-						<h3 class="text-2xl font-medium">Feature 3</h3>
+						<h3 class="text-2xl font-medium">Sharing</h3>
 						<p>
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
 							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
@@ -105,13 +111,13 @@
 					</div>
 				</div>
 
-				<div class="flex gap-2">
-					<div class="h-8 w-8 flex-shrink-0 rounded-full bg-neutral-400">icon</div>
+				<div class="flex w-1/2 gap-2">
+					<PhChartLine class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div>
-						<h3 class="text-2xl font-medium">Feature 4</h3>
+						<h3 class="text-2xl font-medium">Therapist Dashboard</h3>
 						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
-							fermentum lacinia, nisl nisl aliquet nisl, nec aliquet nisl nisl sit amet lectus.
+							See at a glance what your clients have been writing about. See if they're up to date
+							on their goals and how they've been feeling over time.
 						</p>
 					</div>
 				</div>
@@ -132,7 +138,7 @@
 				It is deployed on Vercel, a cloud platform for static sites, serverless functions, and more.
 			</p>
 		</div>
-		<img src={dark ? techstackdark : techstack} alt="tech stack" class="mx-auto max-w-4xl" />
+		<img src={dark ? techstackdark : techstack} alt="tech stack" class="mx-auto w-full max-w-4xl" />
 	</div>
 
 	<!-- Our Team -->
@@ -155,9 +161,9 @@
 		<img src={team} alt="team" class="mx-auto w-full" />
 	</div>
 
-	<!-- User Guide and FAQ -->
-	<div class="flex flex-col items-center gap-5">
-		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">User Guide and FAQ</h2>
+	<!-- User Guide -->
+	<div class="app-container flex flex-col items-center gap-5">
+		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">User Guide</h2>
 		<div>
 			<p class="text-center dark:text-neutral-200">
 				For help using TheraJournal or if you have any other questions
