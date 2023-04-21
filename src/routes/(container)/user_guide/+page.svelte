@@ -4,7 +4,7 @@
 
 <div class="mx-auto w-fit">
 	<div class="mb-6">
-		<a href="/#team" class="arrow-link dark:text-neutral-200">
+		<a href="/#guide" class="arrow-link dark:text-neutral-200">
 			<div class="arrow">
 				<PhCaretLeftThin class="inline text-[22px]" />
 			</div>
