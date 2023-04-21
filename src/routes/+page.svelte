@@ -173,10 +173,10 @@
 
 	<!-- User Guide -->
 	<div class="app-container flex flex-col items-center gap-5">
-		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">User Guide</h2>
+		<h2 id="guide" class="text-center text-3xl font-medium dark:text-neutral-200">User Guide</h2>
 		<div>
 			<p class="text-center dark:text-neutral-200">
-				For help using TheraJournal or if you have any other questions
+				For a user guide to help you get started,
 				<a href="/user_guide" class="link">look here</a>.
 			</p>
 		</div>
