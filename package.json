@@ -76,6 +76,6 @@
 		"zod-validation-error": "^0.3.0"
 	},
 	"engines": {
-		"pnpm": ">=7"
+		"pnpm": "=7"
 	}
 }
