@@ -12,7 +12,8 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"seed": "node --loader ts-node/esm prisma/seed.ts",
 		"pretest": "tsc --incremental -p ./src/tests/tsconfig.json",
-		"test": "playwright test -c playwright.config.ts"
+		"test": "playwright test -c playwright.config.ts",
+		"postinstall": "prisma generate"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
