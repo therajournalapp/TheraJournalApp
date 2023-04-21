@@ -1,4 +1,4 @@
-lockfileVersion: '5.4'
+lockfileVersion: '6.0'
 
 dependencies:
   '@lucia-auth/adapter-prisma':
@@ -26,8 +26,8 @@ dependencies:
     specifier: ^1.3.3
     version: 1.3.3
   chart.js:
-    specifier: ^4.2.1
-    version: 4.2.1
+    specifier: github:chartjs/Chart.js#master
+    version: github.com/chartjs/Chart.js/aec1c6d2942b072bbcb9c1bced176775ac927749
   firebase:
     specifier: ^9.16.0
     version: 9.16.0
@@ -2152,13 +2152,6 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-
-  /chart.js@4.2.1:
-    resolution: {integrity: sha512-6YbpQ0nt3NovAgOzbkSSeeAQu/3za1319dPUQTXn9WcOpywM8rGKxJHrhS8V8xEkAlk8YhEfjbuAPfUyp6jIsw==}
-    engines: {pnpm: ^7.0.0}
-    dependencies:
-      '@kurkle/color': 0.3.2
-    dev: false
 
   /check-error@1.0.2:
     resolution: {integrity: sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==}
@@ -4492,7 +4485,7 @@ packages:
       chart.js: ^3.5.0 || ^4.0.0
       svelte: ^3.45.0
     dependencies:
-      chart.js: 4.2.1
+      chart.js: github.com/chartjs/Chart.js/aec1c6d2942b072bbcb9c1bced176775ac927749
       svelte: 3.55.0
     dev: false
 
@@ -5108,4 +5101,13 @@ packages:
 
   /zod@3.20.2:
     resolution: {integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==}
+    dev: false
+
+  github.com/chartjs/Chart.js/aec1c6d2942b072bbcb9c1bced176775ac927749:
+    resolution: {tarball: https://codeload.github.com/chartjs/Chart.js/tar.gz/aec1c6d2942b072bbcb9c1bced176775ac927749}
+    name: chart.js
+    version: 4.2.1
+    engines: {pnpm: '>=7'}
+    dependencies:
+      '@kurkle/color': 0.3.2
     dev: false
