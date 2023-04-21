@@ -2,7 +2,7 @@
 	import PhCaretLeftThin from '~icons/ph/caret-left-thin';
 </script>
 
-<div class="mx-auto w-fit">
+<div class="mx-auto flex w-full max-w-[560px] flex-col">
 	<div class="mb-6">
 		<a href="/#guide" class="arrow-link dark:text-neutral-200">
 			<div class="arrow">
@@ -15,8 +15,7 @@
 	<h1 class="my-10 text-4xl font-medium dark:text-neutral-200">User Guide</h1>
 
 	<iframe
-		width="560"
-		height="315"
+		class="aspect-video w-full max-w-[560px]"
 		src="https://www.youtube-nocookie.com/embed/93hq0YU3Gqk"
 		title="YouTube video player"
 		frameborder="0"
