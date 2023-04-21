@@ -78,8 +78,8 @@
 				<div class="flex w-1/2 gap-2">
 					<PhBookBookmark class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
-						<h3 class="text-2xl font-medium">Journal Editor</h3>
-						<p>
+						<h3 class="text-lg font-medium sm:text-2xl">Journal Editor</h3>
+						<p class="text-sm sm:text-base">
 							TheraJournal's journal editor is designed to be easy to use, while still providing all
 							the features you need to write a journal entry. With rich text support, markdown
 							shortcuts, and even add tags to help you find them later.
@@ -90,8 +90,8 @@
 				<div class="flex w-1/2 gap-2">
 					<PhCalendarCheck class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
-						<h3 class="text-2xl font-medium">Habit & Mood Tracking</h3>
-						<p>
+						<h3 class="text-lg font-medium sm:text-2xl">Habit & Mood Tracking</h3>
+						<p class="text-sm sm:text-base">
 							See how your mood and habits change over time with TheraJournal's habit and mood
 							trackers. Create as many trackers as you need to track your progress for any goal or
 							task.
@@ -103,8 +103,8 @@
 				<div class="flex w-1/2 gap-2">
 					<PhShareNetwork class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
-						<h3 class="text-2xl font-medium">Selective Sharing</h3>
-						<p>
+						<h3 class="text-lg font-medium sm:text-2xl">Selective Sharing</h3>
+						<p class="text-sm sm:text-base">
 							All journal entries and mood/habit tracking data can be selectively shared with your
 							therapist or other TheraJournal users. You can also share your journal entires by
 							link, which lets anyone view that entry, even without an account.
@@ -116,14 +116,14 @@
 					<PhChartLine class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
 						<div class="flex items-center">
-							<h3 class="text-2xl font-medium">Therapist Dashboard</h3>
+							<h3 class="text-lg font-medium sm:text-2xl">Therapist Dashboard</h3>
 							<span
-								class="ml-2 flex h-fit translate-y-0.5 items-center rounded-full border border-primary py-0.5 px-2 text-xs text-primary-dark"
+								class="ml-2 flex h-fit flex-shrink-0 translate-y-0.5 items-center rounded-full border border-primary py-0.5 px-2 text-xs text-primary-dark"
 							>
 								for therapists
 							</span>
 						</div>
-						<p>
+						<p class="text-sm sm:text-base">
 							See at a glance what your clients have been writing about. See if they're up to date
 							on their goals and how they've been feeling over time.
 						</p>
@@ -151,10 +151,10 @@
 	<div class="flex flex-col items-center gap-7">
 		<h2 id="team" class="text-center text-3xl font-medium dark:text-neutral-200">Our Team</h2>
 		<div>
-			<p class="text-center dark:text-neutral-200">
+			<p class="text-center text-sm dark:text-neutral-200 sm:text-base">
 				TheraJournal is built by a team of students from the University of Utah. We are passionate
 			</p>
-			<p class="text-center dark:text-neutral-200">
+			<p class="text-center text-sm dark:text-neutral-200 sm:text-base">
 				about mental health and want to help people understand themselves better.
 			</p>
 		</div>
