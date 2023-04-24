@@ -14,6 +14,8 @@
 	import PhCalendarCheck from '~icons/ph/calendar-check';
 	import PhChartLine from '~icons/ph/chart-line';
 
+	import { balancer } from 'svelte-action-balancer';
+
 	const user = getUser();
 
 	onMount(() => {
@@ -39,15 +41,18 @@
 
 <!-- Landing Text -->
 <div class="app-container my-10">
-	<div class="mb-7">
-		<h1 class="text-center text-5xl font-medium dark:text-neutral-200">
-			The Journal That Helps You
+	<div class="mx-auto mb-7 flex max-w-xl justify-center">
+		<h1
+			class="text-center text-4xl font-medium dark:text-neutral-200 sm:text-5xl"
+			use:balancer={{ enabled: true, ratio: 1 }}
+		>
+			The Journal That Helps You Understand Yourself
 		</h1>
-		<h1 class="text-center text-5xl font-medium dark:text-neutral-200">Understand Yourself</h1>
+		<!-- <h1 class="text-center text-5xl font-medium dark:text-neutral-200">Understand Yourself</h1> -->
 	</div>
 
 	<div class="mx-auto w-full max-w-screen-sm dark:text-neutral-200 ">
-		<p class="mx-auto max-w-3xl text-center">
+		<p class="mx-auto max-w-3xl text-center" use:balancer={{ enabled: true, ratio: 0.5 }}>
 			TheraJournal is an all-in-one web application for patients and therapists, making it easy to
 			share information between users and providing analysis on long term trends.
 		</p>
@@ -74,12 +79,12 @@
 	<div class="app-container flex flex-col items-center justify-center gap-5">
 		<h2 class="text-center text-3xl font-medium dark:text-neutral-200">Features</h2>
 		<div class="flex max-w-5xl flex-col gap-8 dark:text-neutral-200">
-			<div class="flex gap-8">
-				<div class="flex w-1/2 gap-2">
+			<div class="mx-auto flex flex-col items-center gap-8 sm:flex-row">
+				<div class="flex gap-2 sm:w-1/2">
 					<PhBookBookmark class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
-						<h3 class="text-lg font-medium sm:text-2xl">Journal Editor</h3>
-						<p class="text-sm sm:text-base">
+						<h3 class="text-2xl font-medium">Journal Editor</h3>
+						<p>
 							TheraJournal's journal editor is designed to be easy to use, while still providing all
 							the features you need to write a journal entry. With rich text support, markdown
 							shortcuts, and even add tags to help you find them later.
@@ -87,11 +92,11 @@
 					</div>
 				</div>
 
-				<div class="flex w-1/2 gap-2">
+				<div class="flex gap-2 sm:w-1/2">
 					<PhCalendarCheck class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
-						<h3 class="text-lg font-medium sm:text-2xl">Habit & Mood Tracking</h3>
-						<p class="text-sm sm:text-base">
+						<h3 class="text-2xl font-medium">Habit & Mood Tracking</h3>
+						<p>
 							See how your mood and habits change over time with TheraJournal's habit and mood
 							trackers. Create as many trackers as you need to track your progress for any goal or
 							task.
@@ -99,12 +104,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="flex gap-8">
-				<div class="flex w-1/2 gap-2">
+			<div class="mx-auto flex flex-col items-center gap-8 sm:flex-row">
+				<div class="flex gap-2 sm:w-1/2">
 					<PhShareNetwork class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
-						<h3 class="text-lg font-medium sm:text-2xl">Selective Sharing</h3>
-						<p class="text-sm sm:text-base">
+						<h3 class="text-2xl font-medium">Selective Sharing</h3>
+						<p>
 							All journal entries and mood/habit tracking data can be selectively shared with your
 							therapist or other TheraJournal users. You can also share your journal entires by
 							link, which lets anyone view that entry, even without an account.
@@ -112,18 +117,18 @@
 					</div>
 				</div>
 
-				<div class="flex w-1/2 gap-2">
+				<div class="flex gap-2 sm:w-1/2">
 					<PhChartLine class="flex-shrink-0 translate-y-[4px] text-2xl text-primary" />
 					<div class="flex flex-col gap-2">
 						<div class="flex items-center">
-							<h3 class="text-lg font-medium sm:text-2xl">Therapist Dashboard</h3>
+							<h3 class="text-2xl font-medium">Therapist Dashboard</h3>
 							<span
 								class="ml-2 flex h-fit flex-shrink-0 translate-y-0.5 items-center rounded-full border border-primary py-0.5 px-2 text-xs text-primary-dark"
 							>
 								for therapists
 							</span>
 						</div>
-						<p class="text-sm sm:text-base">
+						<p>
 							See at a glance what your clients have been writing about. See if they're up to date
 							on their goals and how they've been feeling over time.
 						</p>
