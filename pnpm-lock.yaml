@@ -8,8 +8,8 @@ dependencies:
     specifier: ^0.5.2
     version: 0.5.2(lucia-auth@0.4.3)(svelte@3.55.0)
   '@prisma/client':
-    specifier: ^4.10.1
-    version: 4.10.1(prisma@4.10.1)
+    specifier: ^4.13.0
+    version: 4.13.0(prisma@4.13.0)
   '@tiptap/core':
     specifier: 2.0.0-beta.209
     version: 2.0.0-beta.209(prosemirror-commands@1.5.0)(prosemirror-keymap@1.2.1)(prosemirror-model@1.19.0)(prosemirror-schema-list@1.2.2)(prosemirror-state@1.4.2)(prosemirror-transform@1.7.1)(prosemirror-view@1.30.1)
@@ -26,8 +26,8 @@ dependencies:
     specifier: ^1.3.3
     version: 1.3.3
   chart.js:
-    specifier: ^4.2.1
-    version: 4.2.1
+    specifier: 3.9.0
+    version: 3.9.0
   firebase:
     specifier: ^9.16.0
     version: 9.16.0
@@ -49,15 +49,12 @@ dependencies:
   node-html-markdown:
     specifier: ^1.3.0
     version: 1.3.0
-  svelte-action-balancer:
-    specifier: ^1.0.4
-    version: 1.0.4
   svelte-add:
     specifier: 2022.12.0-9.0
     version: 2022.12.0-9.0
   svelte-chartjs:
     specifier: ^3.1.2
-    version: 3.1.2(chart.js@4.2.1)(svelte@3.55.0)
+    version: 3.1.2(chart.js@3.9.0)(svelte@3.55.0)
   zod:
     specifier: ^3.20.2
     version: 3.20.2
@@ -139,8 +136,8 @@ devDependencies:
     specifier: ^0.2.1
     version: 0.2.1(prettier@2.8.1)
   prisma:
-    specifier: ^4.10.1
-    version: 4.10.1
+    specifier: ^4.13.0
+    version: 4.13.0
   svelte:
     specifier: ^3.54.0
     version: 3.55.0
@@ -1099,10 +1096,6 @@ packages:
     dev: false
     optional: true
 
-  /@kurkle/color@0.3.2:
-    resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
-    dev: false
-
   /@linaria/core@3.0.0-beta.13:
     resolution: {integrity: sha512-3zEi5plBCOsEzUneRVuQb+2SAx3qaC1dj0FfFAI6zIJQoDWu0dlSwKijMRack7oO9tUWrchfj3OkKQAd1LBdVg==}
     dev: false
@@ -1167,8 +1160,8 @@ packages:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
 
-  /@prisma/client@4.10.1(prisma@4.10.1):
-    resolution: {integrity: sha512-VonXLJZybdt8e5XZH5vnIGCRNnIh6OMX1FS3H/yzMGLT3STj5TJ/OkMcednrvELgk8PK89Vo3aSh51MWNO0axA==}
+  /@prisma/client@4.13.0(prisma@4.13.0):
+    resolution: {integrity: sha512-YaiiICcRB2hatxsbnfB66uWXjcRw3jsZdlAVxmx0cFcTc/Ad/sKdHCcWSnqyDX47vAewkjRFwiLwrOUjswVvmA==}
     engines: {node: '>=14.17'}
     requiresBuild: true
     peerDependencies:
@@ -1177,16 +1170,16 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19
-      prisma: 4.10.1
+      '@prisma/engines-version': 4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a
+      prisma: 4.13.0
     dev: false
 
-  /@prisma/engines-version@4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19:
-    resolution: {integrity: sha512-tsjTho7laDhf9EJ9EnDxAPEf7yrigSMDhniXeU4YoWc7azHAs4GPxRi2P9LTFonmHkJLMOLjR77J1oIP8Ife1w==}
+  /@prisma/engines-version@4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a:
+    resolution: {integrity: sha512-fsQlbkhPJf08JOzKoyoD9atdUijuGBekwoOPZC3YOygXEml1MTtgXVpnUNchQlRSY82OQ6pSGQ9PxUe4arcSLQ==}
     dev: false
 
-  /@prisma/engines@4.10.1:
-    resolution: {integrity: sha512-B3tcTxjx196nuAu1GOTKO9cGPUgTFHYRdkPkTS4m5ptb2cejyBlH9X7GOfSt3xlI7p4zAJDshJP4JJivCg9ouA==}
+  /@prisma/engines@4.13.0:
+    resolution: {integrity: sha512-HrniowHRZXHuGT9XRgoXEaP2gJLXM5RMoItaY2PkjvuZ+iHc0Zjbm/302MB8YsPdWozAPHHn+jpFEcEn71OgPw==}
     requiresBuild: true
 
   /@protobufjs/aspromise@1.1.2:
@@ -2156,11 +2149,8 @@ packages:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
 
-  /chart.js@4.2.1:
-    resolution: {integrity: sha512-6YbpQ0nt3NovAgOzbkSSeeAQu/3za1319dPUQTXn9WcOpywM8rGKxJHrhS8V8xEkAlk8YhEfjbuAPfUyp6jIsw==}
-    engines: {pnpm: ^7.0.0}
-    dependencies:
-      '@kurkle/color': 0.3.2
+  /chart.js@3.9.0:
+    resolution: {integrity: sha512-SHOC6eCTe3dXe6owLHnO56xTLBbVeMHskkAlgPPVkd6xa0mv3EPhH5azRLg1cucYFsp4UloH/4NjSG0oOIFJtw==}
     dev: false
 
   /check-error@1.0.2:
@@ -3920,13 +3910,13 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  /prisma@4.10.1:
-    resolution: {integrity: sha512-0jDxgg+DruB1kHVNlcspXQB9au62IFfVg9drkhzXudszHNUAQn0lVuu+T8np0uC2z1nKD5S3qPeCyR8u5YFLnA==}
+  /prisma@4.13.0:
+    resolution: {integrity: sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==}
     engines: {node: '>=14.17'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 4.10.1
+      '@prisma/engines': 4.13.0
 
   /prompts@2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
@@ -4466,10 +4456,6 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /svelte-action-balancer@1.0.4:
-    resolution: {integrity: sha512-QEJ/UJ576/wt+Sr3Uhswg/6k1s98034QZQBbO3WuNeyPYKa+9w2z/W5SFlusdAi8H7IF+s8BaMptEsUZINfxbw==}
-    dev: false
-
   /svelte-add@2022.12.0-9.0:
     resolution: {integrity: sha512-8FYjxcKq1bAszoXAkK8e3PmSYdx8z5iGBQ8Lx3KEVXLpiOzCOwP+TdaoLyZHbMlUpJAT/4FkCOcAJuoUHPwxbQ==}
     hasBin: true
@@ -4493,13 +4479,13 @@ packages:
       - supports-color
     dev: false
 
-  /svelte-chartjs@3.1.2(chart.js@4.2.1)(svelte@3.55.0):
+  /svelte-chartjs@3.1.2(chart.js@3.9.0)(svelte@3.55.0):
     resolution: {integrity: sha512-3+6gY2IJ9Ua8R9pk3iS1ypa7Z9OoXCJb9oPwIfTp7caJM+X+RrWnH2CTkGAq7FeSxc2nnmW08tYN88Q8Y+5M+w==}
     peerDependencies:
       chart.js: ^3.5.0 || ^4.0.0
       svelte: ^3.45.0
     dependencies:
-      chart.js: 4.2.1
+      chart.js: 3.9.0
       svelte: 3.55.0
     dev: false
 

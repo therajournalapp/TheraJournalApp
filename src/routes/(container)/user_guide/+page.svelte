@@ -16,7 +16,7 @@
 
 	<iframe
 		class="aspect-video w-full max-w-[560px]"
-		src="https://www.youtube-nocookie.com/embed/93hq0YU3Gqk"
+		src="https://www.youtube.com/embed/hbMoKeVgpSQ"
 		title="YouTube video player"
 		frameborder="0"
 		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
