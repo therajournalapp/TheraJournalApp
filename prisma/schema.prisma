@@ -1,13 +1,14 @@
 generator client {
     provider   = "prisma-client-js"
     engineType = "library"
+    // previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-    provider     = "mysql"
-    // provider = "sqlite" // use for local test db with DATABASE_URL=file:./dev.db
-    url          = env("DATABASE_URL")
-    relationMode = "prisma"
+    provider          = "postgresql"
+    url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+    directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+    shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 model User {
@@ -44,7 +45,7 @@ model JournalEntry {
     createdAt   DateTime      @default(now())
     updatedAt   DateTime?     @updatedAt
     title       String        @db.VarChar(255)
-    body        String        @db.LongText
+    body        String
     preview     String        @default("") @db.VarChar(1000)
     user        User          @relation(references: [id], fields: [user_id], onDelete: Cascade)
     SharedEntry SharedEntry[]
